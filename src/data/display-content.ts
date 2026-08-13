@@ -349,6 +349,48 @@ const displayContent: DisplayContent = {
       qualities: {
         en: 'Compassion, courage, eloquence, and unwavering loyalty.', pa: 'ਦਇਆ, ਹਿੰਮਤ, ਸੁਭਾਸ਼ਿਤਾ ਅਤੇ ਅਡੋਲ ਵਫ਼ਾਦਾਰੀ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Before the Call', pa: 'ਪੁਕਾਰ ਤੋਂ ਪਹਿਲਾਂ' },
+          title: { en: 'A Merchant of Lahore', pa: 'ਲਾਹੌਰ ਦਾ ਇੱਕ ਵਪਾਰੀ' },
+          body: {
+            en: 'Long before he was known as Bhai Daya Singh Ji, he was Daya Ram — a Khatri merchant from Lahore, trading in the busy bazaars of a city under Mughal rule. Nothing in his daily ledger hinted at the history he was about to make.',
+            pa: 'ਭਾਈ ਦਯਾ ਸਿੰਘ ਜੀ ਬਣਨ ਤੋਂ ਪਹਿਲਾਂ, ਉਹ ਦਇਆ ਰਾਮ ਸਨ — ਲਾਹੌਰ ਦੇ ਇੱਕ ਖੱਤਰੀ ਵਪਾਰੀ, ਜੋ ਮੁਗਲ ਰਾਜ ਅਧੀਨ ਸ਼ਹਿਰ ਦੇ ਵਿਅਸਤ ਬਾਜ਼ਾਰਾਂ ਵਿੱਚ ਵਪਾਰ ਕਰਦੇ ਸਨ। ਉਨ੍ਹਾਂ ਦੇ ਰੋਜ਼ਾਨਾ ਹਿਸਾਬ-ਕਿਤਾਬ ਵਿੱਚ ਕੁਝ ਵੀ ਉਸ ਇਤਿਹਾਸ ਦਾ ਸੰਕੇਤ ਨਹੀਂ ਸੀ ਜੋ ਉਹ ਬਣਾਉਣ ਵਾਲੇ ਸਨ।',
+          },
+        },
+        {
+          kicker: { en: 'The Call at Anandpur Sahib', pa: 'ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਦੀ ਪੁਕਾਰ' },
+          title: { en: 'The First to Step Forward', pa: 'ਅੱਗੇ ਆਉਣ ਵਾਲੇ ਪਹਿਲੇ' },
+          body: {
+            en: 'On Vaisakhi, April 30, 1699, Guru Gobind Singh Ji drew his sword before a vast gathering and called for a head. A profound silence fell over the crowd. Then Daya Ram rose — the first of five, the bravest to break the silence.',
+            pa: 'ਵਿਸਾਖੀ, 30 ਅਪ੍ਰੈਲ 1699 ਨੂੰ, ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਨੇ ਵੱਡੀ ਸੰਗਤ ਅੱਗੇ ਤਲਵਾਰ ਕੱਢ ਕੇ ਸਿਰ ਦੀ ਮੰਗ ਕੀਤੀ। ਸੰਗਤ ਉੱਤੇ ਗਹਿਰੀ ਚੁੱਪ ਛਾ ਗਈ। ਫਿਰ ਦਇਆ ਰਾਮ ਉੱਠੇ — ਪੰਜਾਂ ਵਿੱਚੋਂ ਪਹਿਲੇ, ਚੁੱਪ ਤੋੜਨ ਵਾਲੇ ਸਭ ਤੋਂ ਦਲੇਰ।',
+          },
+        },
+        {
+          kicker: { en: 'Becoming Khalsa', pa: 'ਖ਼ਾਲਸਾ ਬਣਨਾ' },
+          title: { en: 'A Guru Who Knelt Before His Own Disciples', pa: 'ਆਪਣੇ ਹੀ ਸ਼ਿਸ਼ਾਂ ਅੱਗੇ ਗੋਡੇ ਟੇਕਣ ਵਾਲਾ ਗੁਰੂ' },
+          body: {
+            en: 'After initiating all five with Amrit and the name Singh, Guru Gobind Singh Ji did something no one expected — he asked the newly-created Panj Pyare to initiate him in turn, kneeling as a student of the very Khalsa he had just created. Bhai Daya Singh Ji stood among the five who now carried the Guru\'s own authority.',
+            pa: 'ਪੰਜਾਂ ਨੂੰ ਅੰਮ੍ਰਿਤ ਅਤੇ ਸਿੰਘ ਨਾਮ ਨਾਲ ਦੀਖਿਆ ਦੇਣ ਤੋਂ ਬਾਅਦ, ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਨੇ ਕੁਝ ਅਚਰਜ ਕੀਤਾ — ਉਨ੍ਹਾਂ ਨੇ ਨਵੇਂ ਬਣੇ ਪੰਜ ਪਿਆਰਿਆਂ ਨੂੰ ਆਪਣੇ ਆਪ ਨੂੰ ਦੀਖਿਆ ਦੇਣ ਲਈ ਕਿਹਾ। ਭਾਈ ਦਯਾ ਸਿੰਘ ਜੀ ਉਨ੍ਹਾਂ ਪੰਜਾਂ ਵਿੱਚੋਂ ਸਨ ਜੋ ਹੁਣ ਗੁਰੂ ਦਾ ਆਪਣਾ ਅਧਿਕਾਰ ਰੱਖਦੇ ਸਨ।',
+          },
+        },
+        {
+          kicker: { en: 'Role & Legacy', pa: 'ਭੂਮਿਕਾ ਅਤੇ ਵਿਰਾਸਤ' },
+          title: { en: 'The Zafarnama to Aurangzeb', pa: 'ਔਰੰਗਜ਼ੇਬ ਨੂੰ ਜ਼ਫ਼ਰਨਾਮਾ' },
+          body: {
+            en: 'Bhai Daya Singh Ji became the Guru\'s trusted diplomat, fighting at the Battle of Muktsar in 1705 and undertaking one of history\'s most daring missions: carrying the Zafarnama, the Guru\'s letter of moral defiance, deep into the Deccan to Emperor Aurangzeb himself.',
+            pa: 'ਭਾਈ ਦਯਾ ਸਿੰਘ ਜੀ ਗੁਰੂ ਦੇ ਭਰੋਸੇਯੋਗ ਦੂਤ ਬਣੇ, 1705 ਵਿੱਚ ਮੁਕਤਸਰ ਦੀ ਜੰਗ ਵਿੱਚ ਲੜੇ, ਅਤੇ ਇਤਿਹਾਸ ਦੇ ਸਭ ਤੋਂ ਦਲੇਰ ਮਿਸ਼ਨਾਂ ਵਿੱਚੋਂ ਇੱਕ ਨਿਭਾਇਆ — ਜ਼ਫ਼ਰਨਾਮਾ, ਦੱਖਣ ਵਿੱਚ ਔਰੰਗਜ਼ੇਬ ਤੱਕ ਪਹੁੰਚਾਇਆ।',
+          },
+        },
+        {
+          kicker: { en: 'Lessons for Today', pa: 'ਅੱਜ ਲਈ ਸਿੱਖਿਆ' },
+          title: { en: 'The Courage to Go First', pa: 'ਪਹਿਲਾਂ ਜਾਣ ਦੀ ਹਿੰਮਤ' },
+          body: {
+            en: 'Bhai Daya Singh Ji\'s life teaches that true courage means answering a call others hesitate before — and that steadfast loyalty can carry a person from a merchant\'s ledger to the Guru\'s own emissary. He remained at the Guru\'s side until the very end at Nanded in 1708.',
+            pa: 'ਭਾਈ ਦਯਾ ਸਿੰਘ ਜੀ ਦਾ ਜੀਵਨ ਸਿਖਾਉਂਦਾ ਹੈ ਕਿ ਸੱਚੀ ਹਿੰਮਤ ਦਾ ਮਤਲਬ ਹੈ ਉਸ ਪੁਕਾਰ ਦਾ ਜਵਾਬ ਦੇਣਾ ਜਿਸ ਅੱਗੇ ਹੋਰ ਝਿਜਕਦੇ ਹਨ। ਉਹ 1708 ਵਿੱਚ ਨਾਂਦੇੜ ਤੱਕ ਗੁਰੂ ਜੀ ਦੇ ਨਾਲ ਰਹੇ।',
+          },
+        },
+      ],
     },
     {
       id: 2,
@@ -394,6 +436,48 @@ const displayContent: DisplayContent = {
       qualities: {
         en: 'Righteousness, humility, quiet discipline, and steadfast resolve.', pa: 'ਧਰਮ, ਨਿਮਰਤਾ, ਸ਼ਾਂਤ ਅਨੁਸ਼ਾਸਨ ਅਤੇ ਅਡੋਲ ਦ੍ਰਿੜਤਾ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Before the Call', pa: 'ਪੁਕਾਰ ਤੋਂ ਪਹਿਲਾਂ' },
+          title: { en: 'A Farmer of Hastinapur', pa: 'ਹਸਤਿਨਾਪੁਰ ਦਾ ਇੱਕ ਕਿਸਾਨ' },
+          body: {
+            en: 'Dharam Das was a Jat farmer from Hastinapur, the ancient city of the Mahabharata — a place steeped in the very concept of dharma, righteous duty. Nothing about his quiet farming life suggested he would soon embody that word in its truest form.',
+            pa: 'ਧਰਮ ਦਾਸ ਹਸਤਿਨਾਪੁਰ ਦੇ ਇੱਕ ਜੱਟ ਕਿਸਾਨ ਸਨ — ਮਹਾਭਾਰਤ ਦੀ ਪ੍ਰਾਚੀਨ ਨਗਰੀ, ਧਰਮ ਦੇ ਸੰਕਲਪ ਵਿੱਚ ਡੁੱਬੀ ਹੋਈ। ਉਨ੍ਹਾਂ ਦੇ ਸ਼ਾਂਤ ਕਿਸਾਨੀ ਜੀਵਨ ਵਿੱਚ ਕੁਝ ਵੀ ਇਹ ਸੰਕੇਤ ਨਹੀਂ ਦਿੰਦਾ ਸੀ ਕਿ ਉਹ ਜਲਦੀ ਹੀ ਇਸ ਸ਼ਬਦ ਨੂੰ ਇਸਦੇ ਸੱਚੇ ਰੂਪ ਵਿੱਚ ਸਾਕਾਰ ਕਰਨਗੇ।',
+          },
+        },
+        {
+          kicker: { en: 'The Call at Anandpur Sahib', pa: 'ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਦੀ ਪੁਕਾਰ' },
+          title: { en: 'Crossing Every Boundary', pa: 'ਹਰ ਸੀਮਾ ਪਾਰ ਕਰਨਾ' },
+          body: {
+            en: 'Dharam Das was the second to rise when the Guru\'s call rang out — and in doing so, he crossed every social boundary of his time to stand beside a Khatri merchant. It was a living statement that the Khalsa would dissolve the hierarchy of caste from its very first moment.',
+            pa: 'ਜਦੋਂ ਗੁਰੂ ਦੀ ਪੁਕਾਰ ਗੂੰਜੀ ਤਾਂ ਧਰਮ ਦਾਸ ਦੂਜੇ ਉੱਠੇ — ਅਤੇ ਅਜਿਹਾ ਕਰਦਿਆਂ ਉਨ੍ਹਾਂ ਨੇ ਆਪਣੇ ਸਮੇਂ ਦੀਆਂ ਸਾਰੀਆਂ ਸਮਾਜਿਕ ਸੀਮਾਵਾਂ ਪਾਰ ਕਰਕੇ ਇੱਕ ਖੱਤਰੀ ਵਪਾਰੀ ਦੇ ਨਾਲ ਖੜੇ ਹੋਏ। ਇਹ ਇੱਕ ਜੀਵੰਤ ਬਿਆਨ ਸੀ ਕਿ ਖ਼ਾਲਸਾ ਆਪਣੇ ਪਹਿਲੇ ਪਲ ਤੋਂ ਹੀ ਜਾਤ ਦੀ ਲੜੀ ਨੂੰ ਭੰਗ ਕਰ ਦੇਵੇਗਾ।',
+          },
+        },
+        {
+          kicker: { en: 'Becoming Khalsa', pa: 'ਖ਼ਾਲਸਾ ਬਣਨਾ' },
+          title: { en: 'A New Name, A New Brotherhood', pa: 'ਇੱਕ ਨਵਾਂ ਨਾਮ, ਇੱਕ ਨਵਾਂ ਭਾਈਚਾਰਾ' },
+          body: {
+            en: 'Initiated with Amrit alongside four strangers from four corners of India, Dharam Das rose as Bhai Dharam Singh Ji — his old name, caste, and title dissolved into a single shared identity: Khalsa. He, too, helped initiate the Guru into the very order he had founded.',
+            pa: 'ਭਾਰਤ ਦੇ ਚਾਰ ਖਿੱਤਿਆਂ ਤੋਂ ਆਏ ਚਾਰ ਅਜਨਬੀਆਂ ਦੇ ਨਾਲ ਅੰਮ੍ਰਿਤ ਨਾਲ ਦੀਖਿਆ ਲੈ ਕੇ, ਧਰਮ ਦਾਸ ਭਾਈ ਧਰਮ ਸਿੰਘ ਜੀ ਵਜੋਂ ਉੱਠੇ — ਉਨ੍ਹਾਂ ਦਾ ਪੁਰਾਣਾ ਨਾਮ, ਜਾਤ ਅਤੇ ਖ਼ਿਤਾਬ ਇੱਕ ਸਾਂਝੀ ਪਹਿਚਾਣ ਵਿੱਚ ਘੁਲ ਗਏ: ਖ਼ਾਲਸਾ।',
+          },
+        },
+        {
+          kicker: { en: 'Role & Legacy', pa: 'ਭੂਮਿਕਾ ਅਤੇ ਵਿਰਾਸਤ' },
+          title: { en: 'Standing With the Guru in Battle', pa: 'ਜੰਗ ਵਿੱਚ ਗੁਰੂ ਦੇ ਨਾਲ' },
+          body: {
+            en: 'As one of the five founding members of the Khalsa, Bhai Dharam Singh Ji went on to serve in Guru Gobind Singh Ji\'s military campaigns with distinction. Historical accounts of his final days differ — some placing his shaheedi at Chamkaur Sahib in 1705, others at Nanded in 1708 — but all honour a man who gave everything to the Guru\'s mission.',
+            pa: 'ਖ਼ਾਲਸੇ ਦੇ ਪੰਜ ਸੰਸਥਾਪਕ ਮੈਂਬਰਾਂ ਵਿੱਚੋਂ ਇੱਕ ਵਜੋਂ, ਭਾਈ ਧਰਮ ਸਿੰਘ ਜੀ ਨੇ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਦੀਆਂ ਫ਼ੌਜੀ ਮੁਹਿੰਮਾਂ ਵਿੱਚ ਵਿਸ਼ੇਸ਼ ਯੋਗਦਾਨ ਪਾਇਆ। ਉਨ੍ਹਾਂ ਦੇ ਅੰਤਿਮ ਦਿਨਾਂ ਬਾਰੇ ਇਤਿਹਾਸਕ ਬਿਰਤਾਂਤ ਵੱਖ-ਵੱਖ ਹਨ, ਪਰ ਸਾਰੇ ਉਸ ਵਿਅਕਤੀ ਦਾ ਸਨਮਾਨ ਕਰਦੇ ਹਨ ਜਿਸਨੇ ਗੁਰੂ ਦੇ ਮਿਸ਼ਨ ਲਈ ਸਭ ਕੁਝ ਦਿੱਤਾ।',
+          },
+        },
+        {
+          kicker: { en: 'Lessons for Today', pa: 'ਅੱਜ ਲਈ ਸਿੱਖਿਆ' },
+          title: { en: 'Righteousness Proven, Not Inherited', pa: 'ਧਰਮ ਵਿਰਾਸਤ ਨਹੀਂ, ਸਾਬਤ ਕੀਤਾ ਜਾਂਦਾ ਹੈ' },
+          body: {
+            en: 'Bhai Dharam Singh Ji\'s life shows that righteousness is proven not by birth or title, but by the willingness to cross a room and stand beside someone the world calls different from you — and that ordinary daily discipline prepares a person for extraordinary moments.',
+            pa: 'ਭਾਈ ਧਰਮ ਸਿੰਘ ਜੀ ਦਾ ਜੀਵਨ ਦਿਖਾਉਂਦਾ ਹੈ ਕਿ ਧਰਮ ਜਨਮ ਜਾਂ ਖ਼ਿਤਾਬ ਨਾਲ ਨਹੀਂ ਸਗੋਂ ਉਸ ਵਿਅਕਤੀ ਦੇ ਨਾਲ ਖੜੇ ਹੋਣ ਦੀ ਇੱਛਾ ਨਾਲ ਸਾਬਤ ਹੁੰਦਾ ਹੈ ਜਿਸਨੂੰ ਸੰਸਾਰ ਵੱਖਰਾ ਸਮਝਦਾ ਹੈ।',
+          },
+        },
+      ],
     },
     {
       id: 3,
@@ -439,6 +523,48 @@ const displayContent: DisplayContent = {
       qualities: {
         en: 'Courage, humility, fearlessness, and selfless service.', pa: 'ਹਿੰਮਤ, ਨਿਮਰਤਾ, ਨਿਰਭੈਤਾ ਅਤੇ ਨਿਸ਼ਕਾਮ ਸੇਵਾ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Before the Call', pa: 'ਪੁਕਾਰ ਤੋਂ ਪਹਿਲਾਂ' },
+          title: { en: 'A Water Carrier from Jagannath Puri', pa: 'ਜਗਨਨਾਥ ਪੁਰੀ ਦਾ ਇੱਕ ਪਾਣੀ ਢੋਣ ਵਾਲਾ' },
+          body: {
+            en: 'Himmat Rai carried water for pilgrims and served at Guru Ka Langar in Anandpur Sahib — having made the long journey from Jagannath Puri in Odisha. In the caste hierarchy of his era, a jheevar occupied one of its most marginalized rungs.',
+            pa: 'ਹਿੰਮਤ ਰਾਏ ਸ਼ਰਧਾਲੂਆਂ ਲਈ ਪਾਣੀ ਢੋਂਦੇ ਅਤੇ ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਵਿੱਚ ਗੁਰੂ ਕੇ ਲੰਗਰ ਵਿੱਚ ਸੇਵਾ ਕਰਦੇ ਸਨ — ਉੜੀਸਾ ਦੇ ਜਗਨਨਾਥ ਪੁਰੀ ਤੋਂ ਲੰਬਾ ਸਫ਼ਰ ਕਰਕੇ ਆਏ। ਆਪਣੇ ਸਮੇਂ ਦੀ ਜਾਤ ਲੜੀ ਵਿੱਚ, ਇੱਕ ਝੀਵਰ ਸਭ ਤੋਂ ਹਾਸ਼ੀਏ ਤੇ ਧੱਕੇ ਵਰਗਾਂ ਵਿੱਚੋਂ ਸੀ।',
+          },
+        },
+        {
+          kicker: { en: 'The Call at Anandpur Sahib', pa: 'ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਦੀ ਪੁਕਾਰ' },
+          title: { en: 'The Third to Rise', pa: 'ਉੱਠਣ ਵਾਲੇ ਤੀਜੇ' },
+          body: {
+            en: 'On Vaisakhi 1699, Himmat Rai was the third to step forward when the Guru called for a head — an extraordinary act. At this founding moment, a water carrier stood equal to a Khatri merchant, his courage (himmat) embodying the Khalsa\'s truth that all souls are equal before the Creator.',
+            pa: 'ਵਿਸਾਖੀ 1699 ਨੂੰ, ਹਿੰਮਤ ਰਾਏ ਤੀਜੇ ਅੱਗੇ ਆਏ ਜਦੋਂ ਗੁਰੂ ਨੇ ਸਿਰ ਦੀ ਮੰਗ ਕੀਤੀ — ਇੱਕ ਅਸਾਧਾਰਨ ਕਾਰਜ। ਇਸ ਸਥਾਪਨਾ ਦੇ ਪਲ ਤੇ, ਇੱਕ ਪਾਣੀ ਢੋਣ ਵਾਲਾ ਇੱਕ ਖੱਤਰੀ ਵਪਾਰੀ ਦੇ ਬਰਾਬਰ ਖੜ੍ਹਾ ਸੀ।',
+          },
+        },
+        {
+          kicker: { en: 'Becoming Khalsa', pa: 'ਖ਼ਾਲਸਾ ਬਣਨਾ' },
+          title: { en: 'Dignity Claimed, Not Granted', pa: 'ਹਾਸਲ ਕੀਤਾ ਸਨਮਾਨ, ਦਿੱਤਾ ਨਹੀਂ ਗਿਆ' },
+          body: {
+            en: 'As Amrit was prepared and the five knelt to receive it, Himmat Rai rose as Bhai Himmat Singh Ji — co-inaugurating the Khande-di-Pahul ceremony itself. Occupation no longer defined him; courage did.',
+            pa: 'ਜਿਵੇਂ ਅੰਮ੍ਰਿਤ ਤਿਆਰ ਕੀਤਾ ਗਿਆ ਅਤੇ ਪੰਜੇ ਇਸਨੂੰ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਗੋਡੇ ਟੇਕੇ, ਹਿੰਮਤ ਰਾਏ ਭਾਈ ਹਿੰਮਤ ਸਿੰਘ ਜੀ ਵਜੋਂ ਉੱਠੇ — ਖੰਡੇ ਦੀ ਪਾਹੁਲ ਦੀ ਰਸਮ ਦੀ ਸ਼ੁਰੂਆਤ ਵਿੱਚ ਸਹਿਭਾਗੀ ਬਣੇ। ਹੁਣ ਕਿੱਤਾ ਨਹੀਂ, ਹਿੰਮਤ ਹੀ ਉਨ੍ਹਾਂ ਦੀ ਪਹਿਚਾਣ ਸੀ।',
+          },
+        },
+        {
+          kicker: { en: 'Role & Legacy', pa: 'ਭੂਮਿਕਾ ਅਤੇ ਵਿਰਾਸਤ' },
+          title: { en: 'Fallen at Chamkaur Sahib', pa: 'ਚਮਕੌਰ ਸਾਹਿਬ ਵਿੱਚ ਸ਼ਹੀਦੀ' },
+          body: {
+            en: 'Bhai Himmat Singh Ji fought bravely across Guru Gobind Singh Ji\'s campaigns and attained shaheedi at the Battle of Chamkaur Sahib on December 7, 1705 — fighting alongside the Guru\'s own sons and companions to defend the Khalsa Panth.',
+            pa: 'ਭਾਈ ਹਿੰਮਤ ਸਿੰਘ ਜੀ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਦੀਆਂ ਮੁਹਿੰਮਾਂ ਵਿੱਚ ਦਲੇਰੀ ਨਾਲ ਲੜੇ ਅਤੇ 7 ਦਸੰਬਰ 1705 ਨੂੰ ਚਮਕੌਰ ਸਾਹਿਬ ਦੀ ਜੰਗ ਵਿੱਚ ਸ਼ਹੀਦੀ ਪਾਈ।',
+          },
+        },
+        {
+          kicker: { en: 'Lessons for Today', pa: 'ਅੱਜ ਲਈ ਸਿੱਖਿਆ' },
+          title: { en: 'No Service Too Humble', pa: 'ਕੋਈ ਵੀ ਸੇਵਾ ਛੋਟੀ ਨਹੀਂ' },
+          body: {
+            en: 'Bhai Himmat Singh Ji\'s life teaches that no service is too humble to lead to greatness, and that dignity is claimed through courage, not granted by occupation. A man who carried water for others became one of the founders of a new Panth.',
+            pa: 'ਭਾਈ ਹਿੰਮਤ ਸਿੰਘ ਜੀ ਦਾ ਜੀਵਨ ਸਿਖਾਉਂਦਾ ਹੈ ਕਿ ਕੋਈ ਵੀ ਸੇਵਾ ਮਹਾਨਤਾ ਵੱਲ ਲੈ ਜਾਣ ਲਈ ਬਹੁਤ ਨਿਮਾਣੀ ਨਹੀਂ, ਅਤੇ ਸਨਮਾਨ ਕਿੱਤੇ ਨਾਲ ਨਹੀਂ ਸਗੋਂ ਹਿੰਮਤ ਨਾਲ ਹਾਸਲ ਹੁੰਦਾ ਹੈ।',
+          },
+        },
+      ],
     },
     {
       id: 4,
@@ -484,6 +610,48 @@ const displayContent: DisplayContent = {
       qualities: {
         en: 'Steadfastness, skillfulness, discipline, and quiet loyalty.', pa: 'ਅਡੋਲਤਾ, ਹੁਨਰਮੰਦੀ, ਅਨੁਸ਼ਾਸਨ ਅਤੇ ਸ਼ਾਂਤ ਵਫ਼ਾਦਾਰੀ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Before the Call', pa: 'ਪੁਕਾਰ ਤੋਂ ਪਹਿਲਾਂ' },
+          title: { en: 'A Craftsman of Dwarka', pa: 'ਦਵਾਰਕਾ ਦਾ ਇੱਕ ਕਾਰੀਗਰ' },
+          body: {
+            en: 'Mohkam Chand was a tailor and calico printer from Dwarka, Gujarat — one of India\'s four sacred dhams, thousands of miles from Punjab. His hands, skilled in patterning cloth, would soon be raised in a very different devotion.',
+            pa: 'ਮੋਹਕਮ ਚੰਦ ਗੁਜਰਾਤ ਦੇ ਦਵਾਰਕਾ ਤੋਂ ਇੱਕ ਦਰਜ਼ੀ ਅਤੇ ਛਾਪਾਕਾਰ ਸਨ — ਭਾਰਤ ਦੇ ਚਾਰ ਪਵਿੱਤਰ ਧਾਮਾਂ ਵਿੱਚੋਂ ਇੱਕ, ਪੰਜਾਬ ਤੋਂ ਹਜ਼ਾਰਾਂ ਮੀਲ ਦੂਰ। ਕੱਪੜੇ ਤੇ ਨਮੂਨੇ ਬਣਾਉਣ ਵਿੱਚ ਹੁਨਰਮੰਦ ਉਨ੍ਹਾਂ ਦੇ ਹੱਥ ਜਲਦੀ ਹੀ ਇੱਕ ਬਿਲਕੁਲ ਵੱਖਰੀ ਭਗਤੀ ਵਿੱਚ ਉੱਠਣ ਵਾਲੇ ਸਨ।',
+          },
+        },
+        {
+          kicker: { en: 'The Call at Anandpur Sahib', pa: 'ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਦੀ ਪੁਕਾਰ' },
+          title: { en: 'The Fourth to Answer', pa: 'ਜਵਾਬ ਦੇਣ ਵਾਲੇ ਚੌਥੇ' },
+          body: {
+            en: 'Mohkam Chand was the fourth to step forward when Guru Gobind Singh Ji called for a head — a skilled artisan from faraway Dwarka answering a call that echoed across all of India, proof of the Guru\'s reach to every corner of the subcontinent.',
+            pa: 'ਮੋਹਕਮ ਚੰਦ ਚੌਥੇ ਅੱਗੇ ਆਏ ਜਦੋਂ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਨੇ ਸਿਰ ਦੀ ਮੰਗ ਕੀਤੀ — ਦੂਰ ਦਵਾਰਕਾ ਤੋਂ ਇੱਕ ਹੁਨਰਮੰਦ ਕਾਰੀਗਰ ਨੇ ਉਸ ਪੁਕਾਰ ਦਾ ਜਵਾਬ ਦਿੱਤਾ ਜੋ ਸਾਰੇ ਭਾਰਤ ਵਿੱਚ ਗੂੰਜੀ।',
+          },
+        },
+        {
+          kicker: { en: 'Becoming Khalsa', pa: 'ਖ਼ਾਲਸਾ ਬਣਨਾ' },
+          title: { en: 'Steadfastness Forged Anew', pa: 'ਨਵੇਂ ਸਿਰੇ ਤੋਂ ਘੜੀ ਅਡੋਲਤਾ' },
+          body: {
+            en: 'Initiated with Amrit as Bhai Mohkam Singh Ji, the craftsman from Dwarka became one of the five founders of the Khalsa Panth — his old name Mohkam Chand transformed, but the steadfastness (mohkam) in his character carried straight through into his new identity.',
+            pa: 'ਭਾਈ ਮੋਹਕਮ ਸਿੰਘ ਜੀ ਵਜੋਂ ਅੰਮ੍ਰਿਤ ਨਾਲ ਦੀਖਿਆ ਲੈ ਕੇ, ਦਵਾਰਕਾ ਦਾ ਇਹ ਕਾਰੀਗਰ ਖ਼ਾਲਸਾ ਪੰਥ ਦੇ ਪੰਜ ਸੰਸਥਾਪਕਾਂ ਵਿੱਚੋਂ ਇੱਕ ਬਣਿਆ — ਉਨ੍ਹਾਂ ਦਾ ਪੁਰਾਣਾ ਨਾਮ ਬਦਲਿਆ, ਪਰ ਉਨ੍ਹਾਂ ਦੇ ਕਿਰਦਾਰ ਵਿੱਚ ਅਡੋਲਤਾ ਨਵੀਂ ਪਹਿਚਾਣ ਵਿੱਚ ਵੀ ਬਣੀ ਰਹੀ।',
+          },
+        },
+        {
+          kicker: { en: 'Role & Legacy', pa: 'ਭੂਮਿਕਾ ਅਤੇ ਵਿਰਾਸਤ' },
+          title: { en: 'Fallen at Chamkaur Sahib', pa: 'ਚਮਕੌਰ ਸਾਹਿਬ ਵਿੱਚ ਸ਼ਹੀਦੀ' },
+          body: {
+            en: 'Bhai Mohkam Singh Ji participated in major battles alongside Guru Gobind Singh Ji and attained shaheedi at the Battle of Chamkaur Sahib in December 1705, among the brave companions who gave their lives defending the Guru and the Khalsa Panth.',
+            pa: 'ਭਾਈ ਮੋਹਕਮ ਸਿੰਘ ਜੀ ਨੇ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਦੇ ਨਾਲ ਵੱਡੀਆਂ ਲੜਾਈਆਂ ਵਿੱਚ ਭਾਗ ਲਿਆ ਅਤੇ ਦਸੰਬਰ 1705 ਵਿੱਚ ਚਮਕੌਰ ਸਾਹਿਬ ਦੀ ਜੰਗ ਵਿੱਚ ਸ਼ਹੀਦੀ ਪਾਈ।',
+          },
+        },
+        {
+          kicker: { en: 'Lessons for Today', pa: 'ਅੱਜ ਲਈ ਸਿੱਖਿਆ' },
+          title: { en: 'A Distance Sincere Seeking Can Cross', pa: 'ਸੱਚੀ ਭਾਲ ਦੀ ਪਾਰ ਕੀਤੀ ਦੂਰੀ' },
+          body: {
+            en: 'Bhai Mohkam Singh Ji\'s life shows that skill practiced with devotion — whether in cloth or in character — builds the steadiness a person needs when called to something greater. His journey from Dwarka to Anandpur Sahib is a reminder that sincere seeking can cross any distance.',
+            pa: 'ਭਾਈ ਮੋਹਕਮ ਸਿੰਘ ਜੀ ਦਾ ਜੀਵਨ ਦਿਖਾਉਂਦਾ ਹੈ ਕਿ ਸ਼ਰਧਾ ਨਾਲ ਅਭਿਆਸ ਕੀਤਾ ਹੁਨਰ ਉਹ ਅਡੋਲਤਾ ਬਣਾਉਂਦਾ ਹੈ ਜਿਸਦੀ ਲੋੜ ਕਿਸੇ ਵੱਡੀ ਪੁਕਾਰ ਦੇ ਸਮੇਂ ਪੈਂਦੀ ਹੈ। ਦਵਾਰਕਾ ਤੋਂ ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਤੱਕ ਦਾ ਸਫ਼ਰ ਯਾਦ ਦਿਵਾਉਂਦਾ ਹੈ ਕਿ ਸੱਚੀ ਭਾਲ ਕੋਈ ਵੀ ਦੂਰੀ ਪਾਰ ਕਰ ਸਕਦੀ ਹੈ।',
+          },
+        },
+      ],
     },
     {
       id: 5,
@@ -529,6 +697,48 @@ const displayContent: DisplayContent = {
       qualities: {
         en: 'Service, humility, devotion, and quiet perseverance.', pa: 'ਸੇਵਾ, ਨਿਮਰਤਾ, ਭਗਤੀ ਅਤੇ ਸ਼ਾਂਤ ਦ੍ਰਿੜਤਾ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Before the Call', pa: 'ਪੁਕਾਰ ਤੋਂ ਪਹਿਲਾਂ' },
+          title: { en: 'A Barber from Bidar', pa: 'ਬੀਦਰ ਦਾ ਇੱਕ ਨਾਈ' },
+          body: {
+            en: 'Sahib Chand was a barber from Bidar, Karnataka — over 1,500 kilometres south of Anandpur Sahib. In the caste order of the era, the Nai (barber) community occupied one of its most marginalized rungs.',
+            pa: 'ਸਾਹਿਬ ਚੰਦ ਕਰਨਾਟਕ ਦੇ ਬੀਦਰ ਤੋਂ ਇੱਕ ਨਾਈ ਸਨ — ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਤੋਂ 1,500 ਕਿਲੋਮੀਟਰ ਤੋਂ ਵੱਧ ਦੱਖਣ ਵਿੱਚ। ਉਸ ਸਮੇਂ ਦੀ ਜਾਤ ਵਿਵਸਥਾ ਵਿੱਚ, ਨਾਈ ਭਾਈਚਾਰਾ ਸਭ ਤੋਂ ਹਾਸ਼ੀਏ ਤੇ ਧੱਕੇ ਵਰਗਾਂ ਵਿੱਚੋਂ ਇੱਕ ਸੀ।',
+          },
+        },
+        {
+          kicker: { en: 'The Call at Anandpur Sahib', pa: 'ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਦੀ ਪੁਕਾਰ' },
+          title: { en: 'The Fifth, and the Circle Complete', pa: 'ਪੰਜਵੇਂ, ਅਤੇ ਚੱਕਰ ਪੂਰਾ' },
+          body: {
+            en: 'On Vaisakhi 1699, Sahib Chand was the fifth to step forward — standing alongside a Khatri merchant, a Jat farmer, a water carrier, and a calico printer. Five people, five different castes, five corners of India. The Khalsa was complete.',
+            pa: 'ਵਿਸਾਖੀ 1699 ਨੂੰ, ਸਾਹਿਬ ਚੰਦ ਪੰਜਵੇਂ ਅੱਗੇ ਆਏ — ਇੱਕ ਖੱਤਰੀ, ਜੱਟ, ਝੀਵਰ ਅਤੇ ਛੀਂਬੇ ਦੇ ਨਾਲ ਖੜ੍ਹੇ ਹੋ ਕੇ। ਪੰਜ ਲੋਕ, ਪੰਜ ਵੱਖ-ਵੱਖ ਜਾਤਾਂ, ਭਾਰਤ ਦੇ ਪੰਜ ਖਿੱਤੇ। ਖ਼ਾਲਸਾ ਪੂਰਾ ਹੋਇਆ।',
+          },
+        },
+        {
+          kicker: { en: 'Becoming Khalsa', pa: 'ਖ਼ਾਲਸਾ ਬਣਨਾ' },
+          title: { en: 'United as One Brotherhood', pa: 'ਇੱਕ ਭਾਈਚਾਰੇ ਵਜੋਂ ਇਕਜੁੱਟ' },
+          body: {
+            en: 'As the fifth to receive Amrit, Bhai Sahib Singh Ji helped inaugurate the Amrit Sanchar ceremony itself — becoming the living embodiment of a teaching that all souls are equal before Waheguru, regardless of the trade a person\'s hands once knew.',
+            pa: 'ਅੰਮ੍ਰਿਤ ਪ੍ਰਾਪਤ ਕਰਨ ਵਾਲੇ ਪੰਜਵੇਂ ਵਜੋਂ, ਭਾਈ ਸਾਹਿਬ ਸਿੰਘ ਜੀ ਨੇ ਅੰਮ੍ਰਿਤ ਸੰਚਾਰ ਦੀ ਰਸਮ ਸ਼ੁਰੂ ਕਰਨ ਵਿੱਚ ਮਦਦ ਕੀਤੀ — ਇਸ ਸਿੱਖਿਆ ਦੇ ਜੀਵੰਤ ਰੂਪ ਬਣੇ ਕਿ ਸਾਰੀਆਂ ਰੂਹਾਂ ਵਾਹਿਗੁਰੂ ਅੱਗੇ ਬਰਾਬਰ ਹਨ।',
+          },
+        },
+        {
+          kicker: { en: 'Role & Legacy', pa: 'ਭੂਮਿਕਾ ਅਤੇ ਵਿਰਾਸਤ' },
+          title: { en: 'Fallen at Chamkaur Sahib', pa: 'ਚਮਕੌਰ ਸਾਹਿਬ ਵਿੱਚ ਸ਼ਹੀਦੀ' },
+          body: {
+            en: 'Bhai Sahib Singh Ji is believed to have attained shaheedi at the Battle of Chamkaur Sahib in December 1705, giving his life alongside his brothers of the Panj Pyare in the service of the Khalsa Panth.',
+            pa: 'ਮੰਨਿਆ ਜਾਂਦਾ ਹੈ ਕਿ ਭਾਈ ਸਾਹਿਬ ਸਿੰਘ ਜੀ ਨੇ ਦਸੰਬਰ 1705 ਵਿੱਚ ਚਮਕੌਰ ਸਾਹਿਬ ਦੀ ਜੰਗ ਵਿੱਚ ਆਪਣੇ ਪੰਜ ਪਿਆਰੇ ਭਰਾਵਾਂ ਦੇ ਨਾਲ ਖ਼ਾਲਸਾ ਪੰਥ ਦੀ ਸੇਵਾ ਵਿੱਚ ਸ਼ਹੀਦੀ ਪਾਈ।',
+          },
+        },
+        {
+          kicker: { en: 'Lessons for Today', pa: 'ਅੱਜ ਲਈ ਸਿੱਖਿਆ' },
+          title: { en: 'The Last to Complete the Circle', pa: 'ਚੱਕਰ ਪੂਰਾ ਕਰਨ ਵਾਲੇ ਆਖਰੀ' },
+          body: {
+            en: 'Bhai Sahib Singh Ji\'s life teaches that service, however socially undervalued, is a form of devotion — and that the last person to complete a circle can matter as much as the first. His journey from Bidar to Anandpur Sahib completed a living map of a Panth meant for all of India.',
+            pa: 'ਭਾਈ ਸਾਹਿਬ ਸਿੰਘ ਜੀ ਦਾ ਜੀਵਨ ਸਿਖਾਉਂਦਾ ਹੈ ਕਿ ਸੇਵਾ, ਭਾਵੇਂ ਸਮਾਜਿਕ ਤੌਰ ਤੇ ਘੱਟ ਸਮਝੀ ਜਾਵੇ, ਭਗਤੀ ਦਾ ਇੱਕ ਰੂਪ ਹੈ। ਬੀਦਰ ਤੋਂ ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਤੱਕ ਦਾ ਸਫ਼ਰ ਇੱਕ ਪੂਰਨ ਪੰਥ ਦਾ ਜੀਵੰਤ ਨਕਸ਼ਾ ਪੂਰਾ ਕਰਦਾ ਹੈ।',
+          },
+        },
+      ],
     },
   ],
   takhts: [
@@ -571,6 +781,40 @@ const displayContent: DisplayContent = {
         en: 'The Akal Takht anchors Amritsar\'s identity as the spiritual and political capital of the Sikh world, drawing millions of pilgrims annually whose visits sustain the city\'s langar (community kitchen) tradition, local economy, and civic life around the twin principles of Miri-Piri.',
         pa: 'ਅਕਾਲ ਤਖ਼ਤ ਅੰਮ੍ਰਿਤਸਰ ਦੀ ਪਹਿਚਾਣ ਨੂੰ ਸਿੱਖ ਜਗਤ ਦੀ ਅਧਿਆਤਮਿਕ ਅਤੇ ਰਾਜਨੀਤਿਕ ਰਾਜਧਾਨੀ ਵਜੋਂ ਸਥਾਪਿਤ ਕਰਦਾ ਹੈ, ਹਰ ਸਾਲ ਲੱਖਾਂ ਸ਼ਰਧਾਲੂਆਂ ਨੂੰ ਖਿੱਚਦਾ ਹੈ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Founding Story', pa: 'ਸਥਾਪਨਾ ਦੀ ਕਥਾ' },
+          title: { en: 'A Throne Built in Defiance', pa: 'ਦ੍ਰਿੜਤਾ ਵਿੱਚ ਉਸਾਰਿਆ ਤਖ਼ਤ' },
+          body: {
+            en: 'In 1606, after the Mughal Empire martyred his father Guru Arjan Dev Ji, the young Guru Hargobind Sahib Ji responded not with retreat but with resolve. He built the Akal Takht — the "Eternal Throne" — directly opposite the Harmandir Sahib, and for the first time wore two swords together: Miri and Piri.',
+            pa: '1606 ਵਿੱਚ, ਮੁਗਲ ਸਾਮਰਾਜ ਵੱਲੋਂ ਆਪਣੇ ਪਿਤਾ ਗੁਰੂ ਅਰਜਨ ਦੇਵ ਜੀ ਦੀ ਸ਼ਹੀਦੀ ਤੋਂ ਬਾਅਦ, ਨੌਜਵਾਨ ਗੁਰੂ ਹਰਿਗੋਬਿੰਦ ਸਾਹਿਬ ਜੀ ਨੇ ਪਿੱਛੇ ਹਟਣ ਦੀ ਥਾਂ ਦ੍ਰਿੜਤਾ ਨਾਲ ਜਵਾਬ ਦਿੱਤਾ। ਉਨ੍ਹਾਂ ਨੇ ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਦੇ ਬਿਲਕੁਲ ਸਾਹਮਣੇ ਅਕਾਲ ਤਖ਼ਤ ਉਸਾਰਿਆ, ਅਤੇ ਪਹਿਲੀ ਵਾਰ ਦੋ ਤਲਵਾਰਾਂ ਇਕੱਠੀਆਂ ਪਹਿਨੀਆਂ: ਮੀਰੀ ਅਤੇ ਪੀਰੀ।',
+          },
+        },
+        {
+          kicker: { en: 'Why It Was Established', pa: 'ਇਹ ਕਿਉਂ ਸਥਾਪਿਤ ਹੋਇਆ' },
+          title: { en: 'Miri-Piri: Two Swords, One Principle', pa: 'ਮੀਰੀ-ਪੀਰੀ: ਦੋ ਤਲਵਾਰਾਂ, ਇੱਕ ਸਿਧਾਂਤ' },
+          body: {
+            en: 'The Akal Takht embodies a founding Sikh principle: spiritual authority (Piri) and worldly sovereignty (Miri) are not separate, but united in one seat. It was built intentionally taller than the Mughal Emperor\'s own seat of power — a deliberate statement that sovereign Sikh authority recognizes no earthly superior.',
+            pa: 'ਅਕਾਲ ਤਖ਼ਤ ਇੱਕ ਬੁਨਿਆਦੀ ਸਿੱਖ ਸਿਧਾਂਤ ਨੂੰ ਦਰਸਾਉਂਦਾ ਹੈ: ਅਧਿਆਤਮਿਕ ਅਧਿਕਾਰ (ਪੀਰੀ) ਅਤੇ ਸੰਸਾਰਕ ਪ੍ਰਭੁਸੱਤਾ (ਮੀਰੀ) ਵੱਖਰੇ ਨਹੀਂ, ਸਗੋਂ ਇੱਕ ਆਸਣ ਵਿੱਚ ਇਕਜੁੱਟ ਹਨ। ਇਹ ਜਾਣਬੁੱਝ ਕੇ ਮੁਗਲ ਬਾਦਸ਼ਾਹ ਦੀ ਸੱਤਾ ਦੀ ਸੀਟ ਨਾਲੋਂ ਉੱਚਾ ਬਣਾਇਆ ਗਿਆ ਸੀ।',
+          },
+        },
+        {
+          kicker: { en: 'Historical Role', pa: 'ਇਤਿਹਾਸਕ ਭੂਮਿਕਾ' },
+          title: { en: 'The Source of Every Hukamnama', pa: 'ਹਰ ਹੁਕਮਨਾਮੇ ਦਾ ਸਰੋਤ' },
+          body: {
+            en: 'Since 1606, the Akal Takht has been the supreme seat of Sikh institutional authority — the source of every hukamnama (edict) binding on Sikhs worldwide, its Jathedar the highest temporal authority in the faith, appointed by the SGPC.',
+            pa: '1606 ਤੋਂ, ਅਕਾਲ ਤਖ਼ਤ ਸਿੱਖ ਸੰਸਥਾਗਤ ਅਧਿਕਾਰ ਦਾ ਸਰਵੋੱਚ ਆਸਣ ਰਿਹਾ ਹੈ — ਵਿਸ਼ਵਭਰ ਦੇ ਸਿੱਖਾਂ ਲਈ ਬੰਧਨਕਾਰੀ ਹਰ ਹੁਕਮਨਾਮੇ ਦਾ ਸਰੋਤ, ਜਿਸਦਾ ਜਥੇਦਾਰ ਧਰਮ ਵਿੱਚ ਸਭ ਤੋਂ ਉੱਚਾ ਸੰਸਾਰਕ ਅਧਿਕਾਰ ਹੈ।',
+          },
+        },
+        {
+          kicker: { en: 'Present Day', pa: 'ਅੱਜ' },
+          title: { en: 'Rebuilt, and Still the Panth\'s Compass', pa: 'ਮੁੜ ਉਸਾਰਿਆ, ਅਤੇ ਅੱਜ ਵੀ ਪੰਥ ਦੀ ਦਿਸ਼ਾ' },
+          body: {
+            en: 'The Akal Takht was severely damaged during Operation Blue Star in 1984 and later rebuilt by the Sikh community. Today it anchors Amritsar\'s identity as the spiritual and political capital of the Sikh world, drawing millions of pilgrims whose visits sustain the city\'s langar tradition and civic life.',
+            pa: '1984 ਵਿੱਚ ਓਪਰੇਸ਼ਨ ਬਲੂ ਸਟਾਰ ਦੌਰਾਨ ਅਕਾਲ ਤਖ਼ਤ ਬੁਰੀ ਤਰ੍ਹਾਂ ਨੁਕਸਾਨਿਆ ਗਿਆ ਸੀ ਅਤੇ ਬਾਅਦ ਵਿੱਚ ਸਿੱਖ ਭਾਈਚਾਰੇ ਦੁਆਰਾ ਮੁੜ ਉਸਾਰਿਆ ਗਿਆ। ਅੱਜ ਇਹ ਅੰਮ੍ਰਿਤਸਰ ਦੀ ਪਹਿਚਾਣ ਨੂੰ ਸਿੱਖ ਜਗਤ ਦੀ ਰਾਜਧਾਨੀ ਵਜੋਂ ਸਥਾਪਿਤ ਕਰਦਾ ਹੈ।',
+          },
+        },
+      ],
     },
     {
       id: 'kesgarh_sahib',
@@ -611,6 +855,40 @@ const displayContent: DisplayContent = {
         en: 'Anandpur Sahib remains one of Sikhi\'s most important pilgrimage towns, hosting the large annual Hola Mohalla festival, and its fort-building history shaped defensive settlement patterns across the Shivalik foothill region.',
         pa: 'ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਸਿੱਖੀ ਦੇ ਸਭ ਤੋਂ ਮਹੱਤਵਪੂਰਨ ਤੀਰਥ ਨਗਰਾਂ ਵਿੱਚੋਂ ਇੱਕ ਬਣਿਆ ਰਹਿੰਦਾ ਹੈ, ਹਰ ਸਾਲ ਵੱਡਾ ਹੋਲਾ ਮਹੱਲਾ ਤਿਉਹਾਰ ਮਨਾਉਂਦਾ ਹੈ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Founding Story', pa: 'ਸਥਾਪਨਾ ਦੀ ਕਥਾ' },
+          title: { en: 'Thousands Gathered at Anandpur Sahib', pa: 'ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਵਿੱਚ ਹਜ਼ਾਰਾਂ ਇਕੱਠੇ' },
+          body: {
+            en: 'On the Vaisakhi of 1699, Guru Gobind Singh Ji summoned thousands of Sikhs to the fortress-city of Anandpur Sahib. Drawing his sword before the vast congregation, he called for five volunteers willing to offer their heads for the faith.',
+            pa: 'ਵਿਸਾਖੀ 1699 ਨੂੰ, ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਨੇ ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਦੇ ਕਿਲ੍ਹਾਬੰਦ ਨਗਰ ਵਿੱਚ ਹਜ਼ਾਰਾਂ ਸਿੱਖਾਂ ਨੂੰ ਬੁਲਾਇਆ। ਵੱਡੀ ਸੰਗਤ ਅੱਗੇ ਤਲਵਾਰ ਕੱਢ ਕੇ, ਉਨ੍ਹਾਂ ਨੇ ਧਰਮ ਲਈ ਆਪਣੇ ਸਿਰ ਭੇਟ ਕਰਨ ਲਈ ਤਿਆਰ ਪੰਜ ਸੇਵਾਦਾਰਾਂ ਦੀ ਮੰਗ ਕੀਤੀ।',
+          },
+        },
+        {
+          kicker: { en: 'Why It Was Established', pa: 'ਇਹ ਕਿਉਂ ਸਥਾਪਿਤ ਹੋਇਆ' },
+          title: { en: 'The Birth of the Khalsa', pa: 'ਖ਼ਾਲਸੇ ਦਾ ਜਨਮ' },
+          body: {
+            en: 'As each of the Panj Pyare stepped forward, the Guru led them behind a tent and emerged each time with a bloodied sword — the crowd fearing the worst. What was truly happening was the preparation of Amrit, stirred with a khanda in an iron bowl to the recitation of Panj Banis. Here the Khalsa Panth was born.',
+            pa: 'ਜਿਵੇਂ-ਜਿਵੇਂ ਪੰਜ ਪਿਆਰੇ ਅੱਗੇ ਆਏ, ਗੁਰੂ ਜੀ ਉਨ੍ਹਾਂ ਨੂੰ ਤੰਬੂ ਪਿੱਛੇ ਲੈ ਗਏ ਅਤੇ ਹਰ ਵਾਰ ਖ਼ੂਨ ਨਾਲ ਰੰਗੀ ਤਲਵਾਰ ਨਾਲ ਬਾਹਰ ਆਏ। ਅਸਲ ਵਿੱਚ ਪੰਜ ਬਾਣੀਆਂ ਦੇ ਪਾਠ ਨਾਲ ਲੋਹੇ ਦੇ ਭਾਂਡੇ ਵਿੱਚ ਖੰਡੇ ਨਾਲ ਹਿਲਾਇਆ ਅੰਮ੍ਰਿਤ ਤਿਆਰ ਹੋ ਰਿਹਾ ਸੀ। ਇੱਥੇ ਖ਼ਾਲਸਾ ਪੰਥ ਦਾ ਜਨਮ ਹੋਇਆ।',
+          },
+        },
+        {
+          kicker: { en: 'Historical Role', pa: 'ਇਤਿਹਾਸਕ ਭੂਮਿਕਾ' },
+          title: { en: 'Guardian of the Guru\'s Weapons', pa: 'ਗੁਰੂ ਦੇ ਹਥਿਆਰਾਂ ਦਾ ਰਖਵਾਲਾ' },
+          body: {
+            en: 'Founded as the town of Chak Nanaki by Guru Tegh Bahadur Ji in 1665, Anandpur Sahib became Guru Gobind Singh Ji\'s primary seat, ringed by forts to protect the young Khalsa community. Keshgarh Sahib today preserves the Guru\'s sacred weapons (shastars), including the original khanda used to prepare the first Amrit.',
+            pa: '1665 ਵਿੱਚ ਗੁਰੂ ਤੇਗ਼ ਬਹਾਦਰ ਜੀ ਦੁਆਰਾ ਚੱਕ ਨਾਨਕੀ ਨਗਰ ਵਜੋਂ ਸਥਾਪਿਤ, ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਦਾ ਮੁੱਖ ਆਸਣ ਬਣਿਆ। ਕੇਸਗੜ੍ਹ ਸਾਹਿਬ ਅੱਜ ਗੁਰੂ ਜੀ ਦੇ ਪਵਿੱਤਰ ਸ਼ਸਤਰ ਸੰਭਾਲਦਾ ਹੈ, ਜਿਸ ਵਿੱਚ ਪਹਿਲਾ ਅੰਮ੍ਰਿਤ ਤਿਆਰ ਕਰਨ ਲਈ ਵਰਤਿਆ ਗਿਆ ਮੂਲ ਖੰਡਾ ਸ਼ਾਮਲ ਹੈ।',
+          },
+        },
+        {
+          kicker: { en: 'Present Day', pa: 'ਅੱਜ' },
+          title: { en: 'Hola Mohalla and a Living Birthplace', pa: 'ਹੋਲਾ ਮਹੱਲਾ ਅਤੇ ਇੱਕ ਜੀਵੰਤ ਜਨਮ ਅਸਥਾਨ' },
+          body: {
+            en: 'Each spring, hundreds of thousands of Sikhs gather at Anandpur Sahib for Hola Mohalla, filling the birthplace of the Khalsa with the same energy that filled it on that Vaisakhi in 1699. The Shastarghar (weapons museum) remains a must-visit for pilgrims tracing the Khalsa\'s founding moment.',
+            pa: 'ਹਰ ਬਸੰਤ, ਲੱਖਾਂ ਸਿੱਖ ਅਨੰਦਪੁਰ ਸਾਹਿਬ ਵਿੱਚ ਹੋਲਾ ਮਹੱਲਾ ਲਈ ਇਕੱਠੇ ਹੁੰਦੇ ਹਨ, ਖ਼ਾਲਸੇ ਦੇ ਜਨਮ ਅਸਥਾਨ ਨੂੰ ਉਸੇ ਊਰਜਾ ਨਾਲ ਭਰਦੇ ਹਨ ਜੋ 1699 ਦੀ ਉਸ ਵਿਸਾਖੀ ਤੇ ਸੀ। ਸ਼ਸਤਰਘਰ ਅੱਜ ਵੀ ਸ਼ਰਧਾਲੂਆਂ ਲਈ ਜ਼ਰੂਰ ਦੇਖਣ ਵਾਲਾ ਸਥਾਨ ਹੈ।',
+          },
+        },
+      ],
     },
     {
       id: 'damdama_sahib',
@@ -651,6 +929,40 @@ const displayContent: DisplayContent = {
         en: 'The Takht\'s scholarly legacy shaped Talwandi Sabo and the wider Bathinda area into a center of Sikh religious education, with institutions such as Guru Kashi University, named for the site\'s epithet, continuing that tradition of learning today.',
         pa: 'ਤਖ਼ਤ ਦੀ ਵਿਦਵਤਾ ਪਰੰਪਰਾ ਨੇ ਤਲਵੰਡੀ ਸਾਬੋ ਅਤੇ ਬਠਿੰਡਾ ਖੇਤਰ ਨੂੰ ਸਿੱਖ ਧਾਰਮਿਕ ਸਿੱਖਿਆ ਦਾ ਕੇਂਦਰ ਬਣਾ ਦਿੱਤਾ, ਗੁਰੂ ਕਾਸ਼ੀ ਯੂਨੀਵਰਸਿਟੀ ਵਰਗੀਆਂ ਸੰਸਥਾਵਾਂ ਅੱਜ ਵੀ ਇਹ ਪਰੰਪਰਾ ਜਾਰੀ ਰੱਖਦੀਆਂ ਹਨ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Founding Story', pa: 'ਸਥਾਪਨਾ ਦੀ ਕਥਾ' },
+          title: { en: 'A Resting Place After Loss', pa: 'ਨੁਕਸਾਨ ਤੋਂ ਬਾਅਦ ਇੱਕ ਵਿਸ਼ਰਾਮ ਅਸਥਾਨ' },
+          body: {
+            en: 'After the devastating battles of 1704–05 — having lost his four sons, his mother Mata Gujri Ji, and countless companions — Guru Gobind Singh Ji arrived at Talwandi Sabo. Here, for nearly nine months, the Guru "breathed" (damdama = resting place) and gathered his scattered sangat.',
+            pa: '1704-05 ਦੀਆਂ ਵਿਨਾਸ਼ਕਾਰੀ ਲੜਾਈਆਂ ਤੋਂ ਬਾਅਦ — ਆਪਣੇ ਚਾਰੇ ਪੁੱਤਰਾਂ, ਮਾਤਾ ਗੁਜਰੀ ਜੀ ਅਤੇ ਅਣਗਿਣਤ ਸਾਥੀਆਂ ਨੂੰ ਗੁਆ ਕੇ — ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਤਲਵੰਡੀ ਸਾਬੋ ਪਹੁੰਚੇ। ਇੱਥੇ, ਲਗਭਗ ਨੌਂ ਮਹੀਨੇ, ਗੁਰੂ ਜੀ ਨੇ ਦਮ ਲਿਆ ਅਤੇ ਆਪਣੀ ਖਿੰਡੀ ਹੋਈ ਸੰਗਤ ਨੂੰ ਇਕੱਠਾ ਕੀਤਾ।',
+          },
+        },
+        {
+          kicker: { en: 'Why It Was Established', pa: 'ਇਹ ਕਿਉਂ ਸਥਾਪਿਤ ਹੋਇਆ' },
+          title: { en: 'Reciting Guru Granth Sahib Ji From Memory', pa: 'ਯਾਦ ਤੋਂ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ ਦਾ ਪਾਠ' },
+          body: {
+            en: 'Most profoundly, Guru Gobind Singh Ji re-established the entire Guru Granth Sahib Ji from memory here — reciting it to Bhai Mani Singh Ji, who transcribed it — and added the bani of his own father, Guru Tegh Bahadur Ji. This final version became the definitive scripture of the Sikhs.',
+            pa: 'ਸਭ ਤੋਂ ਗਹਿਰੀ ਗੱਲ ਇਹ ਹੈ ਕਿ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਨੇ ਇੱਥੇ ਯਾਦ ਤੋਂ ਪੂਰਾ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ ਮੁੜ ਤਿਆਰ ਕੀਤਾ — ਭਾਈ ਮਨੀ ਸਿੰਘ ਜੀ ਨੂੰ ਪਾਠ ਕਰਵਾ ਕੇ, ਜਿਨ੍ਹਾਂ ਨੇ ਇਸਨੂੰ ਲਿਖਿਆ — ਅਤੇ ਆਪਣੇ ਪਿਤਾ ਗੁਰੂ ਤੇਗ਼ ਬਹਾਦਰ ਜੀ ਦੀ ਬਾਣੀ ਜੋੜੀ। ਇਹ ਅੰਤਿਮ ਸੰਸਕਰਣ ਸਿੱਖਾਂ ਦਾ ਅਧਿਕਾਰਕ ਗ੍ਰੰਥ ਬਣਿਆ।',
+          },
+        },
+        {
+          kicker: { en: 'Historical Role', pa: 'ਇਤਿਹਾਸਕ ਭੂਮਿਕਾ' },
+          title: { en: 'Guru Ki Kashi', pa: 'ਗੁਰੂ ਕੀ ਕਾਸ਼ੀ' },
+          body: {
+            en: 'Talwandi Sabo earned the title "Guru Ki Kashi" — the Guru\'s Varanasi — recognizing it as the supreme center of Sikh scholarship, equal in spiritual gravity to the ancient city of Varanasi in Hindu tradition. It was formally declared the fifth Takht on November 26, 1966.',
+            pa: 'ਤਲਵੰਡੀ ਸਾਬੋ ਨੇ "ਗੁਰੂ ਕੀ ਕਾਸ਼ੀ" ਦਾ ਖ਼ਿਤਾਬ ਕਮਾਇਆ — ਸਿੱਖ ਵਿਦਵਤਾ ਦਾ ਸਰਵੋੱਚ ਕੇਂਦਰ। ਇਸਨੂੰ 26 ਨਵੰਬਰ 1966 ਨੂੰ ਰਸਮੀ ਤੌਰ ਤੇ ਪੰਜਵਾਂ ਤਖ਼ਤ ਘੋਸ਼ਿਤ ਕੀਤਾ ਗਿਆ।',
+          },
+        },
+        {
+          kicker: { en: 'Present Day', pa: 'ਅੱਜ' },
+          title: { en: 'A Living Center of Gurbani Study', pa: 'ਗੁਰਬਾਣੀ ਅਧਿਐਨ ਦਾ ਜੀਵੰਤ ਕੇਂਦਰ' },
+          body: {
+            en: 'Talwandi Sabo\'s scholarly legacy shaped the wider Bathinda region into a center of Sikh religious education. Institutions such as Guru Kashi University, named for the site\'s epithet, continue that tradition of learning today, drawing students and scholars of Gurbani from around the world.',
+            pa: 'ਤਲਵੰਡੀ ਸਾਬੋ ਦੀ ਵਿਦਵਤਾ ਪਰੰਪਰਾ ਨੇ ਬਠਿੰਡਾ ਖੇਤਰ ਨੂੰ ਸਿੱਖ ਧਾਰਮਿਕ ਸਿੱਖਿਆ ਦਾ ਕੇਂਦਰ ਬਣਾ ਦਿੱਤਾ। ਗੁਰੂ ਕਾਸ਼ੀ ਯੂਨੀਵਰਸਿਟੀ ਵਰਗੀਆਂ ਸੰਸਥਾਵਾਂ ਅੱਜ ਵੀ ਇਹ ਪਰੰਪਰਾ ਜਾਰੀ ਰੱਖਦੀਆਂ ਹਨ।',
+          },
+        },
+      ],
     },
     {
       id: 'patna_sahib',
@@ -691,6 +1003,40 @@ const displayContent: DisplayContent = {
         en: 'Takht Sri Patna Sahib anchors a small but historic Sikh community within a city where Sikhs are a minority, drawing pilgrims especially for Guru Gobind Singh Ji\'s Prakash Utsav and marking the geographic reach of Sikh heritage into eastern India.',
         pa: 'ਤਖ਼ਤ ਸ੍ਰੀ ਪਟਨਾ ਸਾਹਿਬ ਇੱਕ ਛੋਟੇ ਪਰ ਇਤਿਹਾਸਕ ਸਿੱਖ ਭਾਈਚਾਰੇ ਨੂੰ ਸੰਭਾਲਦਾ ਹੈ, ਖ਼ਾਸ ਕਰਕੇ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਦੇ ਪ੍ਰਕਾਸ਼ ਉਤਸਵ ਲਈ ਸ਼ਰਧਾਲੂਆਂ ਨੂੰ ਖਿੱਚਦਾ ਹੈ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Founding Story', pa: 'ਸਥਾਪਨਾ ਦੀ ਕਥਾ' },
+          title: { en: 'A Son Born in Patna', pa: 'ਪਟਨਾ ਵਿੱਚ ਜਨਮਿਆ ਪੁੱਤਰ' },
+          body: {
+            en: 'In December 1666, Mata Gujri Ji, wife of Guru Tegh Bahadur Ji, gave birth to a son in Patna, Bihar — the child who would become Guru Gobind Singh Ji. His birth name was Gobind Rai, and he spent his first six years here, surrounded by Bihar\'s devoted Sikh sangat.',
+            pa: 'ਦਸੰਬਰ 1666 ਵਿੱਚ, ਮਾਤਾ ਗੁਜਰੀ ਜੀ, ਗੁਰੂ ਤੇਗ਼ ਬਹਾਦਰ ਜੀ ਦੀ ਪਤਨੀ, ਨੇ ਪਟਨਾ, ਬਿਹਾਰ ਵਿੱਚ ਇੱਕ ਪੁੱਤਰ ਨੂੰ ਜਨਮ ਦਿੱਤਾ — ਜੋ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਬਣੇ। ਉਨ੍ਹਾਂ ਦਾ ਜਨਮ ਨਾਮ ਗੋਬਿੰਦ ਰਾਏ ਸੀ, ਅਤੇ ਉਨ੍ਹਾਂ ਨੇ ਇੱਥੇ ਆਪਣੇ ਪਹਿਲੇ ਛੇ ਸਾਲ ਬਿਤਾਏ।',
+          },
+        },
+        {
+          kicker: { en: 'Why It Was Established', pa: 'ਇਹ ਕਿਉਂ ਸਥਾਪਿਤ ਹੋਇਆ' },
+          title: { en: 'A Childhood Trained for Greatness', pa: 'ਮਹਾਨਤਾ ਲਈ ਸਿੱਖਿਅਤ ਬਚਪਨ' },
+          body: {
+            en: 'Even as a child, Gobind Rai was trained in the warrior arts — among the relics preserved here is his iron arrow (baan). His childhood friends in Patna are said to have playfully called him their "Raja." Takht Sri Patna Sahib marks this sacred birthplace and its treasured relics.',
+            pa: 'ਬਚਪਨ ਤੋਂ ਹੀ ਗੋਬਿੰਦ ਰਾਏ ਨੂੰ ਯੋਧੇ ਕਲਾਵਾਂ ਵਿੱਚ ਸਿੱਖਿਅਤ ਕੀਤਾ ਗਿਆ ਸੀ — ਇੱਥੇ ਸੰਭਾਲੀਆਂ ਵਸਤੂਆਂ ਵਿੱਚ ਉਨ੍ਹਾਂ ਦਾ ਲੋਹੇ ਦਾ ਤੀਰ ਵੀ ਹੈ। ਪਟਨਾ ਵਿੱਚ ਉਨ੍ਹਾਂ ਦੇ ਬਚਪਨ ਦੇ ਦੋਸਤ ਖੇਡ-ਖੇਡ ਵਿੱਚ ਉਨ੍ਹਾਂ ਨੂੰ "ਰਾਜਾ" ਕਹਿੰਦੇ ਸਨ।',
+          },
+        },
+        {
+          kicker: { en: 'Historical Role', pa: 'ਇਤਿਹਾਸਕ ਭੂਮਿਕਾ' },
+          title: { en: 'Connecting the Khalsa to the East', pa: 'ਖ਼ਾਲਸੇ ਨੂੰ ਪੂਰਬ ਨਾਲ ਜੋੜਨਾ' },
+          body: {
+            en: 'Patna — ancient Pataliputra, once capital of the Magadha and Mauryan empires — was by the 17th century a major Mughal-era trading city with an established Sikh sangat. Patna Sahib connects the story of the Khalsa to Bihar, demonstrating the full geographic sweep of Sikh history.',
+            pa: 'ਪਟਨਾ — ਪ੍ਰਾਚੀਨ ਪਾਟਲੀਪੁੱਤਰ, ਕਦੇ ਮਗਧ ਅਤੇ ਮੌਰੀਆ ਸਾਮਰਾਜਾਂ ਦੀ ਰਾਜਧਾਨੀ — 17ਵੀਂ ਸਦੀ ਤੱਕ ਇੱਕ ਵੱਡਾ ਮੁਗਲ-ਕਾਲੀ ਵਪਾਰਕ ਸ਼ਹਿਰ ਸੀ ਜਿੱਥੇ ਇੱਕ ਸਥਾਪਿਤ ਸਿੱਖ ਸੰਗਤ ਸੀ। ਪਟਨਾ ਸਾਹਿਬ ਖ਼ਾਲਸੇ ਦੀ ਕਥਾ ਨੂੰ ਬਿਹਾਰ ਨਾਲ ਜੋੜਦਾ ਹੈ।',
+          },
+        },
+        {
+          kicker: { en: 'Present Day', pa: 'ਅੱਜ' },
+          title: { en: 'Prakash Utsav in the East', pa: 'ਪੂਰਬ ਵਿੱਚ ਪ੍ਰਕਾਸ਼ ਉਤਸਵ' },
+          body: {
+            en: 'Pilgrims from across India visit Takht Sri Patna Sahib especially for Guru Gobind Singh Ji\'s Prakash Utsav (birthday celebration) each December–January, anchoring a small but historic Sikh community within a city where Sikhs are a minority.',
+            pa: 'ਭਾਰਤ ਭਰ ਦੇ ਸ਼ਰਧਾਲੂ ਹਰ ਦਸੰਬਰ-ਜਨਵਰੀ ਵਿੱਚ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਦੇ ਪ੍ਰਕਾਸ਼ ਉਤਸਵ ਲਈ ਖ਼ਾਸ ਤੌਰ ਤੇ ਤਖ਼ਤ ਸ੍ਰੀ ਪਟਨਾ ਸਾਹਿਬ ਆਉਂਦੇ ਹਨ, ਇੱਕ ਛੋਟੇ ਪਰ ਇਤਿਹਾਸਕ ਸਿੱਖ ਭਾਈਚਾਰੇ ਨੂੰ ਸੰਭਾਲਦੇ ਹੋਏ।',
+          },
+        },
+      ],
     },
     {
       id: 'hazur_sahib',
@@ -731,6 +1077,40 @@ const displayContent: DisplayContent = {
         en: 'Hazur Sahib transformed Nanded into a major Sikh pilgrimage destination in the Deccan, drawing devotees from across India and sustaining a distinctive local Sikh community, including a long-standing Nihang Singh custodial tradition, far from Punjab.',
         pa: 'ਹਜ਼ੂਰ ਸਾਹਿਬ ਨੇ ਨਾਂਦੇੜ ਨੂੰ ਦੱਖਣ ਵਿੱਚ ਇੱਕ ਵੱਡਾ ਸਿੱਖ ਤੀਰਥ ਸਥਾਨ ਬਣਾ ਦਿੱਤਾ, ਪੰਜਾਬ ਤੋਂ ਦੂਰ ਇੱਕ ਵਿਲੱਖਣ ਸਥਾਨਕ ਸਿੱਖ ਭਾਈਚਾਰੇ ਨੂੰ ਕਾਇਮ ਰੱਖਦਾ ਹੈ।',
       },
+      chapters: [
+        {
+          kicker: { en: 'Founding Story', pa: 'ਸਥਾਪਨਾ ਦੀ ਕਥਾ' },
+          title: { en: 'The Guru\'s Final Days at Nanded', pa: 'ਨਾਂਦੇੜ ਵਿੱਚ ਗੁਰੂ ਜੀ ਦੇ ਅੰਤਿਮ ਦਿਨ' },
+          body: {
+            en: 'In October 1708, Guru Gobind Singh Ji was at Nanded, Maharashtra, when he was fatally wounded by an assailant. As his final days drew near, he gathered the Sikh sangat for a ceremony of profound finality.',
+            pa: 'ਅਕਤੂਬਰ 1708 ਵਿੱਚ, ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਨਾਂਦੇੜ, ਮਹਾਰਾਸ਼ਟਰ ਵਿੱਚ ਸਨ ਜਦੋਂ ਇੱਕ ਹਮਲਾਵਰ ਨੇ ਉਨ੍ਹਾਂ ਨੂੰ ਘਾਤਕ ਜ਼ਖ਼ਮੀ ਕੀਤਾ। ਆਪਣੇ ਅੰਤਿਮ ਦਿਨਾਂ ਵਿੱਚ, ਉਨ੍ਹਾਂ ਨੇ ਸਿੱਖ ਸੰਗਤ ਨੂੰ ਇੱਕ ਗਹਿਰੀ ਅੰਤਿਮਤਾ ਦੀ ਰਸਮ ਲਈ ਇਕੱਠਾ ਕੀਤਾ।',
+          },
+        },
+        {
+          kicker: { en: 'Why It Was Established', pa: 'ਇਹ ਕਿਉਂ ਸਥਾਪਿਤ ਹੋਇਆ' },
+          title: { en: 'Guru Maniyo Granth', pa: 'ਗੁਰੂ ਮਾਨਿਓ ਗ੍ਰੰਥ' },
+          body: {
+            en: 'The Guru declared that after him, the Sri Guru Granth Sahib Ji would be the eternal, living Guru of the Sikhs forever: "Sab Sikhan ko hukam hai, Guru Maniyo Granth." The line of human Gurus ended here — and an eternal one began.',
+            pa: 'ਗੁਰੂ ਜੀ ਨੇ ਘੋਸ਼ਣਾ ਕੀਤੀ ਕਿ ਉਨ੍ਹਾਂ ਤੋਂ ਬਾਅਦ, ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ ਸਿੱਖਾਂ ਦੇ ਸਦੀਵੀ, ਜੀਵੰਤ ਗੁਰੂ ਹੋਣਗੇ: "ਸਬ ਸਿਖਨ ਕੋ ਹੁਕਮ ਹੈ, ਗੁਰੂ ਮਾਨਿਓ ਗ੍ਰੰਥ।" ਇੱਥੇ ਮਨੁੱਖੀ ਗੁਰੂਆਂ ਦੀ ਲੜੀ ਸਮਾਪਤ ਹੋਈ — ਅਤੇ ਇੱਕ ਸਦੀਵੀ ਗੁਰੂ ਦੀ ਸ਼ੁਰੂਆਤ ਹੋਈ।',
+          },
+        },
+        {
+          kicker: { en: 'Historical Role', pa: 'ਇਤਿਹਾਸਕ ਭੂਮਿਕਾ' },
+          title: { en: 'Sachkhand — The Realm of Truth', pa: 'ਸਚਖੰਡ — ਸੱਚ ਦਾ ਰਾਜ' },
+          body: {
+            en: 'The golden-domed Hazur Sahib, also called Sachkhand ("Realm of Truth"), was later built on this sacred site by Maharaja Ranjit Singh between 1832 and 1839, fulfilling a long-held Sikh aspiration to honour this most sacred site of completion.',
+            pa: 'ਸੁਨਹਿਰੀ-ਗੁੰਬਦ ਵਾਲਾ ਹਜ਼ੂਰ ਸਾਹਿਬ, ਜਿਸਨੂੰ ਸਚਖੰਡ ਵੀ ਕਿਹਾ ਜਾਂਦਾ ਹੈ, ਬਾਅਦ ਵਿੱਚ ਮਹਾਰਾਜਾ ਰਣਜੀਤ ਸਿੰਘ ਦੁਆਰਾ 1832 ਤੋਂ 1839 ਦੇ ਵਿਚਕਾਰ ਇਸ ਪਵਿੱਤਰ ਅਸਥਾਨ ਤੇ ਬਣਾਇਆ ਗਿਆ।',
+          },
+        },
+        {
+          kicker: { en: 'Present Day', pa: 'ਅੱਜ' },
+          title: { en: 'Kirtan Without Pause', pa: 'ਬਿਨਾਂ ਰੁਕੇ ਕੀਰਤਨ' },
+          body: {
+            en: 'At Hazur Sahib, kirtan is performed continuously, 24 hours a day, and multiple shrines within the complex commemorate specific moments in Guru Gobind Singh Ji\'s final days — a living site of profound reverence in the Deccan, far from Punjab yet central to every Sikh\'s story.',
+            pa: 'ਹਜ਼ੂਰ ਸਾਹਿਬ ਵਿੱਚ 24 ਘੰਟੇ ਲਗਾਤਾਰ ਕੀਰਤਨ ਹੁੰਦਾ ਹੈ, ਅਤੇ ਪਰਿਸਰ ਦੇ ਅੰਦਰ ਕਈ ਗੁਰਦੁਆਰੇ ਗੁਰੂ ਗੋਬਿੰਦ ਸਿੰਘ ਜੀ ਦੇ ਅੰਤਿਮ ਦਿਨਾਂ ਦੇ ਖ਼ਾਸ ਪਲਾਂ ਦੀ ਯਾਦ ਦਿਵਾਉਂਦੇ ਹਨ।',
+          },
+        },
+      ],
     },
   ],
   learnSikhi: {
