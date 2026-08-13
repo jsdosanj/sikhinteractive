@@ -482,6 +482,25 @@ button {
   @apply h-8 w-8;
 }
 
+/* Line-art icon sizing for the nav pills, home feature cards, and onboarding
+   cards — the icons themselves are inline SVGs from src/lib/icons.ts sized
+   via currentColor, so only their host element needs a fixed box. */
+.nav-pill__icon {
+  @apply flex h-6 w-6 items-center justify-center;
+}
+
+.feature-card__icon {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center;
+}
+
+.onboarding-card__icon {
+  @apply flex h-14 w-14 items-center justify-center;
+}
+
+.listen-btn__icon {
+  @apply flex h-4 w-4 items-center justify-center;
+}
+
 /* Guru succession lineage chart */
 .guru-lineage {
   display: flex;
@@ -1297,7 +1316,7 @@ button {
 }
 
 .pronun-tip {
-  @apply cursor-help text-xs text-cloud-400 transition hover:text-gold-300;
+  @apply inline-flex h-4 w-4 cursor-help items-center justify-center text-cloud-400 transition hover:text-gold-300;
 }
 
 /* ==========================================

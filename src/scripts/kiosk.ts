@@ -4,6 +4,7 @@ import type { TransitionType } from './animate';
 import { createRotator } from './banner';
 import type { Rotator } from './banner';
 import { initAmbient, retintForTheme, setAmbientMode } from './ambient';
+import { icons, kakaarIcons } from '../lib/icons';
 import displayContent from '../data/display-content';
 import {
   advanceQuiz,
@@ -141,25 +142,6 @@ function shouldShowInstallBanner(): boolean {
 const journeyViews: View[] = ['pyare', 'takhts', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
 const visitedViews = new Set<View>();
 
-// Minimal line-art medallion icons for the Panj Kakaar, in the fixed
-// Kesh/Kangha/Kara/Kachhera/Kirpan order the content array is authored in.
-// Abstract symbolism (a topknot, a comb's teeth, a bangle, a waistband, a
-// blade) rather than literal photography — matches the site's line-icon
-// language elsewhere and stays respectful of the articles' sanctity.
-const kakaarIcons: string[] = [
-  // Kesh — the rishi/joora hair-knot: a coiled bun above the gathered hair
-  // beneath it, the standard abstract shorthand for uncut, gathered hair.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4.5"/><path d="M12 6.3a2.4 2.4 0 0 1 1.8 3.9"/><path d="M7.5 20c.6-3 2.2-4.7 4.5-4.7s3.9 1.7 4.5 4.7"/></svg>',
-  // Kangha — a wooden comb: rounded spine with five teeth.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5.2c0-.9.8-1.7 1.7-1.7h11.6c.9 0 1.7.8 1.7 1.7v3H4.5v-3z"/><path d="M6.2 8.2v10.6M9.1 8.2v10.6M12 8.2v10.6M14.9 8.2v10.6M17.8 8.2v10.6"/></svg>',
-  // Kara — a single plain iron bangle with a subtle metallic highlight arc.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="7.5"/><path d="M6.8 8a7.4 7.4 0 0 1 3.3-2.4" stroke-width="1.1" opacity="0.55"/></svg>',
-  // Kachhera — a symmetric drawstring undergarment silhouette with a waistband.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14v3.5c0 1-.3 2-.8 2.9L15.8 17.5h-2.2l-1.1-6-1.1 6H9.3L6.8 11.4c-.5-.9-.8-1.9-.8-2.9V5z"/><path d="M5 8.3h14"/></svg>',
-  // Kirpan — a slightly curved single-edged blade with crossguard and hilt.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.4 3c1.1 4.2.9 9-1.4 13.2"/><path d="M9.3 6.3h4.4"/><path d="M10.4 16.2h2.3l-.6 3.8h-1.1z"/></svg>',
-];
-
 async function initQrCodes(): Promise<void> {
   for (const site of content.resources.sites) {
     try {
@@ -194,15 +176,16 @@ void initQrCodes().then(() => {
   }
 });
 
-const icons: Record<View, string> = {
-  home: '🏛️',
-  pyare: '⚔️',
-  takhts: '🕌',
-  quiz: '✨',
-  learn: '📖',
-  about: 'ℹ️',
-  resources: '🌐',
-  leaflets: '📄',
+const viewIcons: Record<View, string> = {
+  home: icons.home,
+  pyare: icons.panjPyare,
+  takhts: icons.panjTakht,
+  quiz: icons.quiz,
+  learn: icons.learn,
+  about: icons.about,
+  resources: icons.resources,
+  leaflets: icons.leaflets,
+  timeline: icons.timeline,
 };
 
 function text(value: LocalizedText, language = state.language): string {
@@ -382,7 +365,7 @@ function renderListenButton(payload: LocalizedText, blockId: string): string {
   const label = text(content.ui.labels.ttsListen);
   return `
     <button type="button" class="listen-btn" data-tts-text="${escapeAttr(value)}" data-tts-lang="${state.language}" data-tts-block="${blockId}" aria-label="${label}">
-      <span class="listen-btn__icon" aria-hidden="true">🔊</span>
+      <span class="listen-btn__icon" aria-hidden="true">${icons.speaker}</span>
       <span class="listen-btn__eq" aria-hidden="true"><span></span><span></span><span></span></span>
       <span class="${classForLanguage()}">${label}</span>
     </button>
@@ -646,7 +629,7 @@ function renderNav(): void {
               data-active="${state.view === view}"
               aria-current="${state.view === view ? 'page' : 'false'}"
             >
-              <span class="text-xl">${icons[view]}</span>
+              <span class="nav-pill__icon" aria-hidden="true">${viewIcons[view]}</span>
               <span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] md:text-xs md:tracking-[0.18em] ${classForLanguage()}">${text(content.ui.nav[view])}</span>
             </button>
           `,
@@ -673,7 +656,7 @@ function renderFeatureCard(feature: HomeFeature): string {
           <p class="text-xs font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(feature.eyebrow)}</p>
           <h3 class="mt-3 text-2xl font-semibold text-white ${classForLanguage()}">${text(feature.title)}</h3>
         </div>
-        <span class="text-4xl">${feature.icon}</span>
+        <span class="feature-card__icon text-gold-300" aria-hidden="true">${feature.icon}</span>
       </div>
       <p class="text-base leading-7 text-cloud-200 ${classForLanguage()}">${text(feature.description)}</p>
       <p class="mt-6 text-sm font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(feature.cta)}</p>
@@ -828,7 +811,7 @@ function renderOnboarding(): string {
               .map(
                 (mode) => `
                   <button type="button" data-onboarding-mode="${mode.id}" data-ripple class="onboarding-card">
-                    <div class="mb-4 text-5xl">${mode.icon}</div>
+                    <div class="onboarding-card__icon mb-4 text-gold-300" aria-hidden="true">${mode.icon}</div>
                     <h4 class="text-lg font-semibold text-white ${classForLanguage()}">${text(mode.title)}</h4>
                     <p class="mt-3 text-sm leading-6 text-cloud-300 ${classForLanguage()}">${text(mode.description)}</p>
                   </button>
@@ -1086,7 +1069,7 @@ function renderPyare(): string {
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p class="text-sm font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(selected.representing)}</p>
-            <h3 class="mt-2 text-4xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">🔊</span></h3>
+            <h3 class="mt-2 text-4xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></h3>
             <p class="mt-2 text-base text-cloud-400 ${classForLanguage()}">${text(content.ui.labels.birthName)}: ${text(selected.birthName)} &middot; ${selected.years}</p>
           </div>
           ${renderChapterBar('pyara', content.panjPyare.length, pyareIndex, text(selected.name), true)}
@@ -1250,7 +1233,7 @@ function renderTakhts(): string {
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p class="text-sm font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(selected.location)}</p>
-            <h3 class="mt-2 text-3xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">🔊</span></h3>
+            <h3 class="mt-2 text-3xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></h3>
             <p class="mt-2 text-base text-cloud-400 ${classForLanguage()}">${text(selected.location)}${selected.yearDeclared ? ' &middot; ' + selected.yearDeclared : ''}</p>
           </div>
           ${renderChapterBar('takht', content.takhts.length, takhtIndex, text(selected.name), true)}

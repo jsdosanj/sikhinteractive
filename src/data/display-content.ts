@@ -1,4 +1,5 @@
 import type { DisplayContent } from '../types/display';
+import { icons } from '../lib/icons';
 
 const displayContent: DisplayContent = {
   settings: {
@@ -37,6 +38,10 @@ const displayContent: DisplayContent = {
       title: { en: 'Leaflets', pa: 'ਲੀਫਲੈਟ' },
       subtitle: { en: 'Download and continue learning beyond this display', pa: 'ਡਾਊਨਲੋਡ ਕਰੋ ਅਤੇ ਇਸ ਪ੍ਰਦਰਸ਼ਨੀ ਤੋਂ ਬਾਅਦ ਵੀ ਸਿੱਖਣਾ ਜਾਰੀ ਰੱਖੋ' },
     },
+    timeline: {
+      title: { en: 'Sikh History Timeline', pa: 'ਸਿੱਖ ਇਤਿਹਾਸ ਦੀ ਸਮਾਂਰੇਖਾ' },
+      subtitle: { en: 'From Guru Nanak Dev Ji to the Sikh Empire — the events that shaped the Panth', pa: 'ਗੁਰੂ ਨਾਨਕ ਦੇਵ ਜੀ ਤੋਂ ਲੈ ਕੇ ਸਿੱਖ ਸਾਮਰਾਜ ਤੱਕ — ਉਹ ਘਟਨਾਵਾਂ ਜਿਨ੍ਹਾਂ ਨੇ ਪੰਥ ਨੂੰ ਰੂਪ ਦਿੱਤਾ' },
+    },
   },
   ui: {
     experienceLabel: { en: 'Premium Interactive Display', pa: 'ਪ੍ਰੀਮੀਅਮ ਇੰਟਰਐਕਟਿਵ ਪ੍ਰਦਰਸ਼ਨੀ' },
@@ -54,6 +59,7 @@ const displayContent: DisplayContent = {
       about: { en: 'About', pa: 'ਬਾਰੇ', hi: 'परिचय', es: 'Acerca de', ar: 'حول' },
       resources: { en: 'Resources', pa: 'ਸਰੋਤ', hi: 'संसाधन', es: 'Recursos', ar: 'موارد' },
       leaflets: { en: 'Leaflets', pa: 'ਲੀਫਲੈਟ', hi: 'पत्रक', es: 'Folletos', ar: 'نشرات' },
+      timeline: { en: 'Timeline', pa: 'ਸਮਾਂਰੇਖਾ', hi: 'समयरेखा', es: 'Cronología', ar: 'الجدول الزمني' },
     },
     languageLabel: {
       en: 'Language',
@@ -179,7 +185,7 @@ const displayContent: DisplayContent = {
     featureCards: [
       {
         id: 'pyare',
-        icon: '⚔️',
+        icon: icons.panjPyare,
         eyebrow: { en: 'Collective Identity', pa: 'ਸਾਂਝੀ ਪਹਿਚਾਣ' },
         title: { en: 'Explore the Panj Pyare', pa: 'ਪੰਜ ਪਿਆਰਿਆਂ ਨੂੰ ਜਾਣੋ' },
         description: { en: 'Compare their backgrounds, regions, and contributions in a refined side-by-side experience.', pa: 'ਉਨ੍ਹਾਂ ਦੇ ਪਿਛੋਕੜ, ਇਲਾਕੇ ਅਤੇ ਯੋਗਦਾਨ ਨੂੰ ਇਕ ਨਿੱਖਰੇ ਤੁਲਨਾਤਮਕ ਅਨੁਭਵ ਵਿੱਚ ਦੇਖੋ।' },
@@ -187,7 +193,7 @@ const displayContent: DisplayContent = {
       },
       {
         id: 'takhts',
-        icon: '🕌',
+        icon: icons.panjTakht,
         eyebrow: { en: 'Sacred Geography', pa: 'ਪਵਿੱਤਰ ਭੂਗੋਲ' },
         title: { en: 'Journey across the Panj Takht', pa: 'ਪੰਜ ਤਖ਼ਤਾਂ ਦੀ ਯਾਤਰਾ' },
         description: { en: 'Move through the five seats of authority with an elegant map-first narrative layout.', pa: 'ਅਧਿਕਾਰ ਦੇ ਪੰਜ ਆਸਣਾਂ ਰਾਹੀਂ ਸੁੰਦਰ ਨਕਸ਼ਾ-ਪਹਿਲਾਂ ਕਥਾਤਮਕ ਲੇਆਉਟ ਨਾਲ ਯਾਤਰਾ ਕਰੋ।' },
@@ -195,7 +201,7 @@ const displayContent: DisplayContent = {
       },
       {
         id: 'quiz',
-        icon: '✨',
+        icon: icons.quiz,
         eyebrow: { en: 'Active Recall', pa: 'ਸਕ੍ਰਿਯ ਯਾਦ' },
         title: { en: 'Test memory with a polished quiz mode', pa: 'ਨਿੱਖਰੇ ਕਵਿਜ਼ ਮੋਡ ਨਾਲ ਯਾਦਸ਼ਕਤੀ ਪਰਖੋ' },
         description: { en: 'Use touch-friendly cards, instant feedback, and replayable rounds to strengthen retention.', pa: 'ਟਚ-ਦੋਸਤ ਕਾਰਡ, ਤੁਰੰਤ ਪ੍ਰਤੀਕਿਰਿਆ ਅਤੇ ਦੁਹਰਾਏ ਜਾ ਸਕਣ ਵਾਲੇ ਰਾਊਂਡਾਂ ਨਾਲ ਯਾਦ ਮਜ਼ਬੂਤ ਕਰੋ।' },
@@ -1565,9 +1571,9 @@ const displayContent: DisplayContent = {
     welcomeSubtitle: { en: 'Choose where to begin your journey.', pa: 'ਆਪਣੀ ਯਾਤਰਾ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚੁਣੋ।' },
     modeTitle: { en: 'What would you like to explore?', pa: 'ਤੁਸੀਂ ਕੀ ਜਾਣਨਾ ਚਾਹੁੰਦੇ ਹੋ?' },
     modes: [
-      { id: 'start-here', icon: '☬', title: { en: 'Start Here', pa: 'ਇੱਥੋਂ ਸ਼ੁਰੂ ਕਰੋ' }, description: { en: 'A guided first look at Sikh history and the Khalsa.', pa: 'ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਖ਼ਾਲਸੇ ਬਾਰੇ ਮਾਰਗਦਰਸ਼ਿਤ ਪਹਿਲੀ ਝਲਕ।' } },
-      { id: 'pyare', icon: '⚔️', title: { en: 'Who were the Panj Pyare?', pa: 'ਪੰਜ ਪਿਆਰੇ ਕੌਣ ਸਨ?' }, description: { en: 'Five brave souls who gave their heads for the Khalsa.', pa: 'ਪੰਜ ਦਲੇਰ ਆਤਮਾਵਾਂ ਜਿਨ੍ਹਾਂ ਨੇ ਖ਼ਾਲਸੇ ਲਈ ਸਿਰ ਦਿੱਤਾ।' } },
-      { id: 'takhts', icon: '🕌', title: { en: 'What are the Panj Takht?', pa: 'ਪੰਜ ਤਖ਼ਤ ਕੀ ਹਨ?' }, description: { en: 'Five sacred seats of Sikh authority across South Asia.', pa: 'ਦੱਖਣੀ ਏਸ਼ੀਆ ਵਿੱਚ ਸਿੱਖ ਅਧਿਕਾਰ ਦੇ ਪੰਜ ਪਵਿੱਤਰ ਅਸਥਾਨ।' } },
+      { id: 'start-here', icon: icons.khanda, title: { en: 'Start Here', pa: 'ਇੱਥੋਂ ਸ਼ੁਰੂ ਕਰੋ' }, description: { en: 'A guided first look at Sikh history and the Khalsa.', pa: 'ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਖ਼ਾਲਸੇ ਬਾਰੇ ਮਾਰਗਦਰਸ਼ਿਤ ਪਹਿਲੀ ਝਲਕ।' } },
+      { id: 'pyare', icon: icons.panjPyare, title: { en: 'Who were the Panj Pyare?', pa: 'ਪੰਜ ਪਿਆਰੇ ਕੌਣ ਸਨ?' }, description: { en: 'Five brave souls who gave their heads for the Khalsa.', pa: 'ਪੰਜ ਦਲੇਰ ਆਤਮਾਵਾਂ ਜਿਨ੍ਹਾਂ ਨੇ ਖ਼ਾਲਸੇ ਲਈ ਸਿਰ ਦਿੱਤਾ।' } },
+      { id: 'takhts', icon: icons.panjTakht, title: { en: 'What are the Panj Takht?', pa: 'ਪੰਜ ਤਖ਼ਤ ਕੀ ਹਨ?' }, description: { en: 'Five sacred seats of Sikh authority across South Asia.', pa: 'ਦੱਖਣੀ ਏਸ਼ੀਆ ਵਿੱਚ ਸਿੱਖ ਅਧਿਕਾਰ ਦੇ ਪੰਜ ਪਵਿੱਤਰ ਅਸਥਾਨ।' } },
     ],
   },
 };

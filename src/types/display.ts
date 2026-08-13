@@ -1,5 +1,5 @@
 export type Language = 'en' | 'pa' | 'hi' | 'es' | 'ar';
-export type View = 'home' | 'pyare' | 'takhts' | 'quiz' | 'learn' | 'about' | 'resources' | 'leaflets';
+export type View = 'home' | 'pyare' | 'takhts' | 'quiz' | 'learn' | 'about' | 'resources' | 'leaflets' | 'timeline';
 export type ThemePalette = 'default' | 'vaisakhi' | 'diwali' | 'gurpurab';
 
 export interface LocalizedText {
@@ -8,6 +8,17 @@ export interface LocalizedText {
   hi?: string;
   es?: string;
   ar?: string;
+}
+
+// A single narrative beat in the Panj Pyare / Panj Takht storyline reader —
+// restructures a profile's existing verified fields (story, funFact, roles,
+// lessons, etc.) into a sequential, one-beat-at-a-time chapter instead of a
+// flat all-fields-at-once detail card.
+export interface StoryChapter {
+  kicker: LocalizedText;
+  title: LocalizedText;
+  body: LocalizedText;
+  imagePath?: string;
 }
 
 export interface EventTheme {
@@ -60,6 +71,7 @@ export interface PanjPyaraProfile {
   lessons?: LocalizedText;
   language?: LocalizedText;
   qualities?: LocalizedText;
+  chapters?: StoryChapter[];
 }
 
 export interface TakhtProfile {
@@ -83,6 +95,7 @@ export interface TakhtProfile {
   gurusVisited?: LocalizedText;
   areaHistory?: LocalizedText;
   localImpact?: LocalizedText;
+  chapters?: StoryChapter[];
 }
 
 export type QuizLevel = 'beginner' | 'intermediate' | 'advanced';
@@ -104,11 +117,14 @@ export interface FaqItem {
   answer: LocalizedText;
 }
 
+export type TimelineCategory = 'guru' | 'martyrdom' | 'battle' | 'political' | 'scripture';
+
 export interface TimelineEvent {
   year: string;
   title: LocalizedText;
   description: LocalizedText;
   mapPoint?: { x: string; y: string };
+  category?: TimelineCategory;
 }
 
 export interface GurdwaraRoom {
@@ -127,6 +143,15 @@ export interface GuruSummary {
   years: string;
   summary: LocalizedText;
   relation: LocalizedText;
+  epithet?: LocalizedText;
+  fullSummary?: LocalizedText;
+  aheadOfTimeFact?: LocalizedText;
+  storiesUrl?: string;
+  /** True for the eternal/collective Gurus (Guru Granth Sahib Ji, Guru
+   * Khalsa Panth) — rendered with a distinct medallion treatment instead of
+   * a numbered badge, since they aren't another link in the numeric
+   * succession chain. */
+  eternal?: boolean;
 }
 
 export interface SahibzaadaSummary {
