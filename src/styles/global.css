@@ -569,6 +569,26 @@ button {
   position: relative;
 }
 
+/* The two eternal Gurus (Guru Granth Sahib Ji, Guru Khalsa Panth) get a
+   radiant glow instead of a numbered badge — they aren't another link in
+   the numbered succession chain, so the medallion shouldn't imply one. The
+   faint Ik Onkar watermark is redundant once the visible glyph is itself
+   the Ik Onkar, so it's hidden here. */
+.guru-lineage__medallion[data-eternal='true'] {
+  border-color: rgba(228, 187, 94, 0.7);
+  background: radial-gradient(circle at 30% 25%, rgba(228, 187, 94, 0.4), rgba(9, 19, 34, 0.6) 70%);
+  box-shadow: 0 0 0 4px rgba(228, 187, 94, 0.18), 0 0 24px rgba(228, 187, 94, 0.35);
+}
+
+.guru-lineage__medallion[data-eternal='true']::before {
+  display: none;
+}
+
+.guru-lineage__medallion[data-eternal='true'] span {
+  font-family: var(--font-gurmukhi);
+  font-size: 1.6rem;
+}
+
 .guru-lineage__card {
   flex: 1;
   padding-top: 4px;

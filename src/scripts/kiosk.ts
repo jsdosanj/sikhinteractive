@@ -1317,7 +1317,9 @@ function renderLearn(): string {
               (guru) => `
                 <div class="guru-lineage__node">
                   <div class="guru-lineage__connector" aria-hidden="true"></div>
-                  <div class="guru-lineage__medallion"><span>${guru.order}</span></div>
+                  <div class="guru-lineage__medallion" data-eternal="${Boolean(guru.eternal)}">
+                    <span aria-hidden="true">${guru.eternal ? 'ੴ' : guru.order}</span>
+                  </div>
                   <div class="guru-lineage__card">
                     <p class="text-base font-semibold text-white ${classForLanguage()}">${text(guru.name)}</p>
                     <p class="mt-1 text-xs uppercase tracking-[0.14em] text-cloud-400">${guru.years}</p>
@@ -1332,21 +1334,38 @@ function renderLearn(): string {
 
       <section class="glass-panel p-8 md:p-10">
         <h3 class="text-2xl font-semibold text-white ${classForLanguage()}">${text(learn.gurusTitle)}</h3>
-        <div class="mt-6 grid gap-4">
+        <div class="mt-6 grid gap-5">
           ${learn.gurus
             .map(
               (guru) => `
-                <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5 flex gap-4">
-                  <span class="shrink-0 flex h-10 w-10 items-center justify-center rounded-full border border-gold-300/30 bg-gold-400/10 text-sm font-semibold text-gold-300">${guru.order}</span>
-                  <div>
-                    <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(guru.name)} <span class="font-normal text-cloud-400">— ${guru.years}</span></h4>
-                    <p class="mt-2 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(guru.summary)}</p>
+                <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-6">
+                  <div class="flex gap-4">
+                    <span class="shrink-0 flex h-10 w-10 items-center justify-center rounded-full border border-gold-300/30 bg-gold-400/10 text-sm font-semibold text-gold-300" aria-hidden="true">${guru.eternal ? 'ੴ' : guru.order}</span>
+                    <div class="min-w-0">
+                      <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(guru.name)} <span class="font-normal text-cloud-400">— ${guru.years}</span></h4>
+                      ${guru.epithet ? `<p class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-300 ${classForLanguage()}">${text(guru.epithet)}</p>` : ''}
+                      <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(guru.fullSummary ?? guru.summary)}</p>
+                      ${
+                        guru.aheadOfTimeFact
+                          ? `<div class="mt-4 rounded-2xl border border-gold-300/20 bg-gold-400/6 p-4">
+                               <p class="text-xs font-semibold uppercase tracking-[0.18em] text-gold-300 ${classForLanguage()}">✦ ${text(content.ui.labels.funFact)}</p>
+                               <p class="mt-2 text-sm leading-6 text-cloud-200 ${classForLanguage()}">${text(guru.aheadOfTimeFact)}</p>
+                             </div>`
+                          : ''
+                      }
+                      ${
+                        guru.storiesUrl
+                          ? `<a href="${guru.storiesUrl}" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 hover:text-sky-200 ${classForLanguage()}" aria-label="Read more stories about ${text(guru.name, 'en')} on sikhi.io">${text(content.ui.labels.learnMore)} →</a>`
+                          : ''
+                      }
+                    </div>
                   </div>
                 </article>
               `,
             )
             .join('')}
         </div>
+        <p class="ai-badge mt-6 ${classForLanguage()}">${text(content.ui.labels.aiContentNotice)}</p>
       </section>
 
       <section class="glass-panel p-8 md:p-10">

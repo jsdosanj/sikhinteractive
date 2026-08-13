@@ -117,7 +117,7 @@ export interface FaqItem {
   answer: LocalizedText;
 }
 
-export type TimelineCategory = 'guru' | 'martyrdom' | 'battle' | 'political' | 'scripture';
+export type TimelineCategory = 'guru' | 'martyrdom' | 'battle' | 'political' | 'scripture' | 'massacre';
 
 export interface TimelineEvent {
   year: string;
@@ -292,6 +292,7 @@ export interface DisplayContent {
       chapterLabel: LocalizedText;
       previousChapter: LocalizedText;
       nextChapter: LocalizedText;
+      aiContentNotice: LocalizedText;
       pauseRotation: LocalizedText;
       resumeRotation: LocalizedText;
       heroSlide: LocalizedText;
