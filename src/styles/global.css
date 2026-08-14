@@ -1760,6 +1760,39 @@ button {
   color: rgba(217, 228, 239, 0.7);
 }
 
+/* Shimmer placeholder for QR codes and chapter artwork while they generate
+   / load — avoids the blank flash a visitor otherwise sees for the brief
+   window before the async QR data URL (or a chapter's backdrop image)
+   resolves. prefers-reduced-motion users get a static tint instead of the
+   sweeping shimmer. */
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -120% 0;
+  }
+  100% {
+    background-position: 120% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(228, 187, 94, 0.12) 50%,
+    rgba(255, 255, 255, 0.04) 70%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+}
+
 .resource-card__qr {
   display: flex;
   align-items: center;

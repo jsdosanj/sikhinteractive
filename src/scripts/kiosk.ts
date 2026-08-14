@@ -1455,7 +1455,7 @@ function renderAbout(): string {
           <a href="${MOBILE_APP_APK_URL}" data-ripple class="cta-glow relative mt-5 inline-flex items-center gap-2 overflow-hidden rounded-full bg-gold-400 px-5 py-3 text-sm font-semibold text-night-950 transition active:scale-[0.98] ${classForLanguage()}">${text(content.about.mobileApp.cta)}</a>
         </div>
         <div class="qr-badge">
-          ${qrDataUrls['mobile-app'] ? `<img src="${qrDataUrls['mobile-app']}" alt="QR code to download the Android app" class="qr-badge__img" width="80" height="80" />` : ''}
+          ${qrDataUrls['mobile-app'] ? `<img src="${qrDataUrls['mobile-app']}" alt="QR code to download the Android app" class="qr-badge__img" width="80" height="80" />` : '<div class="qr-badge__img skeleton-shimmer" aria-hidden="true"></div>'}
           <p class="qr-badge__hint">${text(content.ui.labels.scanToVisit)}</p>
         </div>
       </section>
@@ -1540,7 +1540,7 @@ function renderResources(): string {
                         <a href="${site.url}" target="_blank" rel="noopener noreferrer" data-ripple class="cta-glow relative mt-4 inline-flex items-center gap-2 overflow-hidden rounded-full bg-gold-400 px-5 py-3 text-sm font-semibold text-night-950 transition active:scale-[0.98] ${classForLanguage()}">${text(content.ui.labels.visitSite)}</a>
                       </div>
                       <div class="qr-badge">
-                        ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="qr-badge__img" width="80" height="80" />` : ''}
+                        ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="qr-badge__img" width="80" height="80" />` : '<div class="qr-badge__img skeleton-shimmer" aria-hidden="true"></div>'}
                         <p class="qr-badge__hint">${text(content.ui.labels.scanToVisit)}</p>
                       </div>
                     </div>
@@ -1570,7 +1570,7 @@ function renderResources(): string {
               <article class="resource-card">
                 ${resourceBanners[site.id] ? `<img src="${asset(resourceBanners[site.id])}" alt="${site.title} banner" class="w-full object-cover" style="height:6rem;border-radius:28px 28px 0 0;" loading="lazy" decoding="async" />` : ''}
                 <div class="resource-card__qr">
-                  ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="resource-card__qr-img" width="80" height="80" />` : '<div class="resource-card__qr-placeholder">QR</div>'}
+                  ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="resource-card__qr-img" width="80" height="80" />` : '<div class="resource-card__qr-placeholder skeleton-shimmer" aria-hidden="true"></div>'}
                 </div>
                 <div class="p-5">
                   <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(site.previewTitle)}</h4>
@@ -1602,7 +1602,7 @@ function renderLeaflets(): string {
       <a href="${content.leaflets.hubUrl}" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center gap-2 rounded-full bg-gold-400 px-6 py-4 text-base font-semibold text-night-950 transition active:scale-[0.98] ${classForLanguage()}">${text(content.leaflets.cta)}</a>
       <p class="mt-4 text-sm text-cloud-400">basicsofsikhi.com/resources</p>
       <div class="mx-auto mt-8 flex flex-col items-center gap-2">
-        ${leafletQr ? `<img src="${leafletQr}" alt="QR code for basicsofsikhi.com/resources" class="leaflet-qr" width="128" height="128" />` : '<div class="mx-auto flex h-32 w-32 items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] text-xs uppercase tracking-[0.18em] text-cloud-400">QR Code</div>'}
+        ${leafletQr ? `<img src="${leafletQr}" alt="QR code for basicsofsikhi.com/resources" class="leaflet-qr" width="128" height="128" />` : '<div class="mx-auto h-32 w-32 rounded-2xl border border-white/10 skeleton-shimmer" aria-hidden="true"></div>'}
       </div>
       <p class="mt-3 text-xs text-cloud-400">Scan the QR code or visit basicsofsikhi.com/resources</p>
     </div>
