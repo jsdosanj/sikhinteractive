@@ -651,10 +651,10 @@ function renderHeader(): void {
 }
 
 function renderNav(): void {
-  const views: View[] = ['home', 'pyare', 'takhts', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
+  const views: View[] = ['home', 'pyare', 'takhts', 'timeline', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
 
   bottomNav.innerHTML = `
-    <div class="nav-scroll glass-header flex min-h-20 gap-2 overflow-x-auto px-2 pt-2 md:grid md:min-h-24 md:grid-cols-8 md:gap-2 md:overflow-visible md:px-5 md:py-2">
+    <div class="nav-scroll glass-header flex min-h-20 gap-2 overflow-x-auto px-2 pt-2 md:grid md:min-h-24 md:grid-cols-9 md:gap-2 md:overflow-visible md:px-5 md:py-2">
       ${views
         .map(
           (view) => `
@@ -664,7 +664,7 @@ function renderNav(): void {
               data-ripple
               class="nav-pill min-w-[4.75rem] md:min-w-0"
               data-active="${state.view === view}"
-              aria-current="${state.view === view ? 'page' : 'false'}"
+              ${state.view === view ? 'aria-current="page"' : ''}
             >
               <span class="nav-pill__icon" aria-hidden="true">${viewIcons[view]}</span>
               <span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] md:text-xs md:tracking-[0.18em] ${classForLanguage()}">${text(content.ui.nav[view])}</span>
@@ -2217,6 +2217,13 @@ document.addEventListener('click', (event) => {
 
   const navTarget = target.closest<HTMLElement>('[data-nav]');
   if (navTarget?.dataset.nav) {
+    // Let modified/non-primary clicks fall through to native <a> behavior
+    // (open in new tab, open in new window, etc.) instead of hijacking them
+    // into an in-place SPA navigation.
+    const mouseEvent = event as MouseEvent;
+    if (mouseEvent.button !== 0 || mouseEvent.ctrlKey || mouseEvent.metaKey || mouseEvent.shiftKey || mouseEvent.altKey) {
+      return;
+    }
     event.preventDefault();
     const view = navTarget.dataset.nav as View;
     state = navigate(state, view);
@@ -2228,8 +2235,10 @@ document.addEventListener('click', (event) => {
 
   const homeTarget = target.closest<HTMLElement>('[data-home-target]');
   if (homeTarget?.dataset.homeTarget) {
-    state = navigate(state, homeTarget.dataset.homeTarget as View);
+    const view = homeTarget.dataset.homeTarget as View;
+    state = navigate(state, view);
     render();
+    window.history.pushState(null, '', VIEW_PATHS[view]);
     scheduleInactivityReset();
     return;
   }
