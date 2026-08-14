@@ -5,6 +5,7 @@ import { createRotator } from './banner';
 import type { Rotator } from './banner';
 import { initAmbient, retintForTheme, setAmbientMode } from './ambient';
 import { icons, kakaarIcons } from '../lib/icons';
+import { VIEW_PATHS, viewForPath } from '../lib/routes';
 import displayContent from '../data/display-content';
 import {
   advanceQuiz,
@@ -23,13 +24,14 @@ import {
   selectTakht,
   setLanguage,
   setTheme,
+  setTimelineFilter,
   startQuiz,
   stepPyaraChapter,
   stepTakhtChapter,
   submitQuizAnswer,
   wakeKiosk,
 } from '../lib/kiosk-state';
-import type { KioskState } from '../lib/kiosk-state';
+import type { KioskState, TimelineFilter } from '../lib/kiosk-state';
 import type {
   DisplayContent,
   HomeFeature,
@@ -75,6 +77,11 @@ const viewAnnouncer = requireElement('view-announcer');
 
 let state = createInitialState(content);
 
+const ALL_VIEWS: View[] = ['home', 'pyare', 'takhts', 'quiz', 'learn', 'about', 'resources', 'leaflets', 'timeline'];
+function isView(value: string | undefined | null): value is View {
+  return value != null && (ALL_VIEWS as string[]).includes(value);
+}
+
 // Honor the manifest's home-screen app shortcuts (long-press the installed
 // icon on Android/iOS to jump straight to Quiz or Learn Sikhi) by reading
 // the ?shortcut= query param the OS launches the app with.
@@ -82,6 +89,15 @@ const shortcutTarget = new URLSearchParams(window.location.search).get('shortcut
 if (shortcutTarget === 'quiz' || shortcutTarget === 'learn') {
   state = navigate(wakeKiosk(state), shortcutTarget);
   window.history.replaceState(null, '', window.location.pathname);
+} else {
+  // Each routed page (see src/components/KioskShell.astro) sets
+  // #app-root's data-initial-view to the section it server-rendered a
+  // fallback for — boot straight into that section, same pattern as the
+  // shortcut handling above, just generalized to every route.
+  const initialView = document.getElementById('app-root')?.dataset.initialView;
+  if (isView(initialView) && initialView !== 'home') {
+    state = navigate(wakeKiosk(state), initialView);
+  }
 }
 let inactivityTimer = 0;
 let langMenuOpen = false;
@@ -208,6 +224,24 @@ const speechLangCodes: Record<Language, string> = {
   hi: 'hi-IN',
   es: 'es-ES',
   ar: 'ar-SA',
+};
+
+const timelineCategoryLabels: Record<TimelineFilter, LocalizedText> = {
+  all: { en: 'All', pa: 'ਸਾਰੇ' },
+  guru: { en: 'Guru', pa: 'ਗੁਰੂ' },
+  martyrdom: { en: 'Martyrdom', pa: 'ਸ਼ਹੀਦੀ' },
+  battle: { en: 'Battle', pa: 'ਜੰਗ' },
+  political: { en: 'Political', pa: 'ਰਾਜਨੀਤਿਕ' },
+  scripture: { en: 'Scripture', pa: 'ਗ੍ਰੰਥ' },
+  massacre: { en: 'Massacre', pa: 'ਘੱਲੂਘਾਰਾ' },
+};
+
+const timelineCategoryIcons: Partial<Record<TimelineFilter, string>> = {
+  guru: icons.categoryGuru,
+  martyrdom: icons.categoryMartyrdom,
+  battle: icons.categoryBattle,
+  political: icons.categoryPolitical,
+  scripture: icons.categoryScripture,
 };
 
 function showTtsNotice(buttonEl: HTMLElement, message: string): void {
@@ -587,7 +621,7 @@ function renderHeader(): void {
     <div class="glass-header">
       <div class="flex min-h-20 items-center justify-between px-4 py-2 md:min-h-24 md:px-8 md:py-0">
         <div class="flex min-w-0 items-center gap-3 sm:gap-4">
-          <button type="button" data-nav="home" aria-label="${text(content.ui.nav.home)}" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-white/5 text-xl text-gold-300 transition active:scale-[0.98] sm:h-14 sm:w-14 sm:text-2xl">☬</button>
+          <a href="${VIEW_PATHS.home}" data-nav="home" aria-label="${text(content.ui.nav.home)}" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-white/5 text-gold-300 transition active:scale-[0.98] sm:h-14 sm:w-14"><span class="nav-pill__icon">${icons.khanda}</span></a>
           <div class="min-w-0">
             <p class="hidden truncate text-xs font-semibold uppercase tracking-[0.22em] text-cloud-400 sm:block">${text(content.ui.experienceLabel)}</p>
             <h2 class="truncate text-lg font-semibold text-white sm:text-xl md:text-2xl ${classForLanguage()}">${text(copy.title)}</h2>
@@ -623,8 +657,8 @@ function renderNav(): void {
       ${views
         .map(
           (view) => `
-            <button
-              type="button"
+            <a
+              href="${VIEW_PATHS[view]}"
               data-nav="${view}"
               data-ripple
               class="nav-pill min-w-[4.75rem] md:min-w-0"
@@ -633,7 +667,7 @@ function renderNav(): void {
             >
               <span class="nav-pill__icon" aria-hidden="true">${viewIcons[view]}</span>
               <span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] md:text-xs md:tracking-[0.18em] ${classForLanguage()}">${text(content.ui.nav[view])}</span>
-            </button>
+            </a>
           `,
         )
         .join('')}
@@ -747,12 +781,17 @@ function renderPyareMap(selected: PanjPyaraProfile): string {
   `;
 }
 
+// Condensed teaser embedded on Home — the full, filterable 57-event
+// timeline lives at its own route (renderTimelineView / the 'timeline'
+// View), reachable via the link at the bottom.
 function renderTimelineSection(): string {
+  const preview = content.timeline.slice(0, 6);
+
   return `
     <section class="glass-panel p-7 md:p-10">
       <h3 class="text-2xl font-semibold text-white ${classForLanguage()}">${text(content.ui.labels.timelineTitle)}</h3>
       <div class="mt-6">
-        ${content.timeline
+        ${preview
           .map(
             (event) => `
               <div class="timeline-node">
@@ -766,7 +805,63 @@ function renderTimelineSection(): string {
           )
           .join('')}
       </div>
+      <a href="${VIEW_PATHS.timeline}" data-nav="timeline" data-ripple class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-300 hover:text-gold-200 ${classForLanguage()}">
+        ${text(content.sections.timeline.title)} →
+      </a>
     </section>
+  `;
+}
+
+function renderTimelineView(): string {
+  const filters: TimelineFilter[] = ['all', 'guru', 'martyrdom', 'battle', 'political', 'scripture', 'massacre'];
+  const events = state.timelineFilter === 'all' ? content.timeline : content.timeline.filter((event) => event.category === state.timelineFilter);
+
+  return `
+    <div class="grid gap-6">
+      <p class="max-w-4xl text-base leading-7 text-cloud-200 ${classForLanguage()}">${text(content.sections.timeline.subtitle)}</p>
+
+      <div class="flex flex-wrap gap-2" role="group" aria-label="${text(content.ui.labels.timelineTitle)}">
+        ${filters
+          .map(
+            (filter) => `
+              <button
+                type="button"
+                data-timeline-filter="${filter}"
+                data-ripple
+                data-active="${state.timelineFilter === filter}"
+                class="timeline-filter-chip ${classForLanguage()}"
+              >
+                ${timelineCategoryIcons[filter] ? `<span class="timeline-filter-chip__icon" aria-hidden="true">${timelineCategoryIcons[filter]}</span>` : ''}
+                ${text(timelineCategoryLabels[filter])}
+              </button>
+            `,
+          )
+          .join('')}
+      </div>
+
+      <section class="glass-panel p-7 md:p-10">
+        ${
+          events.length === 0
+            ? `<p class="text-sm text-cloud-400 ${classForLanguage()}">${text(content.ui.labels.timelineNoResults)}</p>`
+            : `<div class="mt-2">
+                ${events
+                  .map(
+                    (event) => `
+                      <div class="timeline-node" data-reveal>
+                        <span class="timeline-year">${event.year}</span>
+                        <div class="pt-1">
+                          <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(event.title)}</h4>
+                          <p class="mt-2 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(event.description)}</p>
+                        </div>
+                      </div>
+                    `,
+                  )
+                  .join('')}
+              </div>`
+        }
+      </section>
+      <p class="ai-badge ${classForLanguage()}">${text(content.ui.labels.aiContentNotice)}</p>
+    </div>
   `;
 }
 
@@ -1230,7 +1325,7 @@ function renderLearn(): string {
                       }
                       ${
                         guru.storiesUrl
-                          ? `<a href="${guru.storiesUrl}" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 hover:text-sky-200 ${classForLanguage()}" aria-label="Read more stories about ${text(guru.name, 'en')} on sikhi.io">${text(content.ui.labels.learnMore)} →</a>`
+                          ? `<a href="${guru.storiesUrl}" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 hover:text-sky-200 ${classForLanguage()}" aria-label="Read more stories about ${text(guru.name, 'en')} on sikhi.io">${text(content.ui.labels.learnMore)}</a>`
                           : ''
                       }
                     </div>
@@ -1895,6 +1990,9 @@ function renderView(): void {
     case 'leaflets':
       viewContent.innerHTML = renderLeaflets();
       break;
+    case 'timeline':
+      viewContent.innerHTML = renderTimelineView();
+      break;
     case 'quiz': {
       if (state.quizPhase === 'level') {
         viewContent.innerHTML = renderQuizLevelSelect();
@@ -2118,8 +2216,11 @@ document.addEventListener('click', (event) => {
 
   const navTarget = target.closest<HTMLElement>('[data-nav]');
   if (navTarget?.dataset.nav) {
-    state = navigate(state, navTarget.dataset.nav as View);
+    event.preventDefault();
+    const view = navTarget.dataset.nav as View;
+    state = navigate(state, view);
     render();
+    window.history.pushState(null, '', VIEW_PATHS[view]);
     scheduleInactivityReset();
     return;
   }
@@ -2197,6 +2298,14 @@ document.addEventListener('click', (event) => {
     state = setTheme(state, themeTarget.dataset.setTheme);
     themeMenuOpen = false;
     applyDocumentTheme(state);
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  const timelineFilterTarget = target.closest<HTMLElement>('[data-timeline-filter]');
+  if (timelineFilterTarget?.dataset.timelineFilter) {
+    state = setTimelineFilter(state, timelineFilterTarget.dataset.timelineFilter as TimelineFilter);
     render();
     scheduleInactivityReset();
     return;
@@ -2421,6 +2530,19 @@ document.addEventListener(
   },
   { passive: true },
 );
+
+// Browser back/forward — the pushState side of navigation lives in the
+// data-nav click handler above; this is the reverse direction. Unknown
+// paths (shouldn't happen for same-origin nav, but a pasted/edited URL
+// could produce one) are ignored rather than crashing the router.
+window.addEventListener('popstate', () => {
+  const view = viewForPath(window.location.pathname);
+  if (view) {
+    state = navigate(wakeKiosk(state), view);
+    render();
+    scheduleInactivityReset();
+  }
+});
 
 initPressFeedback();
 initAmbient();

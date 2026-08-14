@@ -1,33 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import KioskShell from '../components/KioskShell.astro';
+import displayContent from '../data/display-content';
+
+const content = displayContent;
 ---
 
-<BaseLayout title="Panj Pyare and Panj Takht Display">
-  <a href="#view-content" class="skip-link">Skip to main content</a>
-  <!-- Sits outside kiosk.ts's re-rendered mount points (#app-root's children
-       get their innerHTML fully replaced on every render) so this ambient
-       "digital darbar" backdrop survives every interaction untouched — only
-       setAmbientMode() (called from render()) ever changes its behavior. -->
-  <div id="ambient-layer" aria-hidden="true">
-    <div class="ambient-blob ambient-blob--a"></div>
-    <div class="ambient-blob ambient-blob--b"></div>
-    <div class="ambient-blob ambient-blob--c"></div>
-    <div class="ambient-rays"></div>
-    <canvas id="ambient-canvas"></canvas>
-    <div class="ambient-grain"></div>
-    <div class="theme-motif"></div>
-  </div>
-  <div id="app-root">
-    <section id="attract-screen"></section>
-    <main id="main-shell" class="hidden flex-col">
-      <header id="app-header" class="shrink-0"></header>
-      <section id="view-content" class="fade-mask flex-1 overflow-y-auto px-4 py-4 md:px-8 md:py-8" tabindex="-1" aria-label="Main content"></section>
-      <nav id="bottom-nav" class="shrink-0" aria-label="Primary"></nav>
-    </main>
-  </div>
-  <div id="view-announcer" class="sr-only" aria-live="polite" role="status"></div>
-
-  <script>
-  import "../scripts/kiosk.ts";
-</script>
+<BaseLayout title="Legacy of the Khalsa — Panj Pyare & Panj Takht" path="/">
+  <KioskShell initialView="home">
+    <Fragment slot="fallback">
+      <h1>{content.home.heroTitle.en}</h1>
+      <p>{content.home.heroDescription.en}</p>
+      <h2>{content.home.differentiationTitle.en}</h2>
+      <p>{content.home.differentiationDescription.en}</p>
+      {
+        content.home.differentiationCards.map((card) => (
+          <article>
+            <h2>{card.title.en}</h2>
+            <p>{card.description.en}</p>
+          </article>
+        ))
+      }
+      <p>
+        <a href="/panj-pyare">Explore the Panj Pyare</a> &middot; <a href="/panj-takht">Explore the Panj Takht</a> &middot;{' '}
+        <a href="/learn-sikhi">Learn Sikhi</a> &middot; <a href="/timeline">Sikh history timeline</a>
+      </p>
+    </Fragment>
+  </KioskShell>
 </BaseLayout>

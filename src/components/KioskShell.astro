@@ -1,0 +1,53 @@
+---
+// Shared kiosk shell used by every route. `initialView` is read by
+// kiosk.ts (via #app-root's data-initial-view) to boot straight into that
+// section — the same mechanism already used for the manifest's
+// ?shortcut= launch params, just generalized to every route instead of
+// only the PWA install shortcuts.
+//
+// The <slot name="fallback"> content is real server-rendered markup for
+// that route (a no-JS/crawler/screen-reader fallback) — kiosk.ts's
+// animate.ts module adds the `js-anim` class to <html> the instant it
+// parses, and `.js-anim .ssr-fallback { display: none }` (global.css)
+// hides the fallback then. JS-disabled visitors and crawlers see only
+// the fallback; JS-enabled visitors never see it, not even as a flash.
+import type { View } from '../types/display';
+
+interface Props {
+  initialView?: View;
+}
+
+const { initialView } = Astro.props;
+---
+
+<a href="#view-content" class="skip-link">Skip to main content</a>
+<!-- Sits outside kiosk.ts's re-rendered mount points (#app-root's children
+     get their innerHTML fully replaced on every render) so this ambient
+     "digital darbar" backdrop survives every interaction untouched — only
+     setAmbientMode() (called from render()) ever changes its behavior. -->
+<div id="ambient-layer" aria-hidden="true">
+  <div class="ambient-blob ambient-blob--a"></div>
+  <div class="ambient-blob ambient-blob--b"></div>
+  <div class="ambient-blob ambient-blob--c"></div>
+  <div class="ambient-rays"></div>
+  <canvas id="ambient-canvas"></canvas>
+  <div class="ambient-grain"></div>
+  <div class="theme-motif"></div>
+</div>
+<div id="app-root" data-initial-view={initialView}>
+  <section id="attract-screen"></section>
+  <main id="main-shell" class="hidden flex-col">
+    <header id="app-header" class="shrink-0"></header>
+    <section id="view-content" class="fade-mask flex-1 overflow-y-auto px-4 py-4 md:px-8 md:py-8" tabindex="-1" aria-label="Main content"></section>
+    <nav id="bottom-nav" class="shrink-0" aria-label="Primary"></nav>
+  </main>
+</div>
+<div id="view-announcer" class="sr-only" aria-live="polite" role="status"></div>
+
+<div class="ssr-fallback">
+  <slot name="fallback" />
+</div>
+
+<script>
+  import '../scripts/kiosk.ts';
+</script>

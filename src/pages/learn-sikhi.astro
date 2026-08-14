@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KioskShell from '../components/KioskShell.astro';
+import displayContent from '../data/display-content';
+
+const content = displayContent;
+const breadcrumb = [
+  { name: 'Home', path: '/' },
+  { name: 'Learn Sikhi', path: '/learn-sikhi' },
+];
+---
+
+<BaseLayout
+  title="Learn Sikhi — The Ten Gurus, Gurdwara Etiquette, and Gurbani | Legacy of the Khalsa"
+  description="A foundational introduction to Sikhi — the Ten Gurus and the eternal Guru Granth Sahib Ji, gurdwara etiquette, the Panj Kakaar, the Four Sahibzaade, and Gurbani — for visitors of any background."
+  path="/learn-sikhi"
+  breadcrumb={breadcrumb}
+>
+  <KioskShell initialView="learn">
+    <Fragment slot="fallback">
+      <h1>{content.learnSikhi.title.en}</h1>
+      <p>{content.learnSikhi.intro.en}</p>
+
+      <h2>{content.learnSikhi.gurusTitle.en}</h2>
+      {
+        content.learnSikhi.gurus.map((guru) => (
+          <article>
+            <h2>
+              {guru.name.en} ({guru.years})
+            </h2>
+            {guru.epithet && <p>{guru.epithet.en}</p>}
+            <p>{guru.fullSummary?.en ?? guru.summary.en}</p>
+            {guru.storiesUrl && (
+              <p>
+                <a href={guru.storiesUrl} rel="noopener">
+                  Read more stories about {guru.name.en} on sikhi.io
+                </a>
+              </p>
+            )}
+          </article>
+        ))
+      }
+
+      <h2>{content.learnSikhi.sahibzaadeTitle.en}</h2>
+      {
+        content.learnSikhi.sahibzaade.map((child) => (
+          <article>
+            <h2>
+              {child.name.en} ({child.years})
+            </h2>
+            <p>{child.summary.en}</p>
+          </article>
+        ))
+      }
+
+      <h2>{content.learnSikhi.kakaarsTitle.en}</h2>
+      <p>{content.learnSikhi.kakaarsIntro.en}</p>
+      {
+        content.learnSikhi.kakaars.map((kakaar) => (
+          <article>
+            <h2>
+              {kakaar.name.en} — {kakaar.meaning.en}
+            </h2>
+            <p>{kakaar.description.en}</p>
+          </article>
+        ))
+      }
+    </Fragment>
+  </KioskShell>
+</BaseLayout>

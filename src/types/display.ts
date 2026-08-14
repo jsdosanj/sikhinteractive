@@ -293,6 +293,7 @@ export interface DisplayContent {
       previousChapter: LocalizedText;
       nextChapter: LocalizedText;
       aiContentNotice: LocalizedText;
+      timelineNoResults: LocalizedText;
       pauseRotation: LocalizedText;
       resumeRotation: LocalizedText;
       heroSlide: LocalizedText;

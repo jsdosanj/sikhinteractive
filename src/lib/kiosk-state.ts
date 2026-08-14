@@ -1,4 +1,6 @@
-import type { DisplayContent, Language, QuizLevel, QuizQuestion, View } from '../types/display';
+import type { DisplayContent, Language, QuizLevel, QuizQuestion, TimelineCategory, View } from '../types/display';
+
+export type TimelineFilter = TimelineCategory | 'all';
 
 export type QuizPhase = 'level' | 'count' | 'active' | 'results';
 
@@ -26,6 +28,7 @@ export interface KioskState {
   revealedAnswer: number | null;
   hasChosenMode: boolean;
   themeId: string;
+  timelineFilter: TimelineFilter;
 }
 
 function shuffleIndices(length: number): number[] {
@@ -66,6 +69,7 @@ export function createInitialState(content: DisplayContent): KioskState {
     revealedAnswer: null,
     hasChosenMode: false,
     themeId: content.themes[0]?.id ?? 'default',
+    timelineFilter: 'all',
   };
 }
 
@@ -88,6 +92,13 @@ export function setTheme(state: KioskState, themeId: string): KioskState {
   return {
     ...state,
     themeId,
+  };
+}
+
+export function setTimelineFilter(state: KioskState, timelineFilter: TimelineFilter): KioskState {
+  return {
+    ...state,
+    timelineFilter,
   };
 }
 

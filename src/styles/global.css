@@ -79,6 +79,56 @@
   @apply sr-only;
 }
 
+/* Server-rendered, real semantic content for that route — the crawler /
+   no-JS / screen-reader-before-hydration fallback for #app-root's
+   otherwise-empty mount points. Hidden the instant kiosk.ts's animate.ts
+   module parses (adds .js-anim to <html>), so JS-enabled visitors never
+   see it, not even as a flash; JS-disabled visitors and most crawlers see
+   only this. */
+.js-anim .ssr-fallback {
+  display: none;
+}
+
+.ssr-fallback {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  color: var(--color-cloud-200);
+  line-height: 1.7;
+}
+
+.ssr-fallback h1 {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.ssr-fallback h2 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.ssr-fallback p {
+  margin-bottom: 1rem;
+}
+
+.ssr-fallback article {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ssr-fallback a {
+  color: var(--color-gold-300);
+  text-decoration: underline;
+}
+
 .skip-link:focus {
   position: fixed;
   top: 1rem;
@@ -1291,6 +1341,18 @@ button {
 }
 .timeline-year {
   @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold-300/40 bg-gold-400/10 text-xs font-bold text-gold-300;
+}
+
+.timeline-filter-chip {
+  @apply relative overflow-hidden inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 text-sm font-semibold text-cloud-200 transition duration-150 ease-out active:scale-[0.97];
+}
+
+.timeline-filter-chip[data-active='true'] {
+  @apply border-gold-300/50 bg-gold-400/15 text-white;
+}
+
+.timeline-filter-chip__icon {
+  @apply flex h-4 w-4 items-center justify-center;
 }
 .recap-card {
   @apply rounded-[28px] border border-white/10 bg-white/[0.06] shadow-2xl shadow-black/30 backdrop-blur-2xl p-8 text-center;

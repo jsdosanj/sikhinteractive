@@ -146,6 +146,10 @@ const displayContent: DisplayContent = {
         en: 'Historical summaries on this page are AI-drafted from verified sources and pending review by our scholar board before being presented as final.',
         pa: 'ਇਸ ਪੰਨੇ ਦੇ ਇਤਿਹਾਸਕ ਸਾਰ AI ਦੁਆਰਾ ਪ੍ਰਮਾਣਿਤ ਸਰੋਤਾਂ ਤੋਂ ਤਿਆਰ ਕੀਤੇ ਗਏ ਹਨ ਅਤੇ ਅੰਤਿਮ ਪੇਸ਼ਕਾਰੀ ਤੋਂ ਪਹਿਲਾਂ ਸਾਡੇ ਵਿਦਵਤ ਬੋਰਡ ਦੀ ਸਮੀਖਿਆ ਅਧੀਨ ਹਨ।',
       },
+      timelineNoResults: {
+        en: 'No events in this category yet — try a different filter.',
+        pa: 'ਇਸ ਸ਼੍ਰੇਣੀ ਵਿੱਚ ਅਜੇ ਕੋਈ ਘਟਨਾ ਨਹੀਂ — ਕੋਈ ਹੋਰ ਫ਼ਿਲਟਰ ਅਜ਼ਮਾਓ।',
+      },
       pauseRotation: { en: 'Pause slideshow', pa: 'ਸਲਾਈਡਸ਼ੋ ਰੋਕੋ' },
       resumeRotation: { en: 'Resume slideshow', pa: 'ਸਲਾਈਡਸ਼ੋ ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ' },
       heroSlide: { en: 'Slide', pa: 'ਸਲਾਈਡ' },
