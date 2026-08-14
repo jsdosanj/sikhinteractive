@@ -108,11 +108,12 @@ let resourceCarouselIndex = 0;
 let resourceCarouselTimer = 0;
 const qrDataUrls: Record<string, string> = {};
 
-// Stable download link for the companion Android app (jsdosanj/gw-display-mobile).
-// This is a GitHub Releases "rolling tag" URL — the mobile repo's CI
-// republishes the latest-apk release's asset on every push to its main
-// branch, so this URL never needs to change here even as new builds ship.
-const MOBILE_APP_APK_URL = 'https://github.com/jsdosanj/gw-display-mobile/releases/download/latest-apk/legacy-of-the-khalsa.apk';
+// Stable download link for the offline Android build (Capacitor, wrapping
+// this same site — see capacitor.config.ts and android/). This is a
+// GitHub Releases "rolling tag" URL — .github/workflows/android-build.yml
+// republishes the latest-apk release's asset on every push to main, so
+// this URL never needs to change here even as new builds ship.
+const MOBILE_APP_APK_URL = 'https://github.com/jsdosanj/sikhinteractive/releases/download/latest-apk/legacy-of-the-khalsa.apk';
 
 // Rotating crossfade banners (Phase 3) — the attract screen rotates
 // unconditionally while asleep (any touch wakes the kiosk, which is itself
