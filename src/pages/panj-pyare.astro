@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KioskShell from '../components/KioskShell.astro';
+import displayContent from '../data/display-content';
+
+const content = displayContent;
+const breadcrumb = [
+  { name: 'Home', path: '/' },
+  { name: 'Panj Pyare', path: '/panj-pyare' },
+];
+---
+
+<BaseLayout
+  title="The Panj Pyare — The Five Beloved Ones | Legacy of the Khalsa"
+  description="Meet the Panj Pyare — the five men who answered Guru Gobind Singh Ji's call at Anandpur Sahib in 1699 and became the founding exemplars of the Khalsa. A guided storyline for each of the five."
+  path="/panj-pyare"
+  breadcrumb={breadcrumb}
+>
+  <KioskShell initialView="pyare">
+    <Fragment slot="fallback">
+      <h1>Who were the Panj Pyare?</h1>
+      <p>{content.ui.labels.pyareIntro.en}</p>
+      {
+        content.panjPyare.map((pyara) => (
+          <article>
+            <h2>
+              {pyara.name.en} ({pyara.years})
+            </h2>
+            <p>
+              {pyara.occupation.en} &middot; {pyara.from.en} &middot; {pyara.representing.en}
+            </p>
+            <p>{pyara.details.en}</p>
+            {pyara.story && <p>{pyara.story.en}</p>}
+          </article>
+        ))
+      }
+    </Fragment>
+  </KioskShell>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KioskShell from '../components/KioskShell.astro';
+import displayContent from '../data/display-content';
+
+const content = displayContent;
+const breadcrumb = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+];
+---
+
+<BaseLayout
+  title="About This Display | Legacy of the Khalsa"
+  description="How Legacy of the Khalsa was built, who we are proud to stand alongside, and where it goes next."
+  path="/about"
+  breadcrumb={breadcrumb}
+>
+  <KioskShell initialView="about">
+    <Fragment slot="fallback">
+      <h1>{content.about.title.en}</h1>
+      <p>{content.about.collaboration.en}</p>
+      <p>{content.about.partnerships.en}</p>
+      <p>{content.about.futureUpdates.en}</p>
+      {
+        content.about.principles.map((principle) => (
+          <article>
+            <h2>{principle.title.en}</h2>
+            <p>{principle.description.en}</p>
+          </article>
+        ))
+      }
+    </Fragment>
+  </KioskShell>
+</BaseLayout>

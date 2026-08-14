@@ -3,7 +3,7 @@
 // feedback. No dependencies — kiosk hardware and the PWA's offline bundle
 // budget don't justify a library for fades/staggers/ripples.
 
-export type TransitionType = 'view' | 'selection' | 'none';
+export type TransitionType = 'view' | 'selection' | 'chapter' | 'none';
 
 let reducedMotionQuery: MediaQueryList | null = null;
 

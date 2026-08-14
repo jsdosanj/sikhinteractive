@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KioskShell from '../components/KioskShell.astro';
+import displayContent from '../data/display-content';
+
+const content = displayContent;
+const breadcrumb = [
+  { name: 'Home', path: '/' },
+  { name: 'Resources', path: '/resources' },
+];
+---
+
+<BaseLayout
+  title="Resources — Trusted Sikh Learning Platforms | Legacy of the Khalsa"
+  description="Trusted Sikh learning platforms and partner sites for continuing your journey beyond this display."
+  path="/resources"
+  breadcrumb={breadcrumb}
+>
+  <KioskShell initialView="resources">
+    <Fragment slot="fallback">
+      <h1>{content.resources.title.en}</h1>
+      <p>{content.resources.intro.en}</p>
+      {
+        content.resources.sites.map((site) => (
+          <article>
+            <h2>{site.previewTitle.en}</h2>
+            <p>{site.previewDescription.en}</p>
+            <p>
+              <a href={site.url} rel="noopener">
+                Visit {site.title}
+              </a>
+            </p>
+          </article>
+        ))
+      }
+    </Fragment>
+  </KioskShell>
+</BaseLayout>

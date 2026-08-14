@@ -1,0 +1,79 @@
+name: Android Build
+
+# Builds the kiosk web app, packages it into the Capacitor Android project
+# (capacitor.config.ts -> webDir: dist/client, so this is the same static
+# output Cloudflare Workers serves — kiosk.ts already renders the whole UI
+# client-side, so nothing server-rendered is missing from the packaged app),
+# and publishes a debug-signed APK to a rolling "latest-apk" GitHub Release
+# so the download link in the app (about.mobileApp / kiosk.ts's
+# MOBILE_APP_APK_URL) never needs to change between builds.
+#
+# Debug-signed (Android's auto-generated ~/.android/debug.keystore, created
+# fresh by Gradle with zero configuration) rather than release-signed with a
+# persistent keystore — that requires generating and safely storing a
+# signing key as repository secrets, a one-time setup step intentionally
+# left for a maintainer with a local JDK to do when ready. Debug-signed
+# APKs install and run identically for sideloading; the only difference is
+# they can't receive automatic in-place updates signed by a different key
+# later without users reinstalling once when that upgrade happens.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'android/**'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/android-build.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build web app
+        run: npm run build
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk legacy-of-the-khalsa.apk
+
+      - name: Publish rolling release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-apk
+          name: Legacy of the Khalsa (latest build)
+          body: |
+            Automatically built from the latest `main` branch commit.
+
+            **This is a debug-signed APK** — install it directly on Android by
+            enabling "Install from unknown sources" for your browser or file
+            manager, then opening the downloaded file. It runs fully offline
+            once installed.
+          make_latest: true
+          files: legacy-of-the-khalsa.apk

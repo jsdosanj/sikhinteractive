@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KioskShell from '../components/KioskShell.astro';
+import displayContent from '../data/display-content';
+
+const content = displayContent;
+const breadcrumb = [
+  { name: 'Home', path: '/' },
+  { name: 'Panj Takht', path: '/panj-takht' },
+];
+---
+
+<BaseLayout
+  title="The Panj Takht — Five Sacred Seats of Sikh Authority | Legacy of the Khalsa"
+  description="Explore the Panj Takht — the five sacred seats of Sikh institutional authority spanning Punjab, Bihar, the Deccan, and beyond. A guided storyline for each of the five Takhts."
+  path="/panj-takht"
+  breadcrumb={breadcrumb}
+>
+  <KioskShell initialView="takhts">
+    <Fragment slot="fallback">
+      <h1>What are the Panj Takht?</h1>
+      <p>{content.ui.labels.takhtsIntro.en}</p>
+      {
+        content.takhts.map((takht) => (
+          <article>
+            <h2>{takht.name.en}</h2>
+            <p>
+              {takht.location.en} &middot; {takht.establishedBy.en}
+            </p>
+            <p>{takht.significance.en}</p>
+            {takht.story && <p>{takht.story.en}</p>}
+          </article>
+        ))
+      }
+    </Fragment>
+  </KioskShell>
+</BaseLayout>

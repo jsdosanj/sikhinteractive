@@ -4,10 +4,14 @@ import type { TransitionType } from './animate';
 import { createRotator } from './banner';
 import type { Rotator } from './banner';
 import { initAmbient, retintForTheme, setAmbientMode } from './ambient';
+import { icons, kakaarIcons } from '../lib/icons';
+import { VIEW_PATHS, viewForPath } from '../lib/routes';
 import displayContent from '../data/display-content';
 import {
   advanceQuiz,
   backToQuizLevels,
+  closePyaraStoryline,
+  closeTakhtStoryline,
   createInitialState,
   getActiveQuizQuestions,
   getQuizScore,
@@ -20,13 +24,14 @@ import {
   selectTakht,
   setLanguage,
   setTheme,
+  setTimelineFilter,
   startQuiz,
-  stepPyara,
-  stepTakht,
+  stepPyaraChapter,
+  stepTakhtChapter,
   submitQuizAnswer,
   wakeKiosk,
 } from '../lib/kiosk-state';
-import type { KioskState } from '../lib/kiosk-state';
+import type { KioskState, TimelineFilter } from '../lib/kiosk-state';
 import type {
   DisplayContent,
   HomeFeature,
@@ -72,6 +77,11 @@ const viewAnnouncer = requireElement('view-announcer');
 
 let state = createInitialState(content);
 
+const ALL_VIEWS: View[] = ['home', 'pyare', 'takhts', 'quiz', 'learn', 'about', 'resources', 'leaflets', 'timeline'];
+function isView(value: string | undefined | null): value is View {
+  return value != null && (ALL_VIEWS as string[]).includes(value);
+}
+
 // Honor the manifest's home-screen app shortcuts (long-press the installed
 // icon on Android/iOS to jump straight to Quiz or Learn Sikhi) by reading
 // the ?shortcut= query param the OS launches the app with.
@@ -79,6 +89,15 @@ const shortcutTarget = new URLSearchParams(window.location.search).get('shortcut
 if (shortcutTarget === 'quiz' || shortcutTarget === 'learn') {
   state = navigate(wakeKiosk(state), shortcutTarget);
   window.history.replaceState(null, '', window.location.pathname);
+} else {
+  // Each routed page (see src/components/KioskShell.astro) sets
+  // #app-root's data-initial-view to the section it server-rendered a
+  // fallback for — boot straight into that section, same pattern as the
+  // shortcut handling above, just generalized to every route.
+  const initialView = document.getElementById('app-root')?.dataset.initialView;
+  if (isView(initialView) && initialView !== 'home') {
+    state = navigate(wakeKiosk(state), initialView);
+  }
 }
 let inactivityTimer = 0;
 let langMenuOpen = false;
@@ -89,11 +108,12 @@ let resourceCarouselIndex = 0;
 let resourceCarouselTimer = 0;
 const qrDataUrls: Record<string, string> = {};
 
-// Stable download link for the companion Android app (jsdosanj/gw-display-mobile).
-// This is a GitHub Releases "rolling tag" URL — the mobile repo's CI
-// republishes the latest-apk release's asset on every push to its main
-// branch, so this URL never needs to change here even as new builds ship.
-const MOBILE_APP_APK_URL = 'https://github.com/jsdosanj/gw-display-mobile/releases/download/latest-apk/legacy-of-the-khalsa.apk';
+// Stable download link for the offline Android build (Capacitor, wrapping
+// this same site — see capacitor.config.ts and android/). This is a
+// GitHub Releases "rolling tag" URL — .github/workflows/android-build.yml
+// republishes the latest-apk release's asset on every push to main, so
+// this URL never needs to change here even as new builds ship.
+const MOBILE_APP_APK_URL = 'https://github.com/jsdosanj/sikhinteractive/releases/download/latest-apk/legacy-of-the-khalsa.apk';
 
 // Rotating crossfade banners (Phase 3) — the attract screen rotates
 // unconditionally while asleep (any touch wakes the kiosk, which is itself
@@ -141,25 +161,6 @@ function shouldShowInstallBanner(): boolean {
 const journeyViews: View[] = ['pyare', 'takhts', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
 const visitedViews = new Set<View>();
 
-// Minimal line-art medallion icons for the Panj Kakaar, in the fixed
-// Kesh/Kangha/Kara/Kachhera/Kirpan order the content array is authored in.
-// Abstract symbolism (a topknot, a comb's teeth, a bangle, a waistband, a
-// blade) rather than literal photography — matches the site's line-icon
-// language elsewhere and stays respectful of the articles' sanctity.
-const kakaarIcons: string[] = [
-  // Kesh — the rishi/joora hair-knot: a coiled bun above the gathered hair
-  // beneath it, the standard abstract shorthand for uncut, gathered hair.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4.5"/><path d="M12 6.3a2.4 2.4 0 0 1 1.8 3.9"/><path d="M7.5 20c.6-3 2.2-4.7 4.5-4.7s3.9 1.7 4.5 4.7"/></svg>',
-  // Kangha — a wooden comb: rounded spine with five teeth.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5.2c0-.9.8-1.7 1.7-1.7h11.6c.9 0 1.7.8 1.7 1.7v3H4.5v-3z"/><path d="M6.2 8.2v10.6M9.1 8.2v10.6M12 8.2v10.6M14.9 8.2v10.6M17.8 8.2v10.6"/></svg>',
-  // Kara — a single plain iron bangle with a subtle metallic highlight arc.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="7.5"/><path d="M6.8 8a7.4 7.4 0 0 1 3.3-2.4" stroke-width="1.1" opacity="0.55"/></svg>',
-  // Kachhera — a symmetric drawstring undergarment silhouette with a waistband.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14v3.5c0 1-.3 2-.8 2.9L15.8 17.5h-2.2l-1.1-6-1.1 6H9.3L6.8 11.4c-.5-.9-.8-1.9-.8-2.9V5z"/><path d="M5 8.3h14"/></svg>',
-  // Kirpan — a slightly curved single-edged blade with crossguard and hilt.
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.4 3c1.1 4.2.9 9-1.4 13.2"/><path d="M9.3 6.3h4.4"/><path d="M10.4 16.2h2.3l-.6 3.8h-1.1z"/></svg>',
-];
-
 async function initQrCodes(): Promise<void> {
   for (const site of content.resources.sites) {
     try {
@@ -194,15 +195,16 @@ void initQrCodes().then(() => {
   }
 });
 
-const icons: Record<View, string> = {
-  home: '🏛️',
-  pyare: '⚔️',
-  takhts: '🕌',
-  quiz: '✨',
-  learn: '📖',
-  about: 'ℹ️',
-  resources: '🌐',
-  leaflets: '📄',
+const viewIcons: Record<View, string> = {
+  home: icons.home,
+  pyare: icons.panjPyare,
+  takhts: icons.panjTakht,
+  quiz: icons.quiz,
+  learn: icons.learn,
+  about: icons.about,
+  resources: icons.resources,
+  leaflets: icons.leaflets,
+  timeline: icons.timeline,
 };
 
 function text(value: LocalizedText, language = state.language): string {
@@ -223,6 +225,24 @@ const speechLangCodes: Record<Language, string> = {
   hi: 'hi-IN',
   es: 'es-ES',
   ar: 'ar-SA',
+};
+
+const timelineCategoryLabels: Record<TimelineFilter, LocalizedText> = {
+  all: { en: 'All', pa: 'ਸਾਰੇ' },
+  guru: { en: 'Guru', pa: 'ਗੁਰੂ' },
+  martyrdom: { en: 'Martyrdom', pa: 'ਸ਼ਹੀਦੀ' },
+  battle: { en: 'Battle', pa: 'ਜੰਗ' },
+  political: { en: 'Political', pa: 'ਰਾਜਨੀਤਿਕ' },
+  scripture: { en: 'Scripture', pa: 'ਗ੍ਰੰਥ' },
+  massacre: { en: 'Massacre', pa: 'ਘੱਲੂਘਾਰਾ' },
+};
+
+const timelineCategoryIcons: Partial<Record<TimelineFilter, string>> = {
+  guru: icons.categoryGuru,
+  martyrdom: icons.categoryMartyrdom,
+  battle: icons.categoryBattle,
+  political: icons.categoryPolitical,
+  scripture: icons.categoryScripture,
 };
 
 function showTtsNotice(buttonEl: HTMLElement, message: string): void {
@@ -382,7 +402,7 @@ function renderListenButton(payload: LocalizedText, blockId: string): string {
   const label = text(content.ui.labels.ttsListen);
   return `
     <button type="button" class="listen-btn" data-tts-text="${escapeAttr(value)}" data-tts-lang="${state.language}" data-tts-block="${blockId}" aria-label="${label}">
-      <span class="listen-btn__icon" aria-hidden="true">🔊</span>
+      <span class="listen-btn__icon" aria-hidden="true">${icons.speaker}</span>
       <span class="listen-btn__eq" aria-hidden="true"><span></span><span></span><span></span></span>
       <span class="${classForLanguage()}">${label}</span>
     </button>
@@ -602,10 +622,10 @@ function renderHeader(): void {
     <div class="glass-header">
       <div class="flex min-h-20 items-center justify-between px-4 py-2 md:min-h-24 md:px-8 md:py-0">
         <div class="flex min-w-0 items-center gap-3 sm:gap-4">
-          <button type="button" data-nav="home" aria-label="${text(content.ui.nav.home)}" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-white/5 text-xl text-gold-300 transition active:scale-[0.98] sm:h-14 sm:w-14 sm:text-2xl">☬</button>
+          <a href="${VIEW_PATHS.home}" data-nav="home" aria-label="${text(content.ui.nav.home)}" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-white/5 text-gold-300 transition active:scale-[0.98] sm:h-14 sm:w-14"><span class="nav-pill__icon">${icons.khanda}</span></a>
           <div class="min-w-0">
             <p class="hidden truncate text-xs font-semibold uppercase tracking-[0.22em] text-cloud-400 sm:block">${text(content.ui.experienceLabel)}</p>
-            <h2 class="truncate text-lg font-semibold text-white sm:text-xl md:text-2xl ${classForLanguage()}">${text(copy.title)}</h2>
+            <h1 class="truncate text-lg font-semibold text-white sm:text-xl md:text-2xl ${classForLanguage()}">${text(copy.title)}</h1>
             <p class="hidden truncate text-xs text-cloud-400 sm:block md:text-sm ${classForLanguage()}">${text(copy.subtitle)}</p>
           </div>
         </div>
@@ -631,24 +651,24 @@ function renderHeader(): void {
 }
 
 function renderNav(): void {
-  const views: View[] = ['home', 'pyare', 'takhts', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
+  const views: View[] = ['home', 'pyare', 'takhts', 'timeline', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
 
   bottomNav.innerHTML = `
-    <div class="nav-scroll glass-header flex min-h-20 gap-2 overflow-x-auto px-2 pt-2 md:grid md:min-h-24 md:grid-cols-8 md:gap-2 md:overflow-visible md:px-5 md:py-2">
+    <div class="nav-scroll glass-header flex min-h-20 gap-2 overflow-x-auto px-2 pt-2 md:grid md:min-h-24 md:grid-cols-9 md:gap-2 md:overflow-visible md:px-5 md:py-2">
       ${views
         .map(
           (view) => `
-            <button
-              type="button"
+            <a
+              href="${VIEW_PATHS[view]}"
               data-nav="${view}"
               data-ripple
               class="nav-pill min-w-[4.75rem] md:min-w-0"
               data-active="${state.view === view}"
-              aria-current="${state.view === view ? 'page' : 'false'}"
+              ${state.view === view ? 'aria-current="page"' : ''}
             >
-              <span class="text-xl">${icons[view]}</span>
+              <span class="nav-pill__icon" aria-hidden="true">${viewIcons[view]}</span>
               <span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] md:text-xs md:tracking-[0.18em] ${classForLanguage()}">${text(content.ui.nav[view])}</span>
-            </button>
+            </a>
           `,
         )
         .join('')}
@@ -673,7 +693,7 @@ function renderFeatureCard(feature: HomeFeature): string {
           <p class="text-xs font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(feature.eyebrow)}</p>
           <h3 class="mt-3 text-2xl font-semibold text-white ${classForLanguage()}">${text(feature.title)}</h3>
         </div>
-        <span class="text-4xl">${feature.icon}</span>
+        <span class="feature-card__icon text-gold-300" aria-hidden="true">${feature.icon}</span>
       </div>
       <p class="text-base leading-7 text-cloud-200 ${classForLanguage()}">${text(feature.description)}</p>
       <p class="mt-6 text-sm font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(feature.cta)}</p>
@@ -762,12 +782,17 @@ function renderPyareMap(selected: PanjPyaraProfile): string {
   `;
 }
 
+// Condensed teaser embedded on Home — the full, filterable 57-event
+// timeline lives at its own route (renderTimelineView / the 'timeline'
+// View), reachable via the link at the bottom.
 function renderTimelineSection(): string {
+  const preview = content.timeline.slice(0, 6);
+
   return `
     <section class="glass-panel p-7 md:p-10">
       <h3 class="text-2xl font-semibold text-white ${classForLanguage()}">${text(content.ui.labels.timelineTitle)}</h3>
       <div class="mt-6">
-        ${content.timeline
+        ${preview
           .map(
             (event) => `
               <div class="timeline-node">
@@ -781,7 +806,64 @@ function renderTimelineSection(): string {
           )
           .join('')}
       </div>
+      <a href="${VIEW_PATHS.timeline}" data-nav="timeline" data-ripple class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-300 hover:text-gold-200 ${classForLanguage()}">
+        ${text(content.sections.timeline.title)} →
+      </a>
     </section>
+  `;
+}
+
+function renderTimelineView(): string {
+  const filters: TimelineFilter[] = ['all', 'guru', 'martyrdom', 'battle', 'political', 'scripture', 'massacre'];
+  const events = state.timelineFilter === 'all' ? content.timeline : content.timeline.filter((event) => event.category === state.timelineFilter);
+
+  return `
+    <div class="grid gap-6">
+      <p class="max-w-4xl text-base leading-7 text-cloud-200 ${classForLanguage()}">${text(content.sections.timeline.subtitle)}</p>
+
+      <div class="flex flex-wrap gap-2" role="group" aria-label="${text(content.ui.labels.timelineTitle)}">
+        ${filters
+          .map(
+            (filter) => `
+              <button
+                type="button"
+                data-timeline-filter="${filter}"
+                data-ripple
+                data-active="${state.timelineFilter === filter}"
+                aria-pressed="${state.timelineFilter === filter}"
+                class="timeline-filter-chip ${classForLanguage()}"
+              >
+                ${timelineCategoryIcons[filter] ? `<span class="timeline-filter-chip__icon" aria-hidden="true">${timelineCategoryIcons[filter]}</span>` : ''}
+                ${text(timelineCategoryLabels[filter])}
+              </button>
+            `,
+          )
+          .join('')}
+      </div>
+
+      <section class="glass-panel p-7 md:p-10">
+        ${
+          events.length === 0
+            ? `<p class="text-sm text-cloud-400 ${classForLanguage()}">${text(content.ui.labels.timelineNoResults)}</p>`
+            : `<div class="mt-2">
+                ${events
+                  .map(
+                    (event) => `
+                      <div class="timeline-node" data-reveal>
+                        <span class="timeline-year">${event.year}</span>
+                        <div class="pt-1">
+                          <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(event.title)}</h4>
+                          <p class="mt-2 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(event.description)}</p>
+                        </div>
+                      </div>
+                    `,
+                  )
+                  .join('')}
+              </div>`
+        }
+      </section>
+      <p class="ai-badge ${classForLanguage()}">${text(content.ui.labels.aiContentNotice)}</p>
+    </div>
   `;
 }
 
@@ -828,7 +910,7 @@ function renderOnboarding(): string {
               .map(
                 (mode) => `
                   <button type="button" data-onboarding-mode="${mode.id}" data-ripple class="onboarding-card">
-                    <div class="mb-4 text-5xl">${mode.icon}</div>
+                    <div class="onboarding-card__icon mb-4 text-gold-300" aria-hidden="true">${mode.icon}</div>
                     <h4 class="text-lg font-semibold text-white ${classForLanguage()}">${text(mode.title)}</h4>
                     <p class="mt-3 text-sm leading-6 text-cloud-300 ${classForLanguage()}">${text(mode.description)}</p>
                   </button>
@@ -926,68 +1008,66 @@ function renderHome(): string {
   `;
 }
 
-function renderInfoBox(labelObj: LocalizedText, value: string): string {
-  return `
-    <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(labelObj)}</p>
-      <p class="mt-3 text-lg font-medium text-white ${classForLanguage()}">${value}</p>
-    </article>
-  `;
-}
 
-// Shared chapter-navigation chrome for the Panj Pyare / Panj Takht "guided
-// journey" — a compact variant near the profile header (prev/next only) and
-// a full variant with the chapter name + 5-dot progress, reused by both
-// renderPyare() and renderTakhts(). `kind` feeds the data-action the click
-// delegation block (below) reads to call stepPyara/stepTakht.
-function renderChapterBar(kind: 'pyara' | 'takht', total: number, currentIndex: number, chapterName: string, compact: boolean): string {
-  const canPrev = currentIndex > 0;
-  const canNext = currentIndex < total - 1;
+// Full-bleed, one-chapter-at-a-time reader — replaces the map when a pin or
+// gallery thumbnail is tapped. The backdrop shares its view-transition-name
+// with the map pin (see renderPyareMap), so the browser morphs the tapped
+// pin into this reader automatically; stepping chapters keeps the same name
+// so the backdrop image crossfades in place rather than the whole panel
+// swapping.
+function renderPyareStoryline(selected: PanjPyaraProfile): string {
+  const chapters = selected.chapters ?? [];
+  const chapterIndex = Math.min(state.pyaraChapterIndex, Math.max(chapters.length - 1, 0));
+  const chapter = chapters[chapterIndex];
 
-  const prevButton = `
-    <button
-      type="button"
-      data-action="${kind}-step"
-      data-step="-1"
-      data-ripple
-      class="chapter-bar__nav"
-      ${canPrev ? '' : 'disabled aria-disabled="true"'}
-      aria-label="${text(content.ui.labels.previousChapter)}"
-    ><span aria-hidden="true">←</span></button>
-  `;
-
-  const nextButton = `
-    <button
-      type="button"
-      data-action="${kind}-step"
-      data-step="1"
-      data-ripple
-      class="chapter-bar__nav"
-      ${canNext ? '' : 'disabled aria-disabled="true"'}
-      aria-label="${text(content.ui.labels.nextChapter)}"
-    ><span aria-hidden="true">→</span></button>
-  `;
-
-  const dots = Array.from({ length: total }, (_, index) => `<span class="chapter-dot" data-filled="${index <= currentIndex}"></span>`).join('');
-
-  if (compact) {
-    return `
-      <div class="chapter-bar chapter-bar--compact">
-        ${prevButton}
-        <span class="chapter-bar__count ${classForLanguage()}">${currentIndex + 1} / ${total}</span>
-        ${nextButton}
-      </div>
-    `;
+  if (!chapter) {
+    return renderPyareMap(selected);
   }
 
+  const pyareIndex = Math.max(content.panjPyare.findIndex((item) => item.id === selected.id), 0);
+  const nextPyara = content.panjPyare[pyareIndex + 1];
+  const isFirstChapter = chapterIndex === 0;
+  const isLastChapter = chapterIndex === chapters.length - 1;
+  const imagePath = chapter.imagePath ?? selected.imagePath;
+
+  const dots = chapters
+    .map((_, index) => `<span class="chapter-dot" data-filled="${index <= chapterIndex}"></span>`)
+    .join('');
+
+  const nextControl = !isLastChapter
+    ? `<button type="button" data-action="pyara-chapter-step" data-step="1" data-ripple class="storyline-reader__nav-btn" aria-label="${text(content.ui.labels.nextChapter)}"><span aria-hidden="true">→</span></button>`
+    : nextPyara
+      ? `<button type="button" data-pyara="${nextPyara.id}" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.nextChapter)}: ${text(nextPyara.name)} →</button>`
+      : `<button type="button" data-action="close-pyara-storyline" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.selectOnMap)}</button>`;
+
   return `
-    <div class="chapter-bar">
-      ${prevButton}
-      <div class="chapter-bar__meta">
-        <p class="chapter-bar__label ${classForLanguage()}">${text(content.ui.labels.chapterLabel)} ${currentIndex + 1} / ${total} — ${chapterName}</p>
-        <div class="chapter-bar__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${currentIndex + 1} / ${total}">${dots}</div>
+    <div class="storyline-reader glass-panel" data-reveal>
+      <div class="storyline-reader__backdrop" data-has-image="${String(Boolean(imagePath))}" style="--art-image:url('${asset(imagePath)}');view-transition-name:pin-pyara-${selected.id};"></div>
+      <div class="storyline-reader__scrim"></div>
+      <div class="storyline-reader__chrome">
+        <button type="button" data-action="close-pyara-storyline" data-ripple class="storyline-reader__close ${classForLanguage()}" aria-label="${text(content.ui.labels.backButton)}">
+          <span aria-hidden="true">←</span> ${text(content.ui.labels.backButton)}
+        </button>
+        <div class="storyline-reader__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${chapterIndex + 1} / ${chapters.length}">${dots}</div>
       </div>
-      ${nextButton}
+      <div class="storyline-reader__body">
+        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${escapeAttr(text(selected.name, 'en'))}">${icons.speaker}</span></p>
+        <p class="storyline-reader__kicker ${classForLanguage()}">${text(chapter.kicker)}</p>
+        <h3 class="storyline-reader__title title-gradient ${classForLanguage()}">${text(chapter.title)}</h3>
+        <p class="storyline-reader__text ${classForLanguage()}">${text(chapter.body)}</p>
+      </div>
+      <div class="storyline-reader__nav">
+        <button
+          type="button"
+          data-action="pyara-chapter-step"
+          data-step="-1"
+          data-ripple
+          class="storyline-reader__nav-btn"
+          ${isFirstChapter ? 'disabled aria-disabled="true"' : ''}
+          aria-label="${text(content.ui.labels.previousChapter)}"
+        ><span aria-hidden="true">←</span></button>
+        ${nextControl}
+      </div>
     </div>
   `;
 }
@@ -995,75 +1075,17 @@ function renderChapterBar(kind: 'pyara' | 'takht', total: number, currentIndex: 
 function renderPyare(): string {
   const selected = content.panjPyare.find((item) => item.id === state.selectedPyaraId) ?? content.panjPyare[0];
 
-  const beforeKhalsaHtml = `
-    <div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5 md:col-span-2" data-reveal>
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.beforeKhalsa)}</p>
-      <div class="mt-3 grid gap-3 sm:grid-cols-3">
-        ${renderInfoBox(content.ui.labels.previousOccupation, text(selected.occupation))}
-        ${renderInfoBox(content.ui.labels.fromRegion, text(selected.from))}
-        ${renderInfoBox(content.ui.labels.representing, text(selected.caste))}
-      </div>
-    </div>
-  `;
-
-  const storyHtml = `
-    <div class="story-panel detail-card" data-reveal>
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.story)}</p>
-        ${renderListenButton(selected.story ?? selected.details, `pyara-story-${selected.id}`)}
-      </div>
-      <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}" data-tts-source="pyara-story-${selected.id}">${text(selected.story ?? selected.details)}</p>
-    </div>
-  `;
-
-  const afterKhalsaHtml = selected.accomplishments || selected.roles
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.afterKhalsa)}</p>
-         ${selected.accomplishments ? `<p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}"><strong class="${classForLanguage()}">${text(content.ui.labels.accomplishments)}:</strong> ${text(selected.accomplishments)}</p>` : ''}
-         ${selected.roles ? `<p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}"><strong class="${classForLanguage()}">${text(content.ui.labels.roles)}:</strong> ${text(selected.roles)}</p>` : ''}
-       </div>`
-    : '';
-
-  const funFactHtml = selected.funFact
-    ? `<div class="fact-card detail-card" data-reveal>
-         <div class="fact-card__icon">✦</div>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.funFact)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.funFact)}</p>
-       </div>`
-    : '';
-
-  const shaheediHtml = selected.shaheedi
-    ? `<div class="detail-card rounded-[24px] border border-rose-300/15 bg-rose-400/5 p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-rose-300 ${classForLanguage()}">${text(content.ui.labels.shaheedi)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.shaheedi)}</p>
-       </div>`
-    : '';
-
-  const lessonsHtml = selected.lessons
-    ? `<div class="story-panel detail-card" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.lessons)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.lessons)}</p>
-       </div>`
-    : '';
-
-  const languageQualitiesHtml = selected.language || selected.qualities
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         ${selected.qualities ? `<p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.qualities)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.qualities)}</p>` : ''}
-         ${selected.language ? `<p class="${selected.qualities ? 'mt-5' : ''} text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.language)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.language)}</p>` : ''}
-       </div>`
-    : '';
-
-  const pyareDetailCards = [beforeKhalsaHtml, storyHtml, afterKhalsaHtml, funFactHtml, shaheediHtml, lessonsHtml, languageQualitiesHtml]
-    .filter(Boolean)
-    .join('');
-
-  const pyareIndex = Math.max(content.panjPyare.findIndex((item) => item.id === selected.id), 0);
+  if (state.pyareStorylineOpen) {
+    return renderPyareStoryline(selected);
+  }
 
   return `
     <div class="grid gap-6">
       <p class="max-w-4xl text-base leading-7 text-cloud-200 ${classForLanguage()}">${text(content.ui.labels.pyareIntro)}</p>
 
       ${renderPyareMap(selected)}
+
+      <p class="map-tap-prompt ${classForLanguage()}" data-reveal>${text(content.ui.labels.selectOnMap)}</p>
 
       <div class="pyare-gallery" data-reveal-group>
         ${content.panjPyare
@@ -1080,38 +1102,6 @@ function renderPyare(): string {
           )
           .join('')}
       </div>
-
-      <section class="glass-panel overflow-hidden p-8 md:p-10 slide-up">
-        ${renderArtworkPanel(selected.imagePath, text(selected.name), text(content.sections.pyare.title), `Commemorative portrait artwork of ${text(selected.name, 'en')}, one of the Panj Pyare`, 'full-photo', 'profile-art')}
-        <div class="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(selected.representing)}</p>
-            <h3 class="mt-2 text-4xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">🔊</span></h3>
-            <p class="mt-2 text-base text-cloud-400 ${classForLanguage()}">${text(content.ui.labels.birthName)}: ${text(selected.birthName)} &middot; ${selected.years}</p>
-          </div>
-          ${renderChapterBar('pyara', content.panjPyare.length, pyareIndex, text(selected.name), true)}
-        </div>
-
-        <div class="detail-grid mt-6" data-reveal-group>
-          ${pyareDetailCards}
-        </div>
-
-        <div class="storyline-panel mt-8">
-          ${renderChapterBar('pyara', content.panjPyare.length, pyareIndex, text(selected.name), false)}
-          <div class="mt-4 grid gap-2 lg:grid-cols-2">
-            ${content.panjPyare
-              .map(
-                (item, index) => `
-                  <button type="button" data-pyara="${item.id}" data-ripple class="storyline-step" data-active="${item.id === selected.id}">
-                    <span class="storyline-step__index">${index + 1}</span>
-                    <span class="${classForLanguage()}">${text(item.name)} — ${text(item.from)}</span>
-                  </button>
-                `,
-              )
-              .join('')}
-          </div>
-        </div>
-      </section>
     </div>
   `;
 }
@@ -1156,74 +1146,69 @@ function renderTakhtMap(selected: TakhtProfile): string {
   `;
 }
 
+function renderTakhtStoryline(selected: TakhtProfile): string {
+  const chapters = selected.chapters ?? [];
+  const chapterIndex = Math.min(state.takhtChapterIndex, Math.max(chapters.length - 1, 0));
+  const chapter = chapters[chapterIndex];
+
+  if (!chapter) {
+    return renderTakhtMap(selected);
+  }
+
+  const takhtIndex = Math.max(content.takhts.findIndex((item) => item.id === selected.id), 0);
+  const nextTakht = content.takhts[takhtIndex + 1];
+  const isFirstChapter = chapterIndex === 0;
+  const isLastChapter = chapterIndex === chapters.length - 1;
+  const imagePath = chapter.imagePath ?? selected.imagePath;
+
+  const dots = chapters
+    .map((_, index) => `<span class="chapter-dot" data-filled="${index <= chapterIndex}"></span>`)
+    .join('');
+
+  const nextControl = !isLastChapter
+    ? `<button type="button" data-action="takht-chapter-step" data-step="1" data-ripple class="storyline-reader__nav-btn" aria-label="${text(content.ui.labels.nextChapter)}"><span aria-hidden="true">→</span></button>`
+    : nextTakht
+      ? `<button type="button" data-takht="${nextTakht.id}" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.nextChapter)}: ${text(nextTakht.name)} →</button>`
+      : `<button type="button" data-action="close-takht-storyline" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.selectOnMap)}</button>`;
+
+  return `
+    <div class="storyline-reader glass-panel" data-reveal>
+      <div class="storyline-reader__backdrop" data-has-image="${String(Boolean(imagePath))}" style="--art-image:url('${asset(imagePath)}');view-transition-name:pin-takht-${selected.id};"></div>
+      <div class="storyline-reader__scrim"></div>
+      <div class="storyline-reader__chrome">
+        <button type="button" data-action="close-takht-storyline" data-ripple class="storyline-reader__close ${classForLanguage()}" aria-label="${text(content.ui.labels.backButton)}">
+          <span aria-hidden="true">←</span> ${text(content.ui.labels.backButton)}
+        </button>
+        <div class="storyline-reader__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${chapterIndex + 1} / ${chapters.length}">${dots}</div>
+      </div>
+      <div class="storyline-reader__body">
+        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${escapeAttr(text(selected.name, 'en'))}">${icons.speaker}</span></p>
+        <p class="storyline-reader__kicker ${classForLanguage()}">${text(chapter.kicker)}</p>
+        <h3 class="storyline-reader__title title-gradient ${classForLanguage()}">${text(chapter.title)}</h3>
+        <p class="storyline-reader__text ${classForLanguage()}">${text(chapter.body)}</p>
+      </div>
+      <div class="storyline-reader__nav">
+        <button
+          type="button"
+          data-action="takht-chapter-step"
+          data-step="-1"
+          data-ripple
+          class="storyline-reader__nav-btn"
+          ${isFirstChapter ? 'disabled aria-disabled="true"' : ''}
+          aria-label="${text(content.ui.labels.previousChapter)}"
+        ><span aria-hidden="true">←</span></button>
+        ${nextControl}
+      </div>
+    </div>
+  `;
+}
+
 function renderTakhts(): string {
   const selected = content.takhts.find((item) => item.id === state.selectedTakhtId) ?? content.takhts[0];
 
-  const establishedByHtml = `
-    <div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.establishedBy)}</p>
-      <p class="mt-3 text-base font-medium text-white ${classForLanguage()}">${text(selected.establishedBy)}</p>
-    </div>
-  `;
-
-  const significanceHtml = `
-    <div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.significance)}</p>
-      <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.significance)}</p>
-    </div>
-  `;
-
-  const storyHtml = selected.story
-    ? `<div class="story-panel detail-card" data-reveal>
-         <div class="flex flex-wrap items-center justify-between gap-3">
-           <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.story)}</p>
-           ${renderListenButton(selected.story, `takht-story-${selected.id}`)}
-         </div>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}" data-tts-source="takht-story-${selected.id}">${text(selected.story)}</p>
-       </div>`
-    : '';
-
-  const funFactHtml = selected.funFact
-    ? `<div class="fact-card detail-card" data-reveal>
-         <div class="fact-card__icon">✦</div>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.funFact)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.funFact)}</p>
-       </div>`
-    : '';
-
-  const jathedaarHtml = selected.jathedaar
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.jathedaar)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.jathedaar)}</p>
-       </div>`
-    : '';
-
-  const visitorsHtml = selected.visitorsInfo
-    ? `<div class="detail-card rounded-[24px] border border-emerald-300/15 bg-emerald-400/5 p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-300 ${classForLanguage()}">${text(content.ui.labels.visitorsInfo)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.visitorsInfo)}</p>
-       </div>`
-    : '';
-
-  const gurusVisitedHtml = selected.gurusVisited
-    ? `<div class="story-panel detail-card" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.gurusVisited)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.gurusVisited)}</p>
-       </div>`
-    : '';
-
-  const areaImpactHtml = selected.areaHistory || selected.localImpact
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         ${selected.areaHistory ? `<p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.areaHistory)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.areaHistory)}</p>` : ''}
-         ${selected.localImpact ? `<p class="${selected.areaHistory ? 'mt-5' : ''} text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.localImpact)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.localImpact)}</p>` : ''}
-       </div>`
-    : '';
-
-  const takhtDetailCards = [establishedByHtml, significanceHtml, storyHtml, funFactHtml, jathedaarHtml, visitorsHtml, gurusVisitedHtml, areaImpactHtml]
-    .filter(Boolean)
-    .join('');
-
-  const takhtIndex = Math.max(content.takhts.findIndex((item) => item.id === selected.id), 0);
+  if (state.takhtStorylineOpen) {
+    return renderTakhtStoryline(selected);
+  }
 
   return `
     <div class="grid gap-6">
@@ -1231,12 +1216,14 @@ function renderTakhts(): string {
 
       ${renderTakhtMap(selected)}
 
+      <p class="map-tap-prompt ${classForLanguage()}" data-reveal>${text(content.ui.labels.selectOnMap)}</p>
+
       <div class="silhouette-strip">
         ${content.takhts
           .map(
             (takht, index) => `
               <button type="button" data-takht="${takht.id}" data-ripple class="silhouette-avatar" data-active="${takht.id === selected.id}" aria-label="${text(takht.name)}">
-                <img src="${asset(takht.silhouettePath ?? '/assets/images/gurdwara-silhouette.svg')}" alt="${text(takht.name)}" class="silhouette-avatar__img" />
+                <img src="${asset(takht.silhouettePath ?? '/assets/images/gurdwara-silhouette.svg')}" alt="" class="silhouette-avatar__img" />
                 <span class="silhouette-avatar__number">${index + 1}</span>
                 <span class="silhouette-avatar__name ${classForLanguage()}">${text(takht.name).replace(/Takht Sri |Sri |Takht /g, '').replace(/ Sahib$/, '')}</span>
               </button>
@@ -1244,38 +1231,6 @@ function renderTakhts(): string {
           )
           .join('')}
       </div>
-
-      <section class="glass-panel overflow-hidden p-8 md:p-10 slide-up">
-        ${renderArtworkPanel(selected.imagePath, text(selected.name), text(content.sections.takhts.title), `Photograph of ${text(selected.name, 'en')} in ${text(selected.location, 'en')}`, 'full-photo', 'profile-art')}
-        <div class="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(selected.location)}</p>
-            <h3 class="mt-2 text-3xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">🔊</span></h3>
-            <p class="mt-2 text-base text-cloud-400 ${classForLanguage()}">${text(selected.location)}${selected.yearDeclared ? ' &middot; ' + selected.yearDeclared : ''}</p>
-          </div>
-          ${renderChapterBar('takht', content.takhts.length, takhtIndex, text(selected.name), true)}
-        </div>
-
-        <div class="detail-grid mt-6" data-reveal-group>
-          ${takhtDetailCards}
-        </div>
-
-        <div class="storyline-panel mt-8">
-          ${renderChapterBar('takht', content.takhts.length, takhtIndex, text(selected.name), false)}
-          <div class="mt-4 grid gap-2 lg:grid-cols-2">
-            ${content.takhts
-              .map(
-                (takht, index) => `
-                  <button type="button" data-takht="${takht.id}" data-ripple class="storyline-step" data-active="${takht.id === selected.id}">
-                    <span class="storyline-step__index">${index + 1}</span>
-                    <span class="${classForLanguage()}">${text(takht.name)} — ${text(takht.location)}</span>
-                  </button>
-                `,
-              )
-              .join('')}
-          </div>
-        </div>
-      </section>
     </div>
   `;
 }
@@ -1334,7 +1289,9 @@ function renderLearn(): string {
               (guru) => `
                 <div class="guru-lineage__node">
                   <div class="guru-lineage__connector" aria-hidden="true"></div>
-                  <div class="guru-lineage__medallion"><span>${guru.order}</span></div>
+                  <div class="guru-lineage__medallion" data-eternal="${Boolean(guru.eternal)}">
+                    <span aria-hidden="true">${guru.eternal ? 'ੴ' : guru.order}</span>
+                  </div>
                   <div class="guru-lineage__card">
                     <p class="text-base font-semibold text-white ${classForLanguage()}">${text(guru.name)}</p>
                     <p class="mt-1 text-xs uppercase tracking-[0.14em] text-cloud-400">${guru.years}</p>
@@ -1349,21 +1306,38 @@ function renderLearn(): string {
 
       <section class="glass-panel p-8 md:p-10">
         <h3 class="text-2xl font-semibold text-white ${classForLanguage()}">${text(learn.gurusTitle)}</h3>
-        <div class="mt-6 grid gap-4">
+        <div class="mt-6 grid gap-5">
           ${learn.gurus
             .map(
               (guru) => `
-                <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5 flex gap-4">
-                  <span class="shrink-0 flex h-10 w-10 items-center justify-center rounded-full border border-gold-300/30 bg-gold-400/10 text-sm font-semibold text-gold-300">${guru.order}</span>
-                  <div>
-                    <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(guru.name)} <span class="font-normal text-cloud-400">— ${guru.years}</span></h4>
-                    <p class="mt-2 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(guru.summary)}</p>
+                <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-6">
+                  <div class="flex gap-4">
+                    <span class="shrink-0 flex h-10 w-10 items-center justify-center rounded-full border border-gold-300/30 bg-gold-400/10 text-sm font-semibold text-gold-300" aria-hidden="true">${guru.eternal ? 'ੴ' : guru.order}</span>
+                    <div class="min-w-0">
+                      <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(guru.name)} <span class="font-normal text-cloud-400">— ${guru.years}</span></h4>
+                      ${guru.epithet ? `<p class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-300 ${classForLanguage()}">${text(guru.epithet)}</p>` : ''}
+                      <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(guru.fullSummary ?? guru.summary)}</p>
+                      ${
+                        guru.aheadOfTimeFact
+                          ? `<div class="mt-4 rounded-2xl border border-gold-300/20 bg-gold-400/6 p-4">
+                               <p class="text-xs font-semibold uppercase tracking-[0.18em] text-gold-300 ${classForLanguage()}">✦ ${text(content.ui.labels.funFact)}</p>
+                               <p class="mt-2 text-sm leading-6 text-cloud-200 ${classForLanguage()}">${text(guru.aheadOfTimeFact)}</p>
+                             </div>`
+                          : ''
+                      }
+                      ${
+                        guru.storiesUrl
+                          ? `<a href="${escapeAttr(guru.storiesUrl)}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 hover:text-sky-200 ${classForLanguage()}" aria-label="${escapeAttr(`Read more stories about ${text(guru.name, 'en')} on sikhi.io`)}">${text(content.ui.labels.learnMore)}</a>`
+                          : ''
+                      }
+                    </div>
                   </div>
                 </article>
               `,
             )
             .join('')}
         </div>
+        <p class="ai-badge mt-6 ${classForLanguage()}">${text(content.ui.labels.aiContentNotice)}</p>
       </section>
 
       <section class="glass-panel p-8 md:p-10">
@@ -1483,7 +1457,7 @@ function renderAbout(): string {
           <a href="${MOBILE_APP_APK_URL}" data-ripple class="cta-glow relative mt-5 inline-flex items-center gap-2 overflow-hidden rounded-full bg-gold-400 px-5 py-3 text-sm font-semibold text-night-950 transition active:scale-[0.98] ${classForLanguage()}">${text(content.about.mobileApp.cta)}</a>
         </div>
         <div class="qr-badge">
-          ${qrDataUrls['mobile-app'] ? `<img src="${qrDataUrls['mobile-app']}" alt="QR code to download the Android app" class="qr-badge__img" width="80" height="80" />` : ''}
+          ${qrDataUrls['mobile-app'] ? `<img src="${qrDataUrls['mobile-app']}" alt="QR code to download the Android app" class="qr-badge__img" width="80" height="80" />` : '<div class="qr-badge__img skeleton-shimmer" aria-hidden="true"></div>'}
           <p class="qr-badge__hint">${text(content.ui.labels.scanToVisit)}</p>
         </div>
       </section>
@@ -1548,7 +1522,7 @@ function renderResources(): string {
                     class="resource-iframe"
                     loading="lazy"
                     sandbox="allow-scripts"
-                    title="${site.title}"
+                    title="${escapeAttr(site.title)}"
                     data-iframe-slot="${site.id}"
                   ></iframe>
                   <div class="resource-fallback-panel" data-fallback-slot="${site.id}" hidden ${resourceBanners[site.id] ? `style="--art-image:url('${asset(resourceBanners[site.id])}');"` : ''}>
@@ -1568,7 +1542,7 @@ function renderResources(): string {
                         <a href="${site.url}" target="_blank" rel="noopener noreferrer" data-ripple class="cta-glow relative mt-4 inline-flex items-center gap-2 overflow-hidden rounded-full bg-gold-400 px-5 py-3 text-sm font-semibold text-night-950 transition active:scale-[0.98] ${classForLanguage()}">${text(content.ui.labels.visitSite)}</a>
                       </div>
                       <div class="qr-badge">
-                        ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="qr-badge__img" width="80" height="80" />` : ''}
+                        ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="qr-badge__img" width="80" height="80" />` : '<div class="qr-badge__img skeleton-shimmer" aria-hidden="true"></div>'}
                         <p class="qr-badge__hint">${text(content.ui.labels.scanToVisit)}</p>
                       </div>
                     </div>
@@ -1598,7 +1572,7 @@ function renderResources(): string {
               <article class="resource-card">
                 ${resourceBanners[site.id] ? `<img src="${asset(resourceBanners[site.id])}" alt="${site.title} banner" class="w-full object-cover" style="height:6rem;border-radius:28px 28px 0 0;" loading="lazy" decoding="async" />` : ''}
                 <div class="resource-card__qr">
-                  ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="resource-card__qr-img" width="80" height="80" />` : '<div class="resource-card__qr-placeholder">QR</div>'}
+                  ${qrDataUrls[site.id] ? `<img src="${qrDataUrls[site.id]}" alt="QR code for ${site.title}" class="resource-card__qr-img" width="80" height="80" />` : '<div class="resource-card__qr-placeholder skeleton-shimmer" aria-hidden="true"></div>'}
                 </div>
                 <div class="p-5">
                   <h4 class="text-base font-semibold text-white ${classForLanguage()}">${text(site.previewTitle)}</h4>
@@ -1630,7 +1604,7 @@ function renderLeaflets(): string {
       <a href="${content.leaflets.hubUrl}" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center gap-2 rounded-full bg-gold-400 px-6 py-4 text-base font-semibold text-night-950 transition active:scale-[0.98] ${classForLanguage()}">${text(content.leaflets.cta)}</a>
       <p class="mt-4 text-sm text-cloud-400">basicsofsikhi.com/resources</p>
       <div class="mx-auto mt-8 flex flex-col items-center gap-2">
-        ${leafletQr ? `<img src="${leafletQr}" alt="QR code for basicsofsikhi.com/resources" class="leaflet-qr" width="128" height="128" />` : '<div class="mx-auto flex h-32 w-32 items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] text-xs uppercase tracking-[0.18em] text-cloud-400">QR Code</div>'}
+        ${leafletQr ? `<img src="${leafletQr}" alt="QR code for basicsofsikhi.com/resources" class="leaflet-qr" width="128" height="128" />` : '<div class="mx-auto h-32 w-32 rounded-2xl border border-white/10 skeleton-shimmer" aria-hidden="true"></div>'}
       </div>
       <p class="mt-3 text-xs text-cloud-400">Scan the QR code or visit basicsofsikhi.com/resources</p>
     </div>
@@ -2018,6 +1992,9 @@ function renderView(): void {
     case 'leaflets':
       viewContent.innerHTML = renderLeaflets();
       break;
+    case 'timeline':
+      viewContent.innerHTML = renderTimelineView();
+      break;
     case 'quiz': {
       if (state.quizPhase === 'level') {
         viewContent.innerHTML = renderQuizLevelSelect();
@@ -2067,6 +2044,10 @@ function scheduleInactivityReset(): void {
 let lastAnnouncedView: View | null = null;
 let lastRenderedPyaraId: number | null = null;
 let lastRenderedTakhtId: string | null = null;
+let lastPyareStorylineOpen = false;
+let lastTakhtStorylineOpen = false;
+let lastPyaraChapterIndex = 0;
+let lastTakhtChapterIndex = 0;
 
 // Aggregate-only multi-kiosk analytics: a random, non-identifying token
 // generated once per device (never tied to a visitor) lets a gurdwara with
@@ -2105,11 +2086,21 @@ function sendAnalyticsPing(view: View, event: 'view' | 'heartbeat'): void {
 
 function render(): void {
   const viewChanging = state.awake && state.view !== lastAnnouncedView;
-  const selectionChanging =
-    !viewChanging &&
-    state.awake &&
-    (state.selectedPyaraId !== lastRenderedPyaraId || state.selectedTakhtId !== lastRenderedTakhtId);
-  const transitionType: TransitionType = viewChanging ? 'view' : selectionChanging ? 'selection' : 'none';
+  // Covers a pin/thumbnail expanding into the storyline reader, the reader
+  // collapsing back to the map, stepping between chapters, and stepping to
+  // a different person/takht — all driven through the same named
+  // view-transition elements (pin-pyara-${id} / pin-takht-${id}) so the
+  // browser morphs between whichever of these actually changed.
+  const pyareChanging =
+    state.selectedPyaraId !== lastRenderedPyaraId ||
+    state.pyareStorylineOpen !== lastPyareStorylineOpen ||
+    state.pyaraChapterIndex !== lastPyaraChapterIndex;
+  const takhtChanging =
+    state.selectedTakhtId !== lastRenderedTakhtId ||
+    state.takhtStorylineOpen !== lastTakhtStorylineOpen ||
+    state.takhtChapterIndex !== lastTakhtChapterIndex;
+  const selectionChanging = !viewChanging && state.awake && (pyareChanging || takhtChanging);
+  const transitionType: TransitionType = viewChanging ? 'view' : selectionChanging ? 'chapter' : 'none';
 
   const usedViewTransitionApi = transitionRender(() => {
     if (state.awake && journeyViews.includes(state.view)) {
@@ -2143,6 +2134,10 @@ function render(): void {
 
   lastRenderedPyaraId = state.selectedPyaraId;
   lastRenderedTakhtId = state.selectedTakhtId;
+  lastPyareStorylineOpen = state.pyareStorylineOpen;
+  lastTakhtStorylineOpen = state.takhtStorylineOpen;
+  lastPyaraChapterIndex = state.pyaraChapterIndex;
+  lastTakhtChapterIndex = state.takhtChapterIndex;
 
   // Legacy fallback: only replay the CSS class-toggle animation when the
   // native View Transition API didn't actually run (unsupported browser or
@@ -2223,16 +2218,28 @@ document.addEventListener('click', (event) => {
 
   const navTarget = target.closest<HTMLElement>('[data-nav]');
   if (navTarget?.dataset.nav) {
-    state = navigate(state, navTarget.dataset.nav as View);
+    // Let modified/non-primary clicks fall through to native <a> behavior
+    // (open in new tab, open in new window, etc.) instead of hijacking them
+    // into an in-place SPA navigation.
+    const mouseEvent = event as MouseEvent;
+    if (mouseEvent.button !== 0 || mouseEvent.ctrlKey || mouseEvent.metaKey || mouseEvent.shiftKey || mouseEvent.altKey) {
+      return;
+    }
+    event.preventDefault();
+    const view = navTarget.dataset.nav as View;
+    state = navigate(state, view);
     render();
+    window.history.pushState(null, '', VIEW_PATHS[view]);
     scheduleInactivityReset();
     return;
   }
 
   const homeTarget = target.closest<HTMLElement>('[data-home-target]');
   if (homeTarget?.dataset.homeTarget) {
-    state = navigate(state, homeTarget.dataset.homeTarget as View);
+    const view = homeTarget.dataset.homeTarget as View;
+    state = navigate(state, view);
     render();
+    window.history.pushState(null, '', VIEW_PATHS[view]);
     scheduleInactivityReset();
     return;
   }
@@ -2307,6 +2314,14 @@ document.addEventListener('click', (event) => {
     return;
   }
 
+  const timelineFilterTarget = target.closest<HTMLElement>('[data-timeline-filter]');
+  if (timelineFilterTarget?.dataset.timelineFilter) {
+    state = setTimelineFilter(state, timelineFilterTarget.dataset.timelineFilter as TimelineFilter);
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
   if (target.closest('[data-action="reset"]')) {
     state = resetForInactivity(content);
     hasCelebratedPerfect = false;
@@ -2337,10 +2352,31 @@ document.addEventListener('click', (event) => {
     return;
   }
 
-  const chapterStepTarget = target.closest<HTMLElement>('[data-action="pyara-step"], [data-action="takht-step"]');
-  if (chapterStepTarget) {
-    const delta = Number(chapterStepTarget.dataset.step ?? 0);
-    state = chapterStepTarget.dataset.action === 'pyara-step' ? stepPyara(state, content, delta) : stepTakht(state, content, delta);
+  const pyaraChapterStepTarget = target.closest<HTMLElement>('[data-action="pyara-chapter-step"]');
+  if (pyaraChapterStepTarget) {
+    state = stepPyaraChapter(state, content, Number(pyaraChapterStepTarget.dataset.step ?? 0));
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  const takhtChapterStepTarget = target.closest<HTMLElement>('[data-action="takht-chapter-step"]');
+  if (takhtChapterStepTarget) {
+    state = stepTakhtChapter(state, content, Number(takhtChapterStepTarget.dataset.step ?? 0));
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  if (target.closest('[data-action="close-pyara-storyline"]')) {
+    state = closePyaraStoryline(state);
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  if (target.closest('[data-action="close-takht-storyline"]')) {
+    state = closeTakhtStoryline(state);
     render();
     scheduleInactivityReset();
     return;
@@ -2420,6 +2456,100 @@ document.addEventListener('click', (event) => {
   if (target.closest('[data-action="restart-quiz"]')) {
     state = restartQuiz(state, content);
     hasCelebratedPerfect = false;
+    render();
+    scheduleInactivityReset();
+  }
+});
+
+// Arrow-key chapter navigation while a storyline reader is open — the
+// prev/next buttons already cover click/tap/switch access; this adds the
+// keyboard-only path so the reader is fully operable without a pointer.
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+    return;
+  }
+  const delta = event.key === 'ArrowRight' ? 1 : -1;
+
+  if (state.pyareStorylineOpen && state.view === 'pyare') {
+    event.preventDefault();
+    state = stepPyaraChapter(state, content, delta);
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  if (state.takhtStorylineOpen && state.view === 'takhts') {
+    event.preventDefault();
+    state = stepTakhtChapter(state, content, delta);
+    render();
+    scheduleInactivityReset();
+  }
+});
+
+// Swipe-left/right to advance chapters within an open storyline reader —
+// touch-first hardware (kiosk + phone) rarely has a keyboard, so this is
+// the primary gesture; the prev/next buttons remain the pointer/keyboard
+// fallback for everyone else. A horizontal swipe past the threshold steps
+// one chapter; anything shorter (a tap, a vertical scroll) is ignored.
+const SWIPE_THRESHOLD_PX = 48;
+let swipeStartX: number | null = null;
+let swipeStartY: number | null = null;
+
+document.addEventListener(
+  'pointerdown',
+  (event) => {
+    const withinReader = event.target instanceof Element && event.target.closest('.storyline-reader__body, .storyline-reader__backdrop');
+    if (!withinReader) {
+      swipeStartX = null;
+      swipeStartY = null;
+      return;
+    }
+    swipeStartX = event.clientX;
+    swipeStartY = event.clientY;
+  },
+  { passive: true },
+);
+
+document.addEventListener(
+  'pointerup',
+  (event) => {
+    if (swipeStartX === null || swipeStartY === null) {
+      return;
+    }
+    const dx = event.clientX - swipeStartX;
+    const dy = event.clientY - swipeStartY;
+    swipeStartX = null;
+    swipeStartY = null;
+
+    if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy)) {
+      return;
+    }
+    const delta = dx < 0 ? 1 : -1;
+
+    if (state.pyareStorylineOpen && state.view === 'pyare') {
+      state = stepPyaraChapter(state, content, delta);
+      render();
+      scheduleInactivityReset();
+      return;
+    }
+
+    if (state.takhtStorylineOpen && state.view === 'takhts') {
+      state = stepTakhtChapter(state, content, delta);
+      render();
+      scheduleInactivityReset();
+    }
+  },
+  { passive: true },
+);
+
+// Browser back/forward — the pushState side of navigation lives in the
+// data-nav click handler above; this is the reverse direction. Unknown
+// paths (shouldn't happen for same-origin nav, but a pasted/edited URL
+// could produce one) are ignored rather than crashing the router.
+window.addEventListener('popstate', () => {
+  const view = viewForPath(window.location.pathname);
+  if (view) {
+    state = navigate(wakeKiosk(state), view);
     render();
     scheduleInactivityReset();
   }

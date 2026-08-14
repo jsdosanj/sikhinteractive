@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KioskShell from '../components/KioskShell.astro';
+import displayContent from '../data/display-content';
+
+const content = displayContent;
+const breadcrumb = [
+  { name: 'Home', path: '/' },
+  { name: 'Timeline', path: '/timeline' },
+];
+---
+
+<BaseLayout
+  title="Sikh History Timeline — 1469 to 1849 | Legacy of the Khalsa"
+  description="A curated timeline of Sikh history from Guru Nanak Dev Ji's birth in 1469 through the Sikh Empire and its annexation in 1849 — the Gurus, martyrdoms, battles, and the compilation of Guru Granth Sahib Ji."
+  path="/timeline"
+  breadcrumb={breadcrumb}
+>
+  <KioskShell initialView="timeline">
+    <Fragment slot="fallback">
+      <h1>{content.sections.timeline.title.en}</h1>
+      <p>{content.sections.timeline.subtitle.en}</p>
+      <ol>
+        {
+          content.timeline.map((event) => (
+            <li>
+              <article>
+                <h2>
+                  {event.year} — {event.title.en}
+                </h2>
+                <p>{event.description.en}</p>
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </Fragment>
+  </KioskShell>
+</BaseLayout>

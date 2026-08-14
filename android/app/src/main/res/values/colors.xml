@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Matches the web app's --color-night-900 / --color-night-950 /
+         --color-gold-400 tokens (src/styles/global.css) so the native
+         chrome (status bar, splash background) doesn't clash with the
+         in-app dark/gold theme. -->
+    <color name="colorPrimary">#091322</color>
+    <color name="colorPrimaryDark">#050b14</color>
+    <color name="colorAccent">#e4bb5e</color>
+</resources>
