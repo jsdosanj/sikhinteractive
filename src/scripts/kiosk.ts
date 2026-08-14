@@ -9,6 +9,8 @@ import displayContent from '../data/display-content';
 import {
   advanceQuiz,
   backToQuizLevels,
+  closePyaraStoryline,
+  closeTakhtStoryline,
   createInitialState,
   getActiveQuizQuestions,
   getQuizScore,
@@ -22,8 +24,8 @@ import {
   setLanguage,
   setTheme,
   startQuiz,
-  stepPyara,
-  stepTakht,
+  stepPyaraChapter,
+  stepTakhtChapter,
   submitQuizAnswer,
   wakeKiosk,
 } from '../lib/kiosk-state';
@@ -909,68 +911,66 @@ function renderHome(): string {
   `;
 }
 
-function renderInfoBox(labelObj: LocalizedText, value: string): string {
-  return `
-    <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(labelObj)}</p>
-      <p class="mt-3 text-lg font-medium text-white ${classForLanguage()}">${value}</p>
-    </article>
-  `;
-}
 
-// Shared chapter-navigation chrome for the Panj Pyare / Panj Takht "guided
-// journey" — a compact variant near the profile header (prev/next only) and
-// a full variant with the chapter name + 5-dot progress, reused by both
-// renderPyare() and renderTakhts(). `kind` feeds the data-action the click
-// delegation block (below) reads to call stepPyara/stepTakht.
-function renderChapterBar(kind: 'pyara' | 'takht', total: number, currentIndex: number, chapterName: string, compact: boolean): string {
-  const canPrev = currentIndex > 0;
-  const canNext = currentIndex < total - 1;
+// Full-bleed, one-chapter-at-a-time reader — replaces the map when a pin or
+// gallery thumbnail is tapped. The backdrop shares its view-transition-name
+// with the map pin (see renderPyareMap), so the browser morphs the tapped
+// pin into this reader automatically; stepping chapters keeps the same name
+// so the backdrop image crossfades in place rather than the whole panel
+// swapping.
+function renderPyareStoryline(selected: PanjPyaraProfile): string {
+  const chapters = selected.chapters ?? [];
+  const chapterIndex = Math.min(state.pyaraChapterIndex, Math.max(chapters.length - 1, 0));
+  const chapter = chapters[chapterIndex];
 
-  const prevButton = `
-    <button
-      type="button"
-      data-action="${kind}-step"
-      data-step="-1"
-      data-ripple
-      class="chapter-bar__nav"
-      ${canPrev ? '' : 'disabled aria-disabled="true"'}
-      aria-label="${text(content.ui.labels.previousChapter)}"
-    ><span aria-hidden="true">←</span></button>
-  `;
-
-  const nextButton = `
-    <button
-      type="button"
-      data-action="${kind}-step"
-      data-step="1"
-      data-ripple
-      class="chapter-bar__nav"
-      ${canNext ? '' : 'disabled aria-disabled="true"'}
-      aria-label="${text(content.ui.labels.nextChapter)}"
-    ><span aria-hidden="true">→</span></button>
-  `;
-
-  const dots = Array.from({ length: total }, (_, index) => `<span class="chapter-dot" data-filled="${index <= currentIndex}"></span>`).join('');
-
-  if (compact) {
-    return `
-      <div class="chapter-bar chapter-bar--compact">
-        ${prevButton}
-        <span class="chapter-bar__count ${classForLanguage()}">${currentIndex + 1} / ${total}</span>
-        ${nextButton}
-      </div>
-    `;
+  if (!chapter) {
+    return renderPyareMap(selected);
   }
 
+  const pyareIndex = Math.max(content.panjPyare.findIndex((item) => item.id === selected.id), 0);
+  const nextPyara = content.panjPyare[pyareIndex + 1];
+  const isFirstChapter = chapterIndex === 0;
+  const isLastChapter = chapterIndex === chapters.length - 1;
+  const imagePath = chapter.imagePath ?? selected.imagePath;
+
+  const dots = chapters
+    .map((_, index) => `<span class="chapter-dot" data-filled="${index <= chapterIndex}"></span>`)
+    .join('');
+
+  const nextControl = !isLastChapter
+    ? `<button type="button" data-action="pyara-chapter-step" data-step="1" data-ripple class="storyline-reader__nav-btn" aria-label="${text(content.ui.labels.nextChapter)}"><span aria-hidden="true">→</span></button>`
+    : nextPyara
+      ? `<button type="button" data-pyara="${nextPyara.id}" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.nextChapter)}: ${text(nextPyara.name)} →</button>`
+      : `<button type="button" data-action="close-pyara-storyline" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.selectOnMap)}</button>`;
+
   return `
-    <div class="chapter-bar">
-      ${prevButton}
-      <div class="chapter-bar__meta">
-        <p class="chapter-bar__label ${classForLanguage()}">${text(content.ui.labels.chapterLabel)} ${currentIndex + 1} / ${total} — ${chapterName}</p>
-        <div class="chapter-bar__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${currentIndex + 1} / ${total}">${dots}</div>
+    <div class="storyline-reader glass-panel" data-reveal>
+      <div class="storyline-reader__backdrop" data-has-image="${String(Boolean(imagePath))}" style="--art-image:url('${asset(imagePath)}');view-transition-name:pin-pyara-${selected.id};"></div>
+      <div class="storyline-reader__scrim"></div>
+      <div class="storyline-reader__chrome">
+        <button type="button" data-action="close-pyara-storyline" data-ripple class="storyline-reader__close ${classForLanguage()}" aria-label="${text(content.ui.labels.backButton)}">
+          <span aria-hidden="true">←</span> ${text(content.ui.labels.backButton)}
+        </button>
+        <div class="storyline-reader__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${chapterIndex + 1} / ${chapters.length}">${dots}</div>
       </div>
-      ${nextButton}
+      <div class="storyline-reader__body">
+        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></p>
+        <p class="storyline-reader__kicker ${classForLanguage()}">${text(chapter.kicker)}</p>
+        <h3 class="storyline-reader__title title-gradient ${classForLanguage()}">${text(chapter.title)}</h3>
+        <p class="storyline-reader__text ${classForLanguage()}">${text(chapter.body)}</p>
+      </div>
+      <div class="storyline-reader__nav">
+        <button
+          type="button"
+          data-action="pyara-chapter-step"
+          data-step="-1"
+          data-ripple
+          class="storyline-reader__nav-btn"
+          ${isFirstChapter ? 'disabled aria-disabled="true"' : ''}
+          aria-label="${text(content.ui.labels.previousChapter)}"
+        ><span aria-hidden="true">←</span></button>
+        ${nextControl}
+      </div>
     </div>
   `;
 }
@@ -978,75 +978,17 @@ function renderChapterBar(kind: 'pyara' | 'takht', total: number, currentIndex: 
 function renderPyare(): string {
   const selected = content.panjPyare.find((item) => item.id === state.selectedPyaraId) ?? content.panjPyare[0];
 
-  const beforeKhalsaHtml = `
-    <div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5 md:col-span-2" data-reveal>
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.beforeKhalsa)}</p>
-      <div class="mt-3 grid gap-3 sm:grid-cols-3">
-        ${renderInfoBox(content.ui.labels.previousOccupation, text(selected.occupation))}
-        ${renderInfoBox(content.ui.labels.fromRegion, text(selected.from))}
-        ${renderInfoBox(content.ui.labels.representing, text(selected.caste))}
-      </div>
-    </div>
-  `;
-
-  const storyHtml = `
-    <div class="story-panel detail-card" data-reveal>
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.story)}</p>
-        ${renderListenButton(selected.story ?? selected.details, `pyara-story-${selected.id}`)}
-      </div>
-      <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}" data-tts-source="pyara-story-${selected.id}">${text(selected.story ?? selected.details)}</p>
-    </div>
-  `;
-
-  const afterKhalsaHtml = selected.accomplishments || selected.roles
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.afterKhalsa)}</p>
-         ${selected.accomplishments ? `<p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}"><strong class="${classForLanguage()}">${text(content.ui.labels.accomplishments)}:</strong> ${text(selected.accomplishments)}</p>` : ''}
-         ${selected.roles ? `<p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}"><strong class="${classForLanguage()}">${text(content.ui.labels.roles)}:</strong> ${text(selected.roles)}</p>` : ''}
-       </div>`
-    : '';
-
-  const funFactHtml = selected.funFact
-    ? `<div class="fact-card detail-card" data-reveal>
-         <div class="fact-card__icon">✦</div>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.funFact)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.funFact)}</p>
-       </div>`
-    : '';
-
-  const shaheediHtml = selected.shaheedi
-    ? `<div class="detail-card rounded-[24px] border border-rose-300/15 bg-rose-400/5 p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-rose-300 ${classForLanguage()}">${text(content.ui.labels.shaheedi)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.shaheedi)}</p>
-       </div>`
-    : '';
-
-  const lessonsHtml = selected.lessons
-    ? `<div class="story-panel detail-card" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.lessons)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.lessons)}</p>
-       </div>`
-    : '';
-
-  const languageQualitiesHtml = selected.language || selected.qualities
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         ${selected.qualities ? `<p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.qualities)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.qualities)}</p>` : ''}
-         ${selected.language ? `<p class="${selected.qualities ? 'mt-5' : ''} text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.language)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.language)}</p>` : ''}
-       </div>`
-    : '';
-
-  const pyareDetailCards = [beforeKhalsaHtml, storyHtml, afterKhalsaHtml, funFactHtml, shaheediHtml, lessonsHtml, languageQualitiesHtml]
-    .filter(Boolean)
-    .join('');
-
-  const pyareIndex = Math.max(content.panjPyare.findIndex((item) => item.id === selected.id), 0);
+  if (state.pyareStorylineOpen) {
+    return renderPyareStoryline(selected);
+  }
 
   return `
     <div class="grid gap-6">
       <p class="max-w-4xl text-base leading-7 text-cloud-200 ${classForLanguage()}">${text(content.ui.labels.pyareIntro)}</p>
 
       ${renderPyareMap(selected)}
+
+      <p class="map-tap-prompt ${classForLanguage()}" data-reveal>${text(content.ui.labels.selectOnMap)}</p>
 
       <div class="pyare-gallery" data-reveal-group>
         ${content.panjPyare
@@ -1063,38 +1005,6 @@ function renderPyare(): string {
           )
           .join('')}
       </div>
-
-      <section class="glass-panel overflow-hidden p-8 md:p-10 slide-up">
-        ${renderArtworkPanel(selected.imagePath, text(selected.name), text(content.sections.pyare.title), `Commemorative portrait artwork of ${text(selected.name, 'en')}, one of the Panj Pyare`, 'full-photo', 'profile-art')}
-        <div class="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(selected.representing)}</p>
-            <h3 class="mt-2 text-4xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></h3>
-            <p class="mt-2 text-base text-cloud-400 ${classForLanguage()}">${text(content.ui.labels.birthName)}: ${text(selected.birthName)} &middot; ${selected.years}</p>
-          </div>
-          ${renderChapterBar('pyara', content.panjPyare.length, pyareIndex, text(selected.name), true)}
-        </div>
-
-        <div class="detail-grid mt-6" data-reveal-group>
-          ${pyareDetailCards}
-        </div>
-
-        <div class="storyline-panel mt-8">
-          ${renderChapterBar('pyara', content.panjPyare.length, pyareIndex, text(selected.name), false)}
-          <div class="mt-4 grid gap-2 lg:grid-cols-2">
-            ${content.panjPyare
-              .map(
-                (item, index) => `
-                  <button type="button" data-pyara="${item.id}" data-ripple class="storyline-step" data-active="${item.id === selected.id}">
-                    <span class="storyline-step__index">${index + 1}</span>
-                    <span class="${classForLanguage()}">${text(item.name)} — ${text(item.from)}</span>
-                  </button>
-                `,
-              )
-              .join('')}
-          </div>
-        </div>
-      </section>
     </div>
   `;
 }
@@ -1139,80 +1049,77 @@ function renderTakhtMap(selected: TakhtProfile): string {
   `;
 }
 
+function renderTakhtStoryline(selected: TakhtProfile): string {
+  const chapters = selected.chapters ?? [];
+  const chapterIndex = Math.min(state.takhtChapterIndex, Math.max(chapters.length - 1, 0));
+  const chapter = chapters[chapterIndex];
+
+  if (!chapter) {
+    return renderTakhtMap(selected);
+  }
+
+  const takhtIndex = Math.max(content.takhts.findIndex((item) => item.id === selected.id), 0);
+  const nextTakht = content.takhts[takhtIndex + 1];
+  const isFirstChapter = chapterIndex === 0;
+  const isLastChapter = chapterIndex === chapters.length - 1;
+  const imagePath = chapter.imagePath ?? selected.imagePath;
+
+  const dots = chapters
+    .map((_, index) => `<span class="chapter-dot" data-filled="${index <= chapterIndex}"></span>`)
+    .join('');
+
+  const nextControl = !isLastChapter
+    ? `<button type="button" data-action="takht-chapter-step" data-step="1" data-ripple class="storyline-reader__nav-btn" aria-label="${text(content.ui.labels.nextChapter)}"><span aria-hidden="true">→</span></button>`
+    : nextTakht
+      ? `<button type="button" data-takht="${nextTakht.id}" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.nextChapter)}: ${text(nextTakht.name)} →</button>`
+      : `<button type="button" data-action="close-takht-storyline" data-ripple class="storyline-reader__next-person ${classForLanguage()}">${text(content.ui.labels.selectOnMap)}</button>`;
+
+  return `
+    <div class="storyline-reader glass-panel" data-reveal>
+      <div class="storyline-reader__backdrop" data-has-image="${String(Boolean(imagePath))}" style="--art-image:url('${asset(imagePath)}');view-transition-name:pin-takht-${selected.id};"></div>
+      <div class="storyline-reader__scrim"></div>
+      <div class="storyline-reader__chrome">
+        <button type="button" data-action="close-takht-storyline" data-ripple class="storyline-reader__close ${classForLanguage()}" aria-label="${text(content.ui.labels.backButton)}">
+          <span aria-hidden="true">←</span> ${text(content.ui.labels.backButton)}
+        </button>
+        <div class="storyline-reader__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${chapterIndex + 1} / ${chapters.length}">${dots}</div>
+      </div>
+      <div class="storyline-reader__body">
+        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></p>
+        <p class="storyline-reader__kicker ${classForLanguage()}">${text(chapter.kicker)}</p>
+        <h3 class="storyline-reader__title title-gradient ${classForLanguage()}">${text(chapter.title)}</h3>
+        <p class="storyline-reader__text ${classForLanguage()}">${text(chapter.body)}</p>
+      </div>
+      <div class="storyline-reader__nav">
+        <button
+          type="button"
+          data-action="takht-chapter-step"
+          data-step="-1"
+          data-ripple
+          class="storyline-reader__nav-btn"
+          ${isFirstChapter ? 'disabled aria-disabled="true"' : ''}
+          aria-label="${text(content.ui.labels.previousChapter)}"
+        ><span aria-hidden="true">←</span></button>
+        ${nextControl}
+      </div>
+    </div>
+  `;
+}
+
 function renderTakhts(): string {
   const selected = content.takhts.find((item) => item.id === state.selectedTakhtId) ?? content.takhts[0];
 
-  const establishedByHtml = `
-    <div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.establishedBy)}</p>
-      <p class="mt-3 text-base font-medium text-white ${classForLanguage()}">${text(selected.establishedBy)}</p>
-    </div>
-  `;
-
-  const significanceHtml = `
-    <div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-      <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.significance)}</p>
-      <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.significance)}</p>
-    </div>
-  `;
-
-  const storyHtml = selected.story
-    ? `<div class="story-panel detail-card" data-reveal>
-         <div class="flex flex-wrap items-center justify-between gap-3">
-           <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.story)}</p>
-           ${renderListenButton(selected.story, `takht-story-${selected.id}`)}
-         </div>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}" data-tts-source="takht-story-${selected.id}">${text(selected.story)}</p>
-       </div>`
-    : '';
-
-  const funFactHtml = selected.funFact
-    ? `<div class="fact-card detail-card" data-reveal>
-         <div class="fact-card__icon">✦</div>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.funFact)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.funFact)}</p>
-       </div>`
-    : '';
-
-  const jathedaarHtml = selected.jathedaar
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.jathedaar)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.jathedaar)}</p>
-       </div>`
-    : '';
-
-  const visitorsHtml = selected.visitorsInfo
-    ? `<div class="detail-card rounded-[24px] border border-emerald-300/15 bg-emerald-400/5 p-5" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-300 ${classForLanguage()}">${text(content.ui.labels.visitorsInfo)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.visitorsInfo)}</p>
-       </div>`
-    : '';
-
-  const gurusVisitedHtml = selected.gurusVisited
-    ? `<div class="story-panel detail-card" data-reveal>
-         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300 ${classForLanguage()}">${text(content.ui.labels.gurusVisited)}</p>
-         <p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.gurusVisited)}</p>
-       </div>`
-    : '';
-
-  const areaImpactHtml = selected.areaHistory || selected.localImpact
-    ? `<div class="detail-card rounded-[24px] border border-white/10 bg-white/[0.03] p-5" data-reveal>
-         ${selected.areaHistory ? `<p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.areaHistory)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.areaHistory)}</p>` : ''}
-         ${selected.localImpact ? `<p class="${selected.areaHistory ? 'mt-5' : ''} text-xs font-semibold uppercase tracking-[0.22em] text-gold-300 ${classForLanguage()}">${text(content.ui.labels.localImpact)}</p><p class="mt-3 text-sm leading-7 text-cloud-200 ${classForLanguage()}">${text(selected.localImpact)}</p>` : ''}
-       </div>`
-    : '';
-
-  const takhtDetailCards = [establishedByHtml, significanceHtml, storyHtml, funFactHtml, jathedaarHtml, visitorsHtml, gurusVisitedHtml, areaImpactHtml]
-    .filter(Boolean)
-    .join('');
-
-  const takhtIndex = Math.max(content.takhts.findIndex((item) => item.id === selected.id), 0);
+  if (state.takhtStorylineOpen) {
+    return renderTakhtStoryline(selected);
+  }
 
   return `
     <div class="grid gap-6">
       <p class="max-w-4xl text-base leading-7 text-cloud-200 ${classForLanguage()}">${text(content.ui.labels.takhtsIntro)}</p>
 
       ${renderTakhtMap(selected)}
+
+      <p class="map-tap-prompt ${classForLanguage()}" data-reveal>${text(content.ui.labels.selectOnMap)}</p>
 
       <div class="silhouette-strip">
         ${content.takhts
@@ -1227,38 +1134,6 @@ function renderTakhts(): string {
           )
           .join('')}
       </div>
-
-      <section class="glass-panel overflow-hidden p-8 md:p-10 slide-up">
-        ${renderArtworkPanel(selected.imagePath, text(selected.name), text(content.sections.takhts.title), `Photograph of ${text(selected.name, 'en')} in ${text(selected.location, 'en')}`, 'full-photo', 'profile-art')}
-        <div class="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-gold-300 ${classForLanguage()}">${text(selected.location)}</p>
-            <h3 class="mt-2 text-3xl font-semibold text-white ${classForLanguage()}" style="view-transition-name:profile-title;">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></h3>
-            <p class="mt-2 text-base text-cloud-400 ${classForLanguage()}">${text(selected.location)}${selected.yearDeclared ? ' &middot; ' + selected.yearDeclared : ''}</p>
-          </div>
-          ${renderChapterBar('takht', content.takhts.length, takhtIndex, text(selected.name), true)}
-        </div>
-
-        <div class="detail-grid mt-6" data-reveal-group>
-          ${takhtDetailCards}
-        </div>
-
-        <div class="storyline-panel mt-8">
-          ${renderChapterBar('takht', content.takhts.length, takhtIndex, text(selected.name), false)}
-          <div class="mt-4 grid gap-2 lg:grid-cols-2">
-            ${content.takhts
-              .map(
-                (takht, index) => `
-                  <button type="button" data-takht="${takht.id}" data-ripple class="storyline-step" data-active="${takht.id === selected.id}">
-                    <span class="storyline-step__index">${index + 1}</span>
-                    <span class="${classForLanguage()}">${text(takht.name)} — ${text(takht.location)}</span>
-                  </button>
-                `,
-              )
-              .join('')}
-          </div>
-        </div>
-      </section>
     </div>
   `;
 }
@@ -2069,6 +1944,10 @@ function scheduleInactivityReset(): void {
 let lastAnnouncedView: View | null = null;
 let lastRenderedPyaraId: number | null = null;
 let lastRenderedTakhtId: string | null = null;
+let lastPyareStorylineOpen = false;
+let lastTakhtStorylineOpen = false;
+let lastPyaraChapterIndex = 0;
+let lastTakhtChapterIndex = 0;
 
 // Aggregate-only multi-kiosk analytics: a random, non-identifying token
 // generated once per device (never tied to a visitor) lets a gurdwara with
@@ -2107,11 +1986,21 @@ function sendAnalyticsPing(view: View, event: 'view' | 'heartbeat'): void {
 
 function render(): void {
   const viewChanging = state.awake && state.view !== lastAnnouncedView;
-  const selectionChanging =
-    !viewChanging &&
-    state.awake &&
-    (state.selectedPyaraId !== lastRenderedPyaraId || state.selectedTakhtId !== lastRenderedTakhtId);
-  const transitionType: TransitionType = viewChanging ? 'view' : selectionChanging ? 'selection' : 'none';
+  // Covers a pin/thumbnail expanding into the storyline reader, the reader
+  // collapsing back to the map, stepping between chapters, and stepping to
+  // a different person/takht — all driven through the same named
+  // view-transition elements (pin-pyara-${id} / pin-takht-${id}) so the
+  // browser morphs between whichever of these actually changed.
+  const pyareChanging =
+    state.selectedPyaraId !== lastRenderedPyaraId ||
+    state.pyareStorylineOpen !== lastPyareStorylineOpen ||
+    state.pyaraChapterIndex !== lastPyaraChapterIndex;
+  const takhtChanging =
+    state.selectedTakhtId !== lastRenderedTakhtId ||
+    state.takhtStorylineOpen !== lastTakhtStorylineOpen ||
+    state.takhtChapterIndex !== lastTakhtChapterIndex;
+  const selectionChanging = !viewChanging && state.awake && (pyareChanging || takhtChanging);
+  const transitionType: TransitionType = viewChanging ? 'view' : selectionChanging ? 'chapter' : 'none';
 
   const usedViewTransitionApi = transitionRender(() => {
     if (state.awake && journeyViews.includes(state.view)) {
@@ -2145,6 +2034,10 @@ function render(): void {
 
   lastRenderedPyaraId = state.selectedPyaraId;
   lastRenderedTakhtId = state.selectedTakhtId;
+  lastPyareStorylineOpen = state.pyareStorylineOpen;
+  lastTakhtStorylineOpen = state.takhtStorylineOpen;
+  lastPyaraChapterIndex = state.pyaraChapterIndex;
+  lastTakhtChapterIndex = state.takhtChapterIndex;
 
   // Legacy fallback: only replay the CSS class-toggle animation when the
   // native View Transition API didn't actually run (unsupported browser or
@@ -2339,10 +2232,31 @@ document.addEventListener('click', (event) => {
     return;
   }
 
-  const chapterStepTarget = target.closest<HTMLElement>('[data-action="pyara-step"], [data-action="takht-step"]');
-  if (chapterStepTarget) {
-    const delta = Number(chapterStepTarget.dataset.step ?? 0);
-    state = chapterStepTarget.dataset.action === 'pyara-step' ? stepPyara(state, content, delta) : stepTakht(state, content, delta);
+  const pyaraChapterStepTarget = target.closest<HTMLElement>('[data-action="pyara-chapter-step"]');
+  if (pyaraChapterStepTarget) {
+    state = stepPyaraChapter(state, content, Number(pyaraChapterStepTarget.dataset.step ?? 0));
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  const takhtChapterStepTarget = target.closest<HTMLElement>('[data-action="takht-chapter-step"]');
+  if (takhtChapterStepTarget) {
+    state = stepTakhtChapter(state, content, Number(takhtChapterStepTarget.dataset.step ?? 0));
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  if (target.closest('[data-action="close-pyara-storyline"]')) {
+    state = closePyaraStoryline(state);
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  if (target.closest('[data-action="close-takht-storyline"]')) {
+    state = closeTakhtStoryline(state);
     render();
     scheduleInactivityReset();
     return;
@@ -2426,6 +2340,87 @@ document.addEventListener('click', (event) => {
     scheduleInactivityReset();
   }
 });
+
+// Arrow-key chapter navigation while a storyline reader is open — the
+// prev/next buttons already cover click/tap/switch access; this adds the
+// keyboard-only path so the reader is fully operable without a pointer.
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+    return;
+  }
+  const delta = event.key === 'ArrowRight' ? 1 : -1;
+
+  if (state.pyareStorylineOpen && state.view === 'pyare') {
+    event.preventDefault();
+    state = stepPyaraChapter(state, content, delta);
+    render();
+    scheduleInactivityReset();
+    return;
+  }
+
+  if (state.takhtStorylineOpen && state.view === 'takhts') {
+    event.preventDefault();
+    state = stepTakhtChapter(state, content, delta);
+    render();
+    scheduleInactivityReset();
+  }
+});
+
+// Swipe-left/right to advance chapters within an open storyline reader —
+// touch-first hardware (kiosk + phone) rarely has a keyboard, so this is
+// the primary gesture; the prev/next buttons remain the pointer/keyboard
+// fallback for everyone else. A horizontal swipe past the threshold steps
+// one chapter; anything shorter (a tap, a vertical scroll) is ignored.
+const SWIPE_THRESHOLD_PX = 48;
+let swipeStartX: number | null = null;
+let swipeStartY: number | null = null;
+
+document.addEventListener(
+  'pointerdown',
+  (event) => {
+    const withinReader = event.target instanceof Element && event.target.closest('.storyline-reader__body, .storyline-reader__backdrop');
+    if (!withinReader) {
+      swipeStartX = null;
+      swipeStartY = null;
+      return;
+    }
+    swipeStartX = event.clientX;
+    swipeStartY = event.clientY;
+  },
+  { passive: true },
+);
+
+document.addEventListener(
+  'pointerup',
+  (event) => {
+    if (swipeStartX === null || swipeStartY === null) {
+      return;
+    }
+    const dx = event.clientX - swipeStartX;
+    const dy = event.clientY - swipeStartY;
+    swipeStartX = null;
+    swipeStartY = null;
+
+    if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy)) {
+      return;
+    }
+    const delta = dx < 0 ? 1 : -1;
+
+    if (state.pyareStorylineOpen && state.view === 'pyare') {
+      state = stepPyaraChapter(state, content, delta);
+      render();
+      scheduleInactivityReset();
+      return;
+    }
+
+    if (state.takhtStorylineOpen && state.view === 'takhts') {
+      state = stepTakhtChapter(state, content, delta);
+      render();
+      scheduleInactivityReset();
+    }
+  },
+  { passive: true },
+);
 
 initPressFeedback();
 initAmbient();

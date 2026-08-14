@@ -8,6 +8,15 @@ export interface KioskState {
   view: View;
   selectedPyaraId: number;
   selectedTakhtId: string;
+  // The map is the landing experience for Panj Pyare / Panj Takht — tapping
+  // a pin expands the storyline reader over it rather than navigating away.
+  // These stay false until a pin is tapped, and the chapter indices reset
+  // to 0 on every new selection so a fresh person/takht always starts at
+  // chapter one.
+  pyareStorylineOpen: boolean;
+  takhtStorylineOpen: boolean;
+  pyaraChapterIndex: number;
+  takhtChapterIndex: number;
   quizPhase: QuizPhase;
   quizLevel: QuizLevel | null;
   quizCount: number;
@@ -44,6 +53,10 @@ export function createInitialState(content: DisplayContent): KioskState {
     view: 'home',
     selectedPyaraId: content.panjPyare[0]?.id ?? 0,
     selectedTakhtId: content.takhts[0]?.id ?? '',
+    pyareStorylineOpen: false,
+    takhtStorylineOpen: false,
+    pyaraChapterIndex: 0,
+    takhtChapterIndex: 0,
     quizPhase: 'level',
     quizLevel: null,
     quizCount: content.quiz.countOptions[0]?.count ?? 5,
@@ -85,6 +98,17 @@ export function navigate(state: KioskState, view: View): KioskState {
     hasChosenMode: true,
   };
 
+  // Re-entering Panj Pyare / Panj Takht always lands on the map first, not
+  // mid-storyline from a previous visit.
+  if (view === 'pyare') {
+    next.pyareStorylineOpen = false;
+    next.pyaraChapterIndex = 0;
+  }
+  if (view === 'takhts') {
+    next.takhtStorylineOpen = false;
+    next.takhtChapterIndex = 0;
+  }
+
   // The quiz always begins at level selection — entering it (even by
   // re-clicking the tab mid-round) starts a clean attempt rather than
   // resuming, matching the kiosk's reset-on-reentry behavior elsewhere.
@@ -100,10 +124,15 @@ export function navigate(state: KioskState, view: View): KioskState {
   return next;
 }
 
+// Tapping a map pin both selects the profile and expands the storyline
+// reader over the map — always starting at chapter one of the new
+// selection.
 export function selectPyara(state: KioskState, selectedPyaraId: number): KioskState {
   return {
     ...state,
     selectedPyaraId,
+    pyareStorylineOpen: true,
+    pyaraChapterIndex: 0,
   };
 }
 
@@ -111,7 +140,17 @@ export function selectTakht(state: KioskState, selectedTakhtId: string): KioskSt
   return {
     ...state,
     selectedTakhtId,
+    takhtStorylineOpen: true,
+    takhtChapterIndex: 0,
   };
+}
+
+export function closePyaraStoryline(state: KioskState): KioskState {
+  return { ...state, pyareStorylineOpen: false };
+}
+
+export function closeTakhtStoryline(state: KioskState): KioskState {
+  return { ...state, takhtStorylineOpen: false };
 }
 
 // Chapter-style stepping through the five profiles, clamped (not wrapping) —
@@ -131,6 +170,23 @@ export function stepTakht(state: KioskState, content: DisplayContent, delta: num
   const nextIndex = Math.min(Math.max(currentIndex + delta, 0), ids.length - 1);
   const nextId = ids[nextIndex];
   return nextId === undefined ? state : selectTakht(state, nextId);
+}
+
+// Clamped stepping through a single profile's storyline chapters — does not
+// wrap and does not change the selected profile (use stepPyara/stepTakht,
+// which reset to chapter one of the new profile, for that).
+export function stepPyaraChapter(state: KioskState, content: DisplayContent, delta: number): KioskState {
+  const selected = content.panjPyare.find((item) => item.id === state.selectedPyaraId);
+  const total = selected?.chapters?.length ?? 0;
+  const nextIndex = Math.min(Math.max(state.pyaraChapterIndex + delta, 0), Math.max(total - 1, 0));
+  return { ...state, pyaraChapterIndex: nextIndex };
+}
+
+export function stepTakhtChapter(state: KioskState, content: DisplayContent, delta: number): KioskState {
+  const selected = content.takhts.find((item) => item.id === state.selectedTakhtId);
+  const total = selected?.chapters?.length ?? 0;
+  const nextIndex = Math.min(Math.max(state.takhtChapterIndex + delta, 0), Math.max(total - 1, 0));
+  return { ...state, takhtChapterIndex: nextIndex };
 }
 
 export function selectQuizLevel(state: KioskState, level: QuizLevel): KioskState {

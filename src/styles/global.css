@@ -452,18 +452,6 @@ button {
   z-index: 0;
 }
 
-.story-panel {
-  @apply rounded-[24px] border border-sky-300/15 bg-sky-400/5 p-5;
-}
-
-.fact-card {
-  @apply rounded-[24px] border border-gold-300/25 bg-gold-400/8 p-5;
-}
-
-.fact-card__icon {
-  @apply mb-3 text-2xl;
-}
-
 .kakaar-card {
   @apply rounded-[24px] border border-white/10 bg-white/[0.03] p-6 text-center transition duration-200 ease-out;
 }
@@ -610,93 +598,137 @@ button {
 }
 
 
-.storyline-panel {
-  @apply rounded-[24px] border border-gold-300/20 bg-gold-400/6 p-4;
-}
-
-/* Detail card grid for the Panj Pyare / Panj Takht profile panels — stacks
-   on phones, but spreads into columns on landscape tablets and desktop so
-   wide screens aren't wasted on one long vertical scroll. */
-.detail-grid {
-  display: grid;
-  gap: 1rem;
-}
-
-@media (min-width: 768px) {
-  .detail-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1280px) {
-  .detail-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.detail-card {
-  min-width: 0;
-}
-
-.storyline-step {
-  @apply relative overflow-hidden flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.02] px-3 py-3 text-left text-sm text-cloud-200 transition duration-200 ease-out;
-}
-
-.storyline-step[data-active='true'] {
-  @apply border-gold-300/40 bg-gold-400/12 text-white;
-}
-
-.storyline-step__index {
-  @apply flex h-7 w-7 items-center justify-center rounded-full border border-current/30 text-xs font-semibold;
-}
-
-/* Chapter navigation chrome for the Panj Pyare / Panj Takht guided journey —
-   reuses the .journey-indicator__dot visual language, enlarged, plus a
-   prev/next pair. Full variant sits inside the storyline panel; compact
-   variant sits beside the profile name header. */
-.chapter-bar {
-  @apply flex items-center gap-3;
-}
-
-.chapter-bar--compact {
-  @apply gap-2;
-}
-
-.chapter-bar__nav {
-  @apply relative overflow-hidden flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-white/[0.04] text-lg text-gold-300 transition duration-150 ease-out;
-}
-
-.chapter-bar__nav:hover:not(:disabled),
-.chapter-bar__nav:active:not(:disabled) {
-  @apply border-gold-300/60 bg-gold-400/12 text-white;
-}
-
-.chapter-bar__nav:disabled {
-  @apply cursor-not-allowed border-white/10 text-white/20;
-}
-
-.chapter-bar__meta {
-  @apply flex flex-1 flex-col items-center gap-2;
-}
-
-.chapter-bar__label {
-  @apply text-center text-xs font-semibold uppercase tracking-[0.22em] text-gold-300;
-}
-
-.chapter-bar__count {
-  @apply min-w-[3.5rem] text-center text-xs font-semibold uppercase tracking-[0.18em] text-gold-300;
-}
-
-.chapter-bar__dots {
-  @apply flex items-center gap-1.5;
-}
-
 .chapter-dot {
   @apply h-2 w-2 rounded-full bg-white/20 transition;
 }
 
 .chapter-dot[data-filled='true'] {
   @apply bg-gold-400;
+}
+
+/* ==========================================
+   STORYLINE READER — full-bleed chapter view
+   ========================================== */
+
+.map-tap-prompt {
+  @apply text-center text-sm font-semibold uppercase tracking-[0.2em] text-gold-300;
+}
+
+/* Fills the map's spot when a pin/thumbnail is tapped. The backdrop below
+   carries a view-transition-name shared with the map pin it was opened
+   from (pin-pyara-${id} / pin-takht-${id}), so the browser morphs the pin
+   into this full-bleed reader automatically — no bespoke animation code. */
+.storyline-reader {
+  @apply relative overflow-hidden;
+  min-height: min(80vh, 640px);
+  isolation: isolate;
+}
+
+.storyline-reader__backdrop {
+  position: absolute;
+  inset: 0;
+  background-image:
+    var(--art-image),
+    linear-gradient(160deg, rgba(5, 11, 20, 0.95) 0%, rgba(9, 19, 34, 0.9) 55%, rgba(228, 187, 94, 0.32) 100%);
+  background-position: center 20%;
+  background-size: cover;
+  z-index: 0;
+}
+
+.storyline-reader__backdrop[data-has-image='false'] {
+  background-image:
+    radial-gradient(circle at 75% 20%, rgba(228, 187, 94, 0.3), transparent 42%),
+    linear-gradient(160deg, rgba(5, 11, 20, 0.95) 0%, rgba(9, 19, 34, 0.9) 55%, rgba(228, 187, 94, 0.32) 100%);
+}
+
+.storyline-reader__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5, 11, 20, 0.96) 0%, rgba(5, 11, 20, 0.55) 46%, rgba(5, 11, 20, 0.15) 78%, transparent 100%);
+  z-index: 1;
+}
+
+.storyline-reader__chrome {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.storyline-reader__close {
+  @apply relative overflow-hidden inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-night-950/50 px-4 py-2 text-sm font-semibold text-cloud-200 backdrop-blur-md transition hover:border-gold-300/40 hover:text-white active:scale-[0.97];
+  min-height: 44px;
+}
+
+.storyline-reader__dots {
+  @apply flex items-center gap-1.5 rounded-full border border-white/15 bg-night-950/50 px-3 py-2 backdrop-blur-md;
+}
+
+.storyline-reader__body {
+  position: relative;
+  z-index: 2;
+  padding: 0 1.5rem 6.5rem;
+  max-width: 42rem;
+}
+
+@media (min-width: 768px) {
+  .storyline-reader__body {
+    padding: 0 3rem 7.5rem;
+  }
+}
+
+.storyline-reader__eyebrow {
+  @apply text-sm font-semibold uppercase tracking-[0.22em] text-gold-300;
+}
+
+.storyline-reader__kicker {
+  @apply mt-4 text-xs font-semibold uppercase tracking-[0.28em] text-cloud-400;
+}
+
+.storyline-reader__title {
+  @apply mt-2 text-3xl font-semibold leading-tight md:text-4xl;
+}
+
+.storyline-reader__text {
+  @apply mt-4 text-base leading-8 text-cloud-200;
+}
+
+.storyline-reader__nav {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 1.5rem;
+  bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .storyline-reader__nav {
+    inset-inline: 3rem;
+    bottom: 2rem;
+  }
+}
+
+.storyline-reader__nav-btn {
+  @apply relative overflow-hidden flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-night-950/60 text-xl text-gold-300 backdrop-blur-md transition duration-150 ease-out;
+}
+
+.storyline-reader__nav-btn:hover:not(:disabled),
+.storyline-reader__nav-btn:active:not(:disabled) {
+  @apply border-gold-300/60 bg-gold-400/15 text-white;
+}
+
+.storyline-reader__nav-btn:disabled {
+  @apply cursor-not-allowed border-white/10 text-white/20;
+}
+
+.storyline-reader__next-person {
+  @apply relative overflow-hidden inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-gold-400 px-5 text-sm font-semibold text-night-950 transition active:scale-[0.98];
 }
 
 .art-panel {
@@ -1904,16 +1936,18 @@ html[data-vt-type='view']::view-transition-new(view-content) {
   animation: viewContentIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Selection changes (data-vt-type="selection", e.g. switching which Pyara/
-   Takht is shown): a quicker, quieter crossfade — the interesting motion
-   here comes from the named elements inside the panel (Phase 4/5), not the
-   whole region swapping. */
-html[data-vt-type='selection']::view-transition-old(view-content) {
-  animation: viewContentOut 0.12s ease both;
+/* Storyline changes (data-vt-type="chapter": a map pin expanding into the
+   reader, the reader collapsing back to the map, stepping between chapters,
+   or stepping to the next person/takht): a near-instant, quiet crossfade of
+   the whole region — the actual motion the visitor sees comes from the
+   named pin-pyara-${id} / pin-takht-${id} element morphing between its map
+   and reader appearance, which the browser animates automatically. */
+html[data-vt-type='chapter']::view-transition-old(view-content) {
+  animation: viewContentOut 0.1s ease both;
 }
 
-html[data-vt-type='selection']::view-transition-new(view-content) {
-  animation: viewContentIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+html[data-vt-type='chapter']::view-transition-new(view-content) {
+  animation: viewContentIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* ==========================================

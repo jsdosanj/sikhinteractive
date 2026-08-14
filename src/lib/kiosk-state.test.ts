@@ -4,6 +4,8 @@ import displayContent from '../data/display-content';
 import {
   advanceQuiz,
   backToQuizLevels,
+  closePyaraStoryline,
+  closeTakhtStoryline,
   createInitialState,
   getQuizScore,
   isQuizComplete,
@@ -16,7 +18,9 @@ import {
   setLanguage,
   startQuiz,
   stepPyara,
+  stepPyaraChapter,
   stepTakht,
+  stepTakhtChapter,
   submitQuizAnswer,
   wakeKiosk,
 } from './kiosk-state';
@@ -151,5 +155,71 @@ describe('kiosk state helpers', () => {
       state = stepTakht(state, displayContent, -1);
     }
     expect(state.selectedTakhtId).toBe(ids[0]);
+  });
+
+  it('lands on the map (storyline closed) on entry, and tapping a pin opens the storyline at chapter one', () => {
+    let state = createInitialState(displayContent);
+    state = navigate(state, 'pyare');
+    expect(state.pyareStorylineOpen).toBe(false);
+
+    state = selectPyara(state, displayContent.panjPyare[1]?.id ?? 2);
+    expect(state.pyareStorylineOpen).toBe(true);
+    expect(state.pyaraChapterIndex).toBe(0);
+
+    state = stepPyaraChapter(state, displayContent, 1);
+    expect(state.pyaraChapterIndex).toBe(1);
+
+    // Selecting a different pyara resets back to chapter one.
+    state = selectPyara(state, displayContent.panjPyare[2]?.id ?? 3);
+    expect(state.pyaraChapterIndex).toBe(0);
+
+    state = closePyaraStoryline(state);
+    expect(state.pyareStorylineOpen).toBe(false);
+  });
+
+  it('clamps Panj Pyare chapter stepping to the selected profile\'s chapter count', () => {
+    let state = createInitialState(displayContent);
+    state = selectPyara(state, displayContent.panjPyare[0]?.id ?? 1);
+    const total = displayContent.panjPyare[0]?.chapters?.length ?? 0;
+    expect(total).toBeGreaterThan(0);
+
+    state = stepPyaraChapter(state, displayContent, -1);
+    expect(state.pyaraChapterIndex).toBe(0);
+
+    for (let i = 0; i < total + 3; i += 1) {
+      state = stepPyaraChapter(state, displayContent, 1);
+    }
+    expect(state.pyaraChapterIndex).toBe(total - 1);
+  });
+
+  it('lands on the map (storyline closed) on entry, and tapping a pin opens the takht storyline at chapter one', () => {
+    let state = createInitialState(displayContent);
+    state = navigate(state, 'takhts');
+    expect(state.takhtStorylineOpen).toBe(false);
+
+    state = selectTakht(state, displayContent.takhts[1]?.id ?? '');
+    expect(state.takhtStorylineOpen).toBe(true);
+    expect(state.takhtChapterIndex).toBe(0);
+
+    state = stepTakhtChapter(state, displayContent, 1);
+    expect(state.takhtChapterIndex).toBe(1);
+
+    state = selectTakht(state, displayContent.takhts[2]?.id ?? '');
+    expect(state.takhtChapterIndex).toBe(0);
+
+    state = closeTakhtStoryline(state);
+    expect(state.takhtStorylineOpen).toBe(false);
+  });
+
+  it('clamps Panj Takht chapter stepping to the selected takht\'s chapter count', () => {
+    let state = createInitialState(displayContent);
+    state = selectTakht(state, displayContent.takhts[0]?.id ?? '');
+    const total = displayContent.takhts[0]?.chapters?.length ?? 0;
+    expect(total).toBeGreaterThan(0);
+
+    for (let i = 0; i < total + 3; i += 1) {
+      state = stepTakhtChapter(state, displayContent, 1);
+    }
+    expect(state.takhtChapterIndex).toBe(total - 1);
   });
 });
