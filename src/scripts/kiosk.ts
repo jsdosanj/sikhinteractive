@@ -158,7 +158,7 @@ function shouldShowInstallBanner(): boolean {
   return deferredInstallPrompt !== null || isIosSafari();
 }
 
-const journeyViews: View[] = ['pyare', 'takhts', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
+const journeyViews: View[] = ['pyare', 'takhts', 'timeline', 'quiz', 'learn', 'about', 'resources', 'leaflets'];
 const visitedViews = new Set<View>();
 
 async function initQrCodes(): Promise<void> {

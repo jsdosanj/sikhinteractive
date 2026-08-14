@@ -114,6 +114,15 @@
   margin-bottom: 0.5rem;
 }
 
+.ssr-fallback h3 {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
 .ssr-fallback p {
   margin-bottom: 1rem;
 }

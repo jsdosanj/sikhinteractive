@@ -20,7 +20,13 @@ interface Props {
 const { initialView } = Astro.props;
 ---
 
-<a href="#view-content" class="skip-link">Skip to main content</a>
+<!-- Two skip links, each live only when its target is actually visible —
+     #main-shell stays `hidden` until kiosk.ts hydrates AND the kiosk is
+     awake, so a link into it would otherwise send no-JS/pre-wake keyboard
+     users to display:none content. Nesting the interactive skip link
+     inside #main-shell means it inherits that same hidden state instead
+     of needing separate conditional logic. -->
+<a href="#ssr-fallback-content" class="skip-link">Skip to main content</a>
 <!-- Sits outside kiosk.ts's re-rendered mount points (#app-root's children
      get their innerHTML fully replaced on every render) so this ambient
      "digital darbar" backdrop survives every interaction untouched — only
@@ -37,6 +43,7 @@ const { initialView } = Astro.props;
 <div id="app-root" data-initial-view={initialView}>
   <section id="attract-screen"></section>
   <main id="main-shell" class="hidden flex-col">
+    <a href="#view-content" class="skip-link">Skip to main content</a>
     <header id="app-header" class="shrink-0"></header>
     <section id="view-content" class="fade-mask flex-1 overflow-y-auto px-4 py-4 md:px-8 md:py-8" tabindex="-1" aria-label="Main content"></section>
     <nav id="bottom-nav" class="shrink-0" aria-label="Primary"></nav>
@@ -44,7 +51,7 @@ const { initialView } = Astro.props;
 </div>
 <div id="view-announcer" class="sr-only" aria-live="polite" role="status"></div>
 
-<div class="ssr-fallback">
+<div id="ssr-fallback-content" class="ssr-fallback" tabindex="-1">
   <slot name="fallback" />
 </div>
 

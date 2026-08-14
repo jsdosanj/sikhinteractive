@@ -25,14 +25,14 @@ const breadcrumb = [
       {
         content.learnSikhi.gurus.map((guru) => (
           <article>
-            <h2>
+            <h3>
               {guru.name.en} ({guru.years})
-            </h2>
+            </h3>
             {guru.epithet && <p>{guru.epithet.en}</p>}
             <p>{guru.fullSummary?.en ?? guru.summary.en}</p>
             {guru.storiesUrl && (
               <p>
-                <a href={guru.storiesUrl} rel="noopener">
+                <a href={guru.storiesUrl} rel="noopener noreferrer">
                   Read more stories about {guru.name.en} on sikhi.io
                 </a>
               </p>
@@ -45,9 +45,9 @@ const breadcrumb = [
       {
         content.learnSikhi.sahibzaade.map((child) => (
           <article>
-            <h2>
+            <h3>
               {child.name.en} ({child.years})
-            </h2>
+            </h3>
             <p>{child.summary.en}</p>
           </article>
         ))
@@ -58,9 +58,9 @@ const breadcrumb = [
       {
         content.learnSikhi.kakaars.map((kakaar) => (
           <article>
-            <h2>
+            <h3>
               {kakaar.name.en} — {kakaar.meaning.en}
-            </h2>
+            </h3>
             <p>{kakaar.description.en}</p>
           </article>
         ))
