@@ -830,6 +830,7 @@ function renderTimelineView(): string {
                 data-timeline-filter="${filter}"
                 data-ripple
                 data-active="${state.timelineFilter === filter}"
+                aria-pressed="${state.timelineFilter === filter}"
                 class="timeline-filter-chip ${classForLanguage()}"
               >
                 ${timelineCategoryIcons[filter] ? `<span class="timeline-filter-chip__icon" aria-hidden="true">${timelineCategoryIcons[filter]}</span>` : ''}
@@ -1050,7 +1051,7 @@ function renderPyareStoryline(selected: PanjPyaraProfile): string {
         <div class="storyline-reader__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${chapterIndex + 1} / ${chapters.length}">${dots}</div>
       </div>
       <div class="storyline-reader__body">
-        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></p>
+        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${escapeAttr(text(selected.name, 'en'))}">${icons.speaker}</span></p>
         <p class="storyline-reader__kicker ${classForLanguage()}">${text(chapter.kicker)}</p>
         <h3 class="storyline-reader__title title-gradient ${classForLanguage()}">${text(chapter.title)}</h3>
         <p class="storyline-reader__text ${classForLanguage()}">${text(chapter.body)}</p>
@@ -1181,7 +1182,7 @@ function renderTakhtStoryline(selected: TakhtProfile): string {
         <div class="storyline-reader__dots" role="status" aria-label="${text(content.ui.labels.chapterLabel)} ${chapterIndex + 1} / ${chapters.length}">${dots}</div>
       </div>
       <div class="storyline-reader__body">
-        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${text(selected.name, 'en')}">${icons.speaker}</span></p>
+        <p class="storyline-reader__eyebrow ${classForLanguage()}">${text(selected.name)} <span class="pronun-tip" title="${escapeAttr(text(selected.name, 'en'))}">${icons.speaker}</span></p>
         <p class="storyline-reader__kicker ${classForLanguage()}">${text(chapter.kicker)}</p>
         <h3 class="storyline-reader__title title-gradient ${classForLanguage()}">${text(chapter.title)}</h3>
         <p class="storyline-reader__text ${classForLanguage()}">${text(chapter.body)}</p>
@@ -1326,7 +1327,7 @@ function renderLearn(): string {
                       }
                       ${
                         guru.storiesUrl
-                          ? `<a href="${guru.storiesUrl}" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 hover:text-sky-200 ${classForLanguage()}" aria-label="Read more stories about ${text(guru.name, 'en')} on sikhi.io">${text(content.ui.labels.learnMore)}</a>`
+                          ? `<a href="${escapeAttr(guru.storiesUrl)}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 hover:text-sky-200 ${classForLanguage()}" aria-label="${escapeAttr(`Read more stories about ${text(guru.name, 'en')} on sikhi.io`)}">${text(content.ui.labels.learnMore)}</a>`
                           : ''
                       }
                     </div>
@@ -1521,7 +1522,7 @@ function renderResources(): string {
                     class="resource-iframe"
                     loading="lazy"
                     sandbox="allow-scripts"
-                    title="${site.title}"
+                    title="${escapeAttr(site.title)}"
                     data-iframe-slot="${site.id}"
                   ></iframe>
                   <div class="resource-fallback-panel" data-fallback-slot="${site.id}" hidden ${resourceBanners[site.id] ? `style="--art-image:url('${asset(resourceBanners[site.id])}');"` : ''}>
